@@ -11,4 +11,4 @@ management:
       probes:
         enabled: true
 server:
-  port: ${SERVER_PORT:8081}
+  port: ${SERVER_PORT:8080}
