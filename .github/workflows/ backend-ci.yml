@@ -24,14 +24,17 @@ jobs:
         working-directory: backend
     steps:
       - uses: actions/checkout@v4
-      - name: Hello (sanity check)
-        run: echo "Running on $GITHUB_REF for $GITHUB_REPOSITORY"
+
       - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: '21'
           cache: gradle
+
+      - name: Ensure gradlew is executable
+        run: chmod +x gradlew
+
       - name: Gradle build (skip tests)
         run: ./gradlew :challenge-service:bootJar :user-service:bootJar -x test --no-daemon
 
@@ -44,7 +47,9 @@ jobs:
         working-directory: backend
     steps:
       - uses: actions/checkout@v4
+
       - name: Build challenge-service image
         run: docker build -t challenge-service -f challenge-service/Dockerfile .
+
       - name: Build user-service image
         run: docker build -t user-service -f user-service/Dockerfile .
