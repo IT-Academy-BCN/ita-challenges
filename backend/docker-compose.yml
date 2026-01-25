@@ -1,3 +1,4 @@
+name:  ita-backend
 services:
   challenge-service:
     build:
