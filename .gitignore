@@ -21,6 +21,7 @@ Thumbs.db
 *.class
 *.log
 *.jar
+!backend/gradle/wrapper/gradle-wrapper.jar
 *.war
 *.ear
 
