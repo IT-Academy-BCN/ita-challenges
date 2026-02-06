@@ -17,7 +17,7 @@ It allows running the whole platform locally in a production-like architecture s
 ## Prerequisites
 
 - Docker Desktop (Docker + Docker Compose)
-- Node 24+ (only required if running the frontend locally with `ng serve`)
+- Node.js 22 (LTS) + npm (only required if running the frontend locally with `ng serve`)
 
 ---
 

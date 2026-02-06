@@ -10,6 +10,12 @@ Angular application for the ItaChallenges platform.
 
 This is the recommended mode for daily frontend work (HMR / hot reload).
 
+## Prerequisites
+
+- Node.js 22 (LTS)
+- npm (comes with Node)
+
+
 ### 1) Start backend (Docker)
 
 From the repository root:
