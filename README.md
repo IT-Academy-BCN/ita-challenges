@@ -1,47 +1,67 @@
 # ita-challenges
 
-Monorepo for the ItaChallenges platform. This repository centralizes the backend and frontend codebases, shared modules, and project documentation to support the development of the IT Academy's challenge-based learning system.
+Monorepo for the ItaChallenges platform.
+
+This repository centralizes:
+- Backend microservices (Spring Boot)
+- Frontend (Angular)
+- Local gateway (Nginx)
+- Infrastructure and documentation
+
+It allows running the whole platform locally in a production-like architecture similar to cloud/AWS.
 
 ---
 
-# Local development
+# 🧰 Local development
 
 ## Prerequisites
-- Docker + Docker Compose
+
+- Docker Desktop (Docker + Docker Compose)
 - Node 20+ (only required if running the frontend with `ng serve`)
 
 ---
 
-# Quick start (recommended)
+# 🚀 Quick start (recommended)
 
-Run the **full stack (gateway + frontend + backend)** through a single entrypoint:
+Run the full stack (gateway + frontend + backend):
 
 ```bash
 docker compose --profile full up --build
 ```
 
 Open:
-- http://localhost:8080
 
-This simulates the production/cloud architecture (API Gateway → services).
+http://localhost:8080
+
+This simulates the real production architecture:
+
+Gateway → Frontend → Backend services
 
 ---
 
-# Development modes
+# 🧩 Development modes
 
-## 🟢 Mode 1 — Frontend fast iteration (recommended for daily dev)
+## 🟢 Mode 1 — Frontend fast iteration (recommended daily)
 
-Best for working on Angular (components, UI, styles, routing, etc.).  
-Uses hot reload (HMR) and is much faster than rebuilding Docker images.
+Best for:
+- UI work
+- components
+- styles
+- routing
+- fast feedback (HMR / hot reload)
 
 ### Start backend only (Docker)
+
 ```bash
-docker compose --profile backend \
+docker compose \
+  --profile backend \
   -f docker-compose.yml \
-  -f docker-compose.backend.override.yml up --build
+  -f docker-compose.backend.override.yml \
+  up --build
 ```
 
 ### Start frontend locally (no Docker)
+
 ```bash
 cd frontend
 npm install
@@ -49,9 +69,10 @@ npx ng serve --proxy-config proxy.conf.json
 ```
 
 Open:
-- http://localhost:4200
 
-The Angular dev server uses a proxy so API calls still go through the gateway automatically.
+http://localhost:4200
+
+Angular uses a proxy so API calls still go through the gateway automatically.
 
 ---
 
@@ -61,73 +82,137 @@ Best for:
 - integration testing
 - demos
 - validating Docker images
-- checking gateway routing
-- “how it will run in AWS”
+- testing gateway routing
+- simulating AWS behavior
 
 ```bash
 docker compose --profile full up --build
 ```
 
 Open:
-- http://localhost:8080
 
-Note: frontend changes require rebuilding the image (slower).
+http://localhost:8080
 
----
-
-# Gateway routing
-
-The local nginx gateway routes:
-
-- `/` → frontend
-- `/itachallenge/api/v1/users/**` → user-service
-- `/itachallenge/api/v1/challenges/**` → challenge-service
-- `/actuator/users/**` → user-service actuator
-- `/actuator/challenges/**` → challenge-service actuator
+Note: frontend changes require rebuilding the Docker image (slower than HMR).
 
 ---
 
-# Health checks
+# 🌐 Gateway routing
 
-You can verify services are up:
+Local Nginx routes requests as follows:
+
+| Path | Service |
+|------|---------|
+| / | frontend |
+| /itachallenge/api/v1/users/** | user-service |
+| /itachallenge/api/v1/challenges/** | challenge-service |
+| /actuator/users/** | user-service actuator |
+| /actuator/challenges/** | challenge-service actuator |
+
+---
+
+# ❤️ Health checks
+
+All backend services expose:
+
+/actuator/health
+
+Docker uses these endpoints to:
+- verify containers are ready
+- control startup order
+- avoid the gateway starting too early
+
+Manual checks:
 
 - http://localhost:8080/actuator/users/health
 - http://localhost:8080/actuator/challenges/health
 
-Docker uses these endpoints for container healthchecks and startup ordering.
+---
+
+# 🏗 Architecture notes
+
+- All backend services run internally on port 8080
+- Only the gateway exposes ports to the host
+- Backend images are built using the Gradle Wrapper (reproducible builds)
+- Frontend is served by Nginx inside Docker
+- Local setup mirrors how services will run in cloud/AWS
 
 ---
 
-# Architecture notes
+# 🧪 Docker Compose profiles
 
-- All backend services run internally on port **8080**
-- Only the **gateway** exposes ports to the host
-- Compose profiles:
-  - `full` → gateway + frontend + backend
-  - `backend` → backend only
-  - `frontend` → frontend only
-- Angular must call **relative paths only** (no hardcoded localhost URLs)
+| Profile | Starts |
+|-----------|-----------------------------|
+| full | gateway + frontend + backend |
+| backend | backend only |
+| frontend | frontend only |
+
+Examples:
+
+```bash
+docker compose --profile full up
+docker compose --profile backend up
+docker compose --profile frontend up
+```
+
+---
+
+# 🅰️ Angular best practices
+
+Always use relative URLs.
 
 ✅ Good:
-```
+
 /itachallenge/api/v1/users
-```
 
 ❌ Avoid:
-```
+
 http://localhost:8081/itachallenge/api/v1/users
-```
+
+The gateway handles routing automatically.
 
 ---
 
-# Tips
+# 🔀 Testing a backend feature branch (frontend workflow)
 
-Rebuild only frontend:
+Frontend developers can test backend changes without waiting for merge to `develop`.
+
+```bash
+git fetch
+git checkout <backend-branch>
+docker compose \
+  --profile backend \
+  -f docker-compose.yml \
+  -f docker-compose.backend.override.yml \
+  up --build
+```
+
+This runs the backend using the code from the selected branch.
+
+---
+
+# 🛠 Useful commands
+
+### Rebuild only frontend
+
 ```bash
 docker compose --profile full up -d --build frontend
 ```
 
-Stop everything:
+### Stop everything
+
 ```bash
 docker compose down
+```
+
+### Full reset (containers + volumes)
+
+```bash
+docker compose down -v
+```
+
+### View logs
+
+```bash
+docker compose logs -f
 ```
