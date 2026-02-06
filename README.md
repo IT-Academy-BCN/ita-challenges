@@ -17,7 +17,7 @@ It allows running the whole platform locally in a production-like architecture s
 ## Prerequisites
 
 - Docker Desktop (Docker + Docker Compose)
-- Node 20+ (only required if running the frontend with `ng serve`)
+- Node 24+ (only required if running the frontend locally with `ng serve`)
 
 ---
 
@@ -52,6 +52,8 @@ Best for:
 
 ### Start backend only (Docker)
 
+This mode starts backend services. If you need the local gateway for routing (recommended), run the full stack instead.
+
 ```bash
 docker compose \
   --profile backend \
@@ -60,19 +62,27 @@ docker compose \
   up --build
 ```
 
+Backend ports exposed to the host (via override):
+- challenge-service → http://localhost:8081
+- user-service → http://localhost:8082
+
 ### Start frontend locally (no Docker)
 
 ```bash
 cd frontend
 npm install
-npx ng serve --proxy-config proxy.conf.json
+npm run start:local
 ```
 
 Open:
 
 http://localhost:4200
 
-Angular uses a proxy so API calls still go through the gateway automatically.
+Angular uses a proxy to route API calls.
+- If the gateway is running: API calls go through `http://localhost:8080` (recommended).
+- If only backend is running (`--profile backend`): you must adjust the proxy target to the exposed ports (see `frontend/README.md`).
+
+For more frontend details (proxy modes, scripts), see `frontend/README.md`.
 
 ---
 
@@ -122,7 +132,7 @@ Docker uses these endpoints to:
 - control startup order
 - avoid the gateway starting too early
 
-Manual checks:
+Manual checks (when gateway is running):
 
 - http://localhost:8080/actuator/users/health
 - http://localhost:8080/actuator/challenges/health
@@ -132,7 +142,7 @@ Manual checks:
 # 🏗 Architecture notes
 
 - All backend services run internally on port 8080
-- Only the gateway exposes ports to the host
+- Only the gateway exposes ports to the host in `full` mode
 - Backend images are built using the Gradle Wrapper (reproducible builds)
 - Frontend is served by Nginx inside Docker
 - Local setup mirrors how services will run in cloud/AWS
