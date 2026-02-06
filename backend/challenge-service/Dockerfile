@@ -2,12 +2,16 @@
 FROM gradle:8.14-jdk21 AS build
 WORKDIR /app
 
+COPY gradlew ./
+COPY gradle ./gradle
+RUN chmod +x ./gradlew
+
 COPY settings.gradle build.gradle ./
 
 COPY challenge-service/build.gradle challenge-service/build.gradle
 COPY challenge-service/src challenge-service/src
 
-RUN gradle :challenge-service:bootJar --no-daemon
+RUN ./gradlew :challenge-service:bootJar --no-daemon
 
 # ---- runtime ----
 FROM eclipse-temurin:21-jre
