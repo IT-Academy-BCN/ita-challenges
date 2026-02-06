@@ -132,10 +132,27 @@ Docker uses these endpoints to:
 - control startup order
 - avoid the gateway starting too early
 
-Manual checks (when gateway is running):
+## When running FULL stack (gateway enabled)
+
+You can check health from the host:
 
 - http://localhost:8080/actuator/users/health
 - http://localhost:8080/actuator/challenges/health
+
+## When running BACKEND only (no gateway)
+
+Ports are NOT exposed to the host.
+
+Use docker exec to query the containers internally:
+
+```bash
+docker compose exec user-service curl -fsS http://localhost:8080/actuator/health
+docker compose exec challenge-service curl -fsS http://localhost:8080/actuator/health
+```
+
+Expected response:
+
+{"status":"UP"}
 
 ---
 

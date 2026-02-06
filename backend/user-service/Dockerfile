@@ -2,9 +2,9 @@
 FROM gradle:8.14-jdk21 AS build
 WORKDIR /app
 
-COPY gradlew ./
+COPY gradlew ./gradlew
 COPY gradle ./gradle
-RUN chmod +x ./gradlew
+RUN sed -i 's/\r$//' ./gradlew && chmod +x ./gradlew
 
 COPY settings.gradle build.gradle ./
 
