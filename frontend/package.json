@@ -2,14 +2,14 @@
   "name": "ita-frontend",
   "version": "0.0.0",
   "scripts": {
-	"ng": "ng",
-  "start": "npm run start:local",
-	"start:local": "ng serve --proxy-config proxy.local.json",
-	"start:dev": "ng serve --proxy-config proxy.dev.json",
-	"build": "ng build",
-	"watch": "ng build --watch --configuration development",
-	"test": "ng test"
-	},
+    "ng": "ng",
+    "start": "npm run start:local",
+    "start:local": "ng serve --proxy-config proxy.local.json",
+    "start:dev": "ng serve --proxy-config proxy.dev.json",
+    "build": "ng build",
+    "watch": "ng build --watch --configuration development",
+    "test": "ng test"
+  },
   "prettier": {
     "printWidth": 100,
     "singleQuote": true,
@@ -25,7 +25,7 @@
   "private": true,
   "packageManager": "npm@10.2.5",
   "engines": {
-    "node": ">=24.0.0",
+    "node": ">=22 <23",
     "npm": ">=10.2.5"
   },
   "dependencies": {
