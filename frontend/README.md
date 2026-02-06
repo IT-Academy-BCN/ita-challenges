@@ -1,59 +1,99 @@
-# Frontend
+# Frontend (Angular)
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.1.1.
+Angular application for the ItaChallenges platform.
 
-## Development server
+---
 
-To start a local development server, run:
+# ✅ Quick start (recommended)
 
-```bash
-ng serve
-```
+## Local development (fast iteration)
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+This is the recommended mode for daily frontend work (HMR / hot reload).
 
-## Code scaffolding
+### 1) Start backend + gateway (Docker)
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+From the repository root:
 
 ```bash
-ng generate component component-name
+docker compose \
+  --profile backend \
+  -f docker-compose.yml \
+  -f docker-compose.backend.override.yml \
+  up --build
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+> Note: This mode starts backend containers. API calls are expected to go through the local gateway at `http://localhost:8080`.
+
+### 2) Start frontend (Angular dev server)
 
 ```bash
-ng generate --help
+npm install
+npm run start:local
 ```
 
-## Building
+Open:
 
-To build the project run:
+http://localhost:4200
+
+---
+
+# 🌐 Proxy modes (local vs dev)
+
+The frontend uses Angular proxy configuration so API calls can be made with relative URLs (no hardcoded hosts).
+
+## Local (default)
+
+Uses the local gateway (Docker) at:
+
+- http://localhost:8080
+
+Command:
 
 ```bash
-ng build
+npm run start:local
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+Proxy file:
 
-## Running unit tests
+- `proxy.local.json`
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+## Dev / AWS (future)
+
+This mode will be used once a dev domain exists (AWS / cloud).
+
+1) Copy the example file:
 
 ```bash
-ng test
+cp proxy.dev.example.json proxy.dev.json
 ```
 
-## Running end-to-end tests
+2) Replace the placeholder domain in `proxy.dev.json`
 
-For end-to-end (e2e) testing, run:
+3) Run:
 
 ```bash
-ng e2e
+npm run start:dev
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+Notes:
+- `proxy.dev.json` is intentionally not committed (each developer can use their own environment).
+- `proxy.dev.example.json` is committed as a template.
 
-## Additional Resources
+---
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+# 🧪 Useful scripts
+
+```bash
+npm run start:local   # ng serve with local proxy
+npm run start:dev     # ng serve with dev proxy (requires proxy.dev.json)
+npm run build         # production build
+npm run test          # unit tests
+```
+
+---
+
+# 🧱 Angular CLI reference
+
+This project was generated using Angular CLI.
+
+- Docs: https://angular.dev/tools/cli

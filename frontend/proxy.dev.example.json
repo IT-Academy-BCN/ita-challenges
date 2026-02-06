@@ -1,0 +1,14 @@
+{
+  "/itachallenge/api": {
+    "target": "https://REPLACE_WITH_DEV_GATEWAY_DOMAIN",
+    "secure": true,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  },
+  "/actuator": {
+    "target": "https://REPLACE_WITH_DEV_GATEWAY_DOMAIN",
+    "secure": true,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  }
+}

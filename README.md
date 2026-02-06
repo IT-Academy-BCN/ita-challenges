@@ -17,7 +17,7 @@ It allows running the whole platform locally in a production-like architecture s
 ## Prerequisites
 
 - Docker Desktop (Docker + Docker Compose)
-- Node 20+ (only required if running the frontend with `ng serve`)
+- Node 20+ (only required if running the frontend locally with `ng serve`)
 
 ---
 
@@ -65,7 +65,7 @@ docker compose \
 ```bash
 cd frontend
 npm install
-npx ng serve --proxy-config proxy.conf.json
+npm run start:local
 ```
 
 Open:
@@ -73,6 +73,8 @@ Open:
 http://localhost:4200
 
 Angular uses a proxy so API calls still go through the gateway automatically.
+
+For more frontend details (proxy modes, scripts), see `frontend/README.md`.
 
 ---
 
