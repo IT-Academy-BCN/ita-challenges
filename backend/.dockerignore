@@ -4,11 +4,3 @@
 .git/
 **/*.iml
 .idea/
-
-!gradlew
-!gradlew.bat
-!gradle/**
-!settings.gradle
-!build.gradle
-!user-service/**
-!challenge-service/**
