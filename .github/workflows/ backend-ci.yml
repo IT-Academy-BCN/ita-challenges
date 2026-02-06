@@ -6,13 +6,18 @@ on:
     branches: [develop, staging, main]
     paths:
       - backend/**
+      - .github/workflows/backend-ci.yml
   pull_request:
-    branches: [staging, main]
+    branches: [develop, staging, main]
     paths:
       - backend/**
+      - .github/workflows/backend-ci.yml
+
+permissions:
+  contents: read
 
 concurrency:
-  group: backend-${{ github.ref }}
+  group: backend-ci-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
