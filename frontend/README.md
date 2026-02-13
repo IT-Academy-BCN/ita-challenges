@@ -15,33 +15,37 @@ This is the recommended mode for daily frontend work (HMR / hot reload).
 - Node.js 22 (LTS)
 - npm (comes with Node)
 
+---
 
-### 1) Start backend (Docker)
+## 1) Start backend (Docker)
 
 From the repository root:
 
-```bash
 docker compose \
-  --profile backend \
-  -f docker-compose.yml \
-  -f docker-compose.backend.override.yml \
-  up --build
-```
+--profile backend \
+-f docker-compose.yml \
+-f docker-compose.backend.override.yml \
+up --build
 
 Backend ports exposed to the host:
+
 - challenge-service → http://localhost:8081
 - user-service → http://localhost:8082
 
-> Note: If you want gateway-based routing (recommended, production-like), run:
-> `docker compose --profile full up --build`
-> and the gateway will be available at `http://localhost:8080`.
+Note: If you want gateway-based routing (recommended, production-like), run:
 
-### 2) Start frontend (Angular dev server)
+docker compose --profile full up --build
 
-```bash
-npm install
+Gateway:
+
+http://localhost:8080
+
+---
+
+## 2) Start frontend (Angular dev server)
+
+npm ci  
 npm run start:local
-```
 
 Open:
 
@@ -51,75 +55,85 @@ http://localhost:4200
 
 # 🌐 Proxy modes (local vs dev)
 
-The frontend uses Angular proxy configuration so API calls can be made with relative URLs (no hardcoded hosts).
+The frontend uses Angular proxy configuration so API calls can be made with relative URLs.
+
+---
 
 ## Local (default)
 
-By default, `proxy.local.json` targets the local gateway:
+Uses:
 
-- http://localhost:8080
+proxy.local.json
 
-Command:
+Targets:
 
-```bash
+http://localhost:8080
+
+Run:
+
 npm run start:local
-```
-
-Proxy file:
-
-- `proxy.local.json`
-
-### If you are running backend only (no gateway)
-
-When you run only `--profile backend`, there is no gateway at `http://localhost:8080`.
-In that case you can either:
-- run `--profile full` to use the gateway (recommended), or
-- temporarily change the proxy target(s) to the exposed backend ports (8081/8082)
 
 ---
 
 ## Dev / AWS (future)
 
-This mode will be used once a dev domain exists (AWS / cloud).
+Copy template:
 
-1) Copy the example file:
+macOS / Linux:
 
-```bash
-# macOS / Linux
 cp proxy.dev.example.json proxy.dev.json
 
-# Windows (PowerShell)
+Windows:
+
 copy proxy.dev.example.json proxy.dev.json
-```
 
-2) Replace the placeholder domain in `proxy.dev.json`
+Edit domain.
 
-3) Run:
+Run:
 
-```bash
 npm run start:dev
-```
 
-Notes:
-- `proxy.dev.json` is intentionally not committed (each developer can use their own environment).
-- `proxy.dev.example.json` is committed as a template.
+proxy.dev.json is not committed.
 
 ---
 
 # 🧪 Useful scripts
 
-```bash
-npm start             # alias for start:local
-npm run start:local   # ng serve with local proxy
-npm run start:dev     # ng serve with dev proxy (requires proxy.dev.json)
-npm run build         # production build
-npm run test          # unit tests
-```
+npm start  
+npm run start:local  
+npm run start:dev  
+npm run build  
+npm run test
 
 ---
 
-# 🧱 Angular CLI reference
+# 🏗 Project structure
 
-This project was generated using Angular CLI.
+src/app/
 
-- Docs: https://angular.dev/tools/cli
+core/  
+shared/  
+features/  
+layout/
+
+---
+
+## Features
+
+auth  
+challenges  
+solutions  
+profile  
+admin
+
+---
+
+## Architecture rules
+
+Only data-access/ should use HttpClient.
+
+Features must not import other features directly.
+
+Shared contains reusable UI only.
+
+Core contains global services.
