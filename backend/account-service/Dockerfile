@@ -8,17 +8,17 @@ RUN sed -i 's/\r$//' ./gradlew && chmod +x ./gradlew
 
 COPY settings.gradle build.gradle ./
 
-COPY user-service/build.gradle user-service/build.gradle
-COPY user-service/src user-service/src
+COPY account-service/build.gradle account-service/build.gradle
+COPY account-service/src account-service/src
 
-RUN ./gradlew :user-service:bootJar --no-daemon
+RUN ./gradlew :account-service:bootJar --no-daemon
 
 # ---- runtime ----
 FROM eclipse-temurin:21-jre
 RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
 WORKDIR /app
 
-COPY --from=build /app/user-service/build/libs/*.jar app.jar
+COPY --from=build /app/account-service/build/libs/*.jar app.jar
 
 ENV SERVER_PORT=8080
 EXPOSE 8080
