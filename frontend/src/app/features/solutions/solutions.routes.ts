@@ -1,0 +1,9 @@
+import { Routes } from '@angular/router';
+import { SolutionsPage } from './pages/solutions-page';
+
+export const SOLUTIONS_ROUTES: Routes = [
+  {
+    path: '',
+    component: SolutionsPage,
+  },
+];
