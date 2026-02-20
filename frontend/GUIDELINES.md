@@ -162,6 +162,30 @@ Lazy loading ensures that feature code is only downloaded when the user navigate
 
 ---
 
+## URL design
+
+Routes must use clean, domain-independent paths.
+
+Correct:
+
+    /auth
+    /challenges
+    /challenges/:id
+    /profile
+
+Incorrect:
+
+    /itachallenges/auth
+    /itachallenges/challenges
+
+The frontend must NOT include deployment-specific prefixes.
+
+The application domain, base path, and hosting configuration are handled outside Angular.
+
+Never hardcode environment-specific prefixes in routes.
+
+---
+
 ## Route ownership
 
 ### app.routes.ts
