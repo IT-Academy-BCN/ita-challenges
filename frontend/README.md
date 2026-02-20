@@ -31,7 +31,7 @@ docker compose \
 Services exposed:
 
 - challenge-service → http://localhost:8081  
-- user-service → http://localhost:8082  
+- account-service → http://localhost:8082  
 
 ---
 

@@ -64,7 +64,7 @@ docker compose \
 
 Backend ports exposed to the host (via override):
 - challenge-service → http://localhost:8081
-- user-service → http://localhost:8082
+- account-service → http://localhost:8082
 
 ### Start frontend locally (no Docker)
 
@@ -114,9 +114,9 @@ Local Nginx routes requests as follows:
 | Path | Service |
 |------|---------|
 | / | frontend |
-| /itachallenge/api/v1/users/** | user-service |
+| /itachallenge/api/v1/users/** | account-service |
 | /itachallenge/api/v1/challenges/** | challenge-service |
-| /actuator/users/** | user-service actuator |
+| /actuator/users/** | account-service actuator |
 | /actuator/challenges/** | challenge-service actuator |
 
 ---
@@ -146,7 +146,7 @@ Ports are NOT exposed to the host.
 Use docker exec to query the containers internally:
 
 ```bash
-docker compose exec user-service curl -fsS http://localhost:8080/actuator/health
+docker compose exec account-service curl -fsS http://localhost:8080/actuator/health
 docker compose exec challenge-service curl -fsS http://localhost:8080/actuator/health
 ```
 
