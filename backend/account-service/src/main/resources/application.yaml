@@ -1,6 +1,6 @@
 spring:
   application:
-    name: user-service
+    name: account-service
 management:
   endpoints:
     web:

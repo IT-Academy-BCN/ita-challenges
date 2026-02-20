@@ -34,7 +34,7 @@ ssh -i "$KEY_FILE" -p "$SSH_PORT" -o StrictHostKeyChecking=no "${SSH_USER}@${SSH
     COMPOSE_FILES=\"\$COMPOSE_FILES -f docker-compose.backend.override.yml\"
   fi
 
-  docker compose \$COMPOSE_FILES --profile full up -d --build challenge-service user-service
+  docker compose \$COMPOSE_FILES --profile full up -d --build challenge-service account-service
   docker image prune -f
 "
 
