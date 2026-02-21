@@ -5,7 +5,9 @@ import com.ita.challenges.challenge.application.dto.CreateChallengeResult;
 import com.ita.challenges.challenge.domain.model.Challenge;
 import com.ita.challenges.challenge.domain.port.in.CreateChallengeUseCase;
 import com.ita.challenges.challenge.domain.port.out.ChallengeRepository;
+import org.springframework.stereotype.Service;
 
+@Service
 public class CreateChallengeService implements CreateChallengeUseCase {
 
     private final ChallengeRepository challengeRepository;

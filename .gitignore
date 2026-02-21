@@ -70,3 +70,8 @@ coverage/
 #######################################
 reports/
 test-output/
+
+#######################################
+# Allow Gradle wrapper jar (required)
+#######################################
+!backend/gradle/wrapper/gradle-wrapper.jar
