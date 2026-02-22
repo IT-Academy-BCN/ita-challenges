@@ -52,8 +52,6 @@ Best for:
 
 ### Start backend only (Docker)
 
-This mode starts backend services. If you need the local gateway for routing (recommended), run the full stack instead.
-
 ```bash
 docker compose \
   --profile backend \
@@ -62,9 +60,14 @@ docker compose \
   up --build
 ```
 
-Backend ports exposed to the host (via override):
-- challenge-service → http://localhost:8081
-- account-service → http://localhost:8082
+Backend access from the host depends on whether you use the override file:
+
+- With `docker-compose.backend.override.yml` → ports are exposed:
+  - challenge-service → http://localhost:8081
+  - account-service → http://localhost:8082
+- Without the override → ports are NOT exposed (containers are internal-only).
+
+---
 
 ### Start frontend locally (no Docker)
 
@@ -79,10 +82,9 @@ Open:
 http://localhost:4200
 
 Angular uses a proxy to route API calls.
-- If the gateway is running: API calls go through `http://localhost:8080` (recommended).
-- If only backend is running (`--profile backend`): you must adjust the proxy target to the exposed ports (see `frontend/README.md`).
 
-For more frontend details (proxy modes, scripts), see `frontend/README.md`.
+- If the gateway is running: API calls go through `http://localhost:8080` (recommended).
+- If only backend is running (`--profile backend`): adjust the proxy target to the exposed ports (see `frontend/README.md`).
 
 ---
 
@@ -109,58 +111,112 @@ Note: frontend changes require rebuilding the Docker image (slower than HMR).
 
 # 🌐 Gateway routing
 
-Local Nginx routes requests as follows:
+In `full` mode, APIs are accessed through the gateway with the `/itachallenge` prefix.
 
-| Path | Service |
-|------|---------|
+Internal services expose their APIs without that prefix.
+
+Routing table (gateway only):
+
+| Path (via gateway) | Service |
+|--------------------|----------|
 | / | frontend |
-| /itachallenge/api/v1/users/** | account-service |
-| /itachallenge/api/v1/challenges/** | challenge-service |
-| /actuator/users/** | account-service actuator |
+| /itachallenge/api/v1/challenges | challenge-service |
 | /actuator/challenges/** | challenge-service actuator |
+| /actuator/users/** | account-service actuator |
+| /itachallenge/api/v1/users | account-service (planned / TODO) |
 
 ---
 
-# ❤️ Health checks
+# ❤️ Health checks & smoke tests
 
 All backend services expose:
 
-/actuator/health
+GET /actuator/health (inside the container on port 8080)
 
-Docker uses these endpoints to:
+Docker Compose uses these endpoints to:
 - verify containers are ready
 - control startup order
 - avoid the gateway starting too early
 
-## When running FULL stack (gateway enabled)
+---
 
-You can check health from the host:
+## ✅ FULL stack (gateway enabled)
 
-- http://localhost:8080/actuator/users/health
-- http://localhost:8080/actuator/challenges/health
+Health (via gateway):
 
-## When running BACKEND only (no gateway)
+```bash
+curl -fsS http://localhost:8080/actuator/challenges/health
+curl -fsS http://localhost:8080/actuator/users/health
+```
 
-Ports are NOT exposed to the host.
+Expected:
 
-Use docker exec to query the containers internally:
+```json
+{"status":"UP"}
+```
+
+Smoke test (API via gateway):
+
+```bash
+curl -i -X POST http://localhost:8080/itachallenge/api/v1/challenges \
+  -H "Content-Type: application/json" \
+  -d '{"title":"Test","description":"Created through gateway"}'
+```
+
+Expected:
+- 201 Created
+- JSON containing an `id`
+
+---
+
+## ✅ BACKEND only (no gateway)
+
+### Option A — With override (ports exposed)
+
+```bash
+docker compose \
+  --profile backend \
+  -f docker-compose.yml \
+  -f docker-compose.backend.override.yml \
+  up --build
+```
+
+Health from host:
+
+```bash
+curl -fsS http://localhost:8081/actuator/health
+curl -fsS http://localhost:8082/actuator/health
+```
+
+API test directly:
+
+```bash
+curl -i -X POST http://localhost:8081/api/v1/challenges \
+  -H "Content-Type: application/json" \
+  -d '{"title":"Test","description":"Created through exposed port 8081"}'
+```
+
+### Option B — Without override (ports NOT exposed)
+
+Containers are internal-only.
+
+Use docker exec:
 
 ```bash
 docker compose exec account-service curl -fsS http://localhost:8080/actuator/health
 docker compose exec challenge-service curl -fsS http://localhost:8080/actuator/health
 ```
 
-Expected response:
-
-{"status":"UP"}
-
 ---
 
 # 🏗 Architecture notes
 
-- All backend services run internally on port 8080
-- Only the gateway exposes ports to the host in `full` mode
-- Backend images are built using the Gradle Wrapper (reproducible builds)
+- All backend services listen on port 8080 inside Docker
+- Gateway adds the `/itachallenge` prefix in full mode
+- Host port exposure depends on the mode:
+  - full mode: gateway exposes 8080
+  - backend mode: ports are exposed only if using docker-compose.backend.override.yml
+- Backend images are built using the Gradle Wrapper
 - Frontend is served by Nginx inside Docker
 - Local setup mirrors how services will run in cloud/AWS
 
@@ -184,19 +240,53 @@ docker compose --profile frontend up
 
 ---
 
+# 🛑 Stopping containers (important when using profiles)
+
+When using Docker Compose profiles, always use the same profile with `down` as you used with `up`.
+
+Stop full stack:
+
+```bash
+docker compose --profile full down
+```
+
+Stop backend-only:
+
+```bash
+docker compose --profile backend down
+```
+
+Stop frontend-only:
+
+```bash
+docker compose --profile frontend down
+```
+
+Full reset (containers + volumes):
+
+```bash
+docker compose --profile full down -v
+```
+
+---
+
 # 🅰️ Angular best practices
 
-Always use relative URLs.
+Always use relative URLs (gateway paths), so the same frontend build works locally and in cloud.
 
-✅ Good:
+Good:
 
-/itachallenge/api/v1/users
+```
+/itachallenge/api/v1/challenges
+```
 
-❌ Avoid:
+Avoid:
 
-http://localhost:8081/itachallenge/api/v1/users
+```
+http://localhost:8081/api/v1/challenges
+```
 
-The gateway handles routing automatically.
+Note: `/itachallenge/api/v1/users` will be available once account-service implements its first endpoints.
 
 ---
 
@@ -207,6 +297,7 @@ Frontend developers can test backend changes without waiting for merge to `devel
 ```bash
 git fetch
 git checkout <backend-branch>
+
 docker compose \
   --profile backend \
   -f docker-compose.yml \
@@ -214,31 +305,17 @@ docker compose \
   up --build
 ```
 
-This runs the backend using the code from the selected branch.
-
 ---
 
 # 🛠 Useful commands
 
-### Rebuild only frontend
+Rebuild only frontend:
 
 ```bash
 docker compose --profile full up -d --build frontend
 ```
 
-### Stop everything
-
-```bash
-docker compose down
-```
-
-### Full reset (containers + volumes)
-
-```bash
-docker compose down -v
-```
-
-### View logs
+View logs:
 
 ```bash
 docker compose logs -f
