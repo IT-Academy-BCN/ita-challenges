@@ -320,3 +320,9 @@ View logs:
 ```bash
 docker compose logs -f
 ```
+
+---
+
+# 🏛 Backend architecture
+
+See [`backend/README.md`](./backend/README.md) for architecture documentation.
