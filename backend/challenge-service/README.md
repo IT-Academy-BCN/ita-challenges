@@ -25,6 +25,24 @@ For general architecture guidelines shared across all backend services see [`bac
 
 ---
 
+## Domain rules
+
+### Submission lifecycle
+
+A user can only have 1 submission per challenge. Once it reaches a terminal state it cannot be changed.
+
+| From | To | Allowed |
+|---|---|---|
+| NONE | IN_PROGRESS | ✅ save draft |
+| NONE | FINAL | ✅ finalize directly |
+| NONE | INCOMPLETE | ✅ mark incomplete directly |
+| IN_PROGRESS | FINAL | ✅ |
+| IN_PROGRESS | INCOMPLETE | ✅ |
+| FINAL | any | ❌ terminal state |
+| INCOMPLETE | any | ❌ terminal state |
+
+---
+
 ## Run locally
 
 ```bash
