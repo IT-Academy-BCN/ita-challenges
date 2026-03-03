@@ -8,4 +8,6 @@ public record SubmissionId(UUID value) {
     }
     public static SubmissionId generate() { return new SubmissionId(UUID.randomUUID()); }
     public static SubmissionId of(String value) { return new SubmissionId(UUID.fromString(value)); }
+    @Override
+    public String toString() { return value.toString(); }
 }

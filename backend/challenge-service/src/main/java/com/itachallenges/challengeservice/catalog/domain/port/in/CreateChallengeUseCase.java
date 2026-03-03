@@ -1,8 +1,8 @@
 package com.itachallenges.challengeservice.catalog.domain.port.in;
 
 import com.itachallenges.challengeservice.catalog.application.dto.CreateChallengeCommand;
-import com.itachallenges.challengeservice.catalog.application.dto.CreateChallengeResult;
+import com.itachallenges.challengeservice.catalog.application.dto.CreateChallengeResponse;
 
 public interface CreateChallengeUseCase {
-    CreateChallengeResult create(CreateChallengeCommand command);
+    CreateChallengeResponse create(CreateChallengeCommand command);
 }

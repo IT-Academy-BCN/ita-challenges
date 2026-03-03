@@ -1,7 +1,7 @@
 package com.itachallenges.challengeservice.catalog.application.usecase;
 
 import com.itachallenges.challengeservice.catalog.application.dto.CreateChallengeCommand;
-import com.itachallenges.challengeservice.catalog.application.dto.CreateChallengeResult;
+import com.itachallenges.challengeservice.catalog.application.dto.CreateChallengeResponse;
 import com.itachallenges.challengeservice.catalog.domain.Challenge;
 import com.itachallenges.challengeservice.catalog.domain.port.in.CreateChallengeUseCase;
 import com.itachallenges.challengeservice.catalog.domain.port.out.ChallengeRepository;
@@ -17,7 +17,7 @@ public class CreateChallengeUseCaseHandler implements CreateChallengeUseCase {
     }
 
     @Override
-    public CreateChallengeResult create(CreateChallengeCommand command) {
+    public CreateChallengeResponse create(CreateChallengeCommand command) {
 
         Challenge challenge = Challenge.createNew(
                 command.title(),
@@ -26,6 +26,6 @@ public class CreateChallengeUseCaseHandler implements CreateChallengeUseCase {
 
         Challenge saved = challengeRepository.save(challenge);
 
-        return new CreateChallengeResult(saved.id());
+        return new CreateChallengeResponse(saved.id());
     }
 }
