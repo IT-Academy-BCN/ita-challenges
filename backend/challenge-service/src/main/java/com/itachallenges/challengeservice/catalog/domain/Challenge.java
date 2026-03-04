@@ -19,7 +19,7 @@ public class Challenge {
     }
 
     public static Challenge createNew(String title, String description) {
-        return new Challenge(ChallengeId.random(), title, description);
+        return new Challenge(ChallengeId.generate(), title, description);
     }
 
     public static Challenge restore(ChallengeId id, String title, String description) {

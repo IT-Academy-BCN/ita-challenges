@@ -2,7 +2,9 @@ package com.itachallenges.challengeservice.submission.application.usecase;
 
 import com.itachallenges.challengeservice.submission.application.dto.MarkIncompleteCommand;
 import com.itachallenges.challengeservice.submission.domain.port.in.MarkIncompleteUseCase;
+import org.springframework.stereotype.Service;
 
+@Service
 public class MarkIncompleteUseCaseHandler implements MarkIncompleteUseCase {
     // TODO: inject SubmissionRepository and any other dependencies
 

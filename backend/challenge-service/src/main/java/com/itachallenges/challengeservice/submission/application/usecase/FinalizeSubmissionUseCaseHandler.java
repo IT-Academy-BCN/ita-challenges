@@ -2,7 +2,9 @@ package com.itachallenges.challengeservice.submission.application.usecase;
 
 import com.itachallenges.challengeservice.submission.application.dto.FinalizeSubmissionCommand;
 import com.itachallenges.challengeservice.submission.domain.port.in.FinalizeSubmissionUseCase;
+import org.springframework.stereotype.Service;
 
+@Service
 public class FinalizeSubmissionUseCaseHandler implements FinalizeSubmissionUseCase {
     // TODO: inject SubmissionRepository and any other dependencies
 

@@ -37,7 +37,7 @@ class ChallengeControllerTest {
     @Test
     void shouldCreateChallenge() throws Exception {
         when(createChallengeUseCase.create(any(CreateChallengeCommand.class)))
-                .thenReturn(new CreateChallengeResponse(ChallengeId.from("00000000-0000-0000-0000-000000000001")));
+                .thenReturn(new CreateChallengeResponse(ChallengeId.of("00000000-0000-0000-0000-000000000001")));
 
         mockMvc.perform(post("/api/v1/challenges")
                         .contentType(MediaType.APPLICATION_JSON)
