@@ -31,6 +31,9 @@ We organize `challenge-service` into four internal modules, each with its own ro
 **`catalog`** — aggregate `Challenge`
 Manages the challenge catalog: statement, language, tags, difficulty, official solution and resources. Only admins can create, edit and delete challenges.
 
+**Official solution visibility**
+The decision of whether to show the official solution is made in the application layer (`GetChallengeDetailUseCase`), not in the domain. The use case loads both `Challenge` and `Submission` aggregates and decides what to expose based on the submission status. The domain remains pure and has no knowledge of the caller context.
+
 **`submission`** — aggregate `Submission`
 Manages the lifecycle of a user's solution for a challenge. A user can transition to any status directly without going through IN_PROGRESS first. Key invariant: a user can only have 1 submission per challenge, and once it reaches a terminal state (FINAL or INCOMPLETE) it cannot be changed.
 
