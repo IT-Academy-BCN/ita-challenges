@@ -17,6 +17,16 @@ For general architecture guidelines shared across all backend services see [`bac
 
 ---
 
+## Shared
+
+The `shared` package contains value objects used across multiple bounded contexts within this service.
+
+| Class | Description |
+|:------|:------------|
+| `UserId` | Opaque identifier for a user. Owned by `account-service`, referenced here as a value object. |
+
+---
+
 ## Architecture Decision Records
 
 | ADR | Decision |
@@ -56,13 +66,14 @@ Once a submission reaches `FINAL` or `INCOMPLETE`, the official solution of the 
 
 `ChallengeStats` maintains global counters per challenge across all users.
 
-| Counter | Description |
-|:--------|:------------|
-| `timesDone` | Total number of users who finalized the challenge |
-| `favorites` | Total number of users who marked the challenge as favorite |
-| `bookmarks` | Total number of users who bookmarked the challenge |
+| Counter       | Description                                                  |
+|:--------------|:-------------------------------------------------------------|
+| `timesDone`   | Total number of users who finalized the challenge            |
+| `favorites`   | Total number of users who marked the challenge as favorite   |
+| `bookmarks`   | Total number of users who bookmarked the challenge           |
 
 Counters are updated in the same transaction as the action that triggers them and never go below 0.
+
 ---
 
 ## Run locally
