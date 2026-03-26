@@ -18,7 +18,7 @@ We needed to decide how to organize the code internally to make it maintainable,
 
 An aggregate is a cluster of domain objects that must change together to maintain business rules consistency. It has a single entry point called the **aggregate root**, and anything that wants to modify something inside the cluster must go through it.
 
-The aggregate root is the guardian of **invariants** — rules that can never be broken. For example: a user can only have 1 FINAL submission per challenge.
+The aggregate root is the guardian of **invariants** — rules that can never be broken. For example: a user can only have 1 submission per challenge in a terminal state.
 
 An aggregate is a pure Java class with attributes and business methods. It has no knowledge of databases, frameworks or other aggregates. Persistence is handled by a Repository (infrastructure), which loads and saves the aggregate without the aggregate knowing about it.
 
@@ -31,14 +31,19 @@ We organize `challenge-service` into four internal modules, each with its own ro
 **`catalog`** — aggregate `Challenge`
 Manages the challenge catalog: statement, language, tags, difficulty, official solution and resources. Only admins can create, edit and delete challenges.
 
-**`submissions`** — aggregate `Submission`
-Manages the lifecycle of a user's solution for a challenge: IN_PROGRESS → FINAL or INCOMPLETE. Key invariant: maximum 1 FINAL per user/challenge.
+**Official solution visibility**
+The decision of whether to show the official solution is made in the application layer (`GetChallengeDetailUseCase`), not in the domain. The use case loads both `Challenge` and `Submission` aggregates and decides what to expose based on the submission status. The domain remains pure and has no knowledge of the caller context.
 
-**`activity`** — aggregate `UserActivity`
+**`submission`** — aggregate `Submission`
+Manages the lifecycle of a user's solution for a challenge. A user can transition to any status directly without going through IN_PROGRESS first. Key invariant: a user can only have 1 submission per challenge, and once it reaches a terminal state (FINAL or INCOMPLETE) it cannot be changed.
+
+**`activity`** — aggregate `Activity`
 Manages user actions on a challenge: mark/unmark favorite and bookmark.
 
-**`stats`** — aggregate `ChallengeStats`
+**`stat`** — aggregate `ChallengeStats`
 Maintains global counters for a challenge: timesDone, favorites, bookmarks. Updated in the same transaction as submissions and activity.
+
+We also introduce a `shared` package for value objects used across multiple bounded contexts, such as `UserId`, which is owned by `account-service` and referenced here as an opaque identifier.
 
 ## Consequences
 
@@ -62,4 +67,4 @@ Discarded because a popular challenge could have thousands of submissions. Loadi
 Discarded because counters are updated very frequently (every favorite, every submission) while the challenge itself is rarely edited. Merging them would force loading the full statement just to increment a counter.
 
 **Move submissions to account-service**
-Discarded because the business rules of submission (max 1 FINAL, mandatory official solution) depend on the challenge, not the user. If submissions lived in account-service, it would need to call challenge-service to validate, creating write-time coupling between services.
+Discarded because the business rules of submission depend on the challenge, not the user. If submissions lived in account-service, it would need to call challenge-service to validate, creating write-time coupling between services.
