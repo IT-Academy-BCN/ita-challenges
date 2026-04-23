@@ -28,7 +28,7 @@ class ChallengeControllerTest {
 
     @Test
     void should_return_201_with_challenge_when_valid_request() throws Exception {
-        mockMvc.perform(post("/challenges")
+        mockMvc.perform(post("/challenge")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
