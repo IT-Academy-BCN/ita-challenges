@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
+import { IChallengeRequest } from '../models/ichallenge-request.interface';
 import { IChallenge } from '../models/ichallenge.interface';
-import { IChallengeResult } from '../models/ichallenge-result.interface';
 import { Observable, of } from 'rxjs';
 
 @Injectable({
@@ -9,7 +9,7 @@ import { Observable, of } from 'rxjs';
 
 export class ChallengeService {
   
-  create(challenge: IChallenge): Observable<IChallengeResult>  { 
+  create(challenge: IChallengeRequest): Observable<IChallenge>  { 
     return of ({
       id: "1",
       title: challenge.title,
@@ -17,27 +17,11 @@ export class ChallengeService {
     })
   }
 
-  loadAll(): Observable<IChallengeResult[]> {
-    return of ( [
-      {
-        id: "1",
-        title:"primero",
-        description: "primero d"
-      },
-      {
-        id: "2",
-        title:"segundo",
-        description: "segundo d"
-      },
-      {
-        id: "3",
-        title:"tercero",
-        description: "tercero d"
-      }
-    ])
+  loadAll(): Observable<IChallenge[]> {
+    return of ([])
   }
 
-  update(id: string, challenge: IChallenge): Observable<IChallengeResult> { 
+  update(id: string, challenge: IChallengeRequest): Observable<IChallenge> { 
     return of ({
       id: id,
       title: challenge.title,
