@@ -10,5 +10,13 @@ management:
     health:
       probes:
         enabled: true
+  security:
+    oauth2:
+      client:
+        registration:
+          github:
+            client-id: ${GITHUB_CLIENT_ID}
+            client-secret: ${GITHUB_CLIENT_SECRET}
+            scope: user:email
 server:
   port: ${SERVER_PORT:8080}
