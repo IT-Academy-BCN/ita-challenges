@@ -15,7 +15,7 @@ public record ChallengeDescription(String value) {
         value = value.trim();
         if (value.length() < MIN_LENGTH || value.length() > MAX_LENGTH) {
             throw new InvalidChallengeDescriptionException(
-                    "Challenge title must be between " + MIN_LENGTH + " and " + MAX_LENGTH + " characters long"
+                    "Challenge description must be between " + MIN_LENGTH + " and " + MAX_LENGTH + " characters long"
             );
         }
     }
