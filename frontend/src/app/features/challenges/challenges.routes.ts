@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
-import { ChallengesListPage } from './pages/challenges-list-page.component';
 import { ChallengeDetailPage } from './pages/challenge-detail-page.component';
+import { ChallengesListPage } from './pages/challenges-list-page/challenges-list-page';
 
 export const CHALLENGES_ROUTES: Routes = [
   {
