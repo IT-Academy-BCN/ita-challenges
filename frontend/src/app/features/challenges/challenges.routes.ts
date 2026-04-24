@@ -9,11 +9,11 @@ export const CHALLENGES_ROUTES: Routes = [
     component: ChallengesListPage,
   },
   {
-    path: ':id',
-    component: ChallengeDetailPage,
-  },
-  {
     path: 'create',
     component: CreateChallengePage,
+  },
+  {
+    path: ':id',
+    component: ChallengeDetailPage,
   },
 ];
