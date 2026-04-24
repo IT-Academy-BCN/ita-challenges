@@ -20,4 +20,21 @@ describe('CreateChallengePage', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should start the form with empty fields', () => {
+    const title = component.challengeForm.get('title')
+    const description = component.challengeForm.get('description')
+
+    expect(title?.value).toBe('')
+    expect(description?.value).toBe('')
+  })
+
+it('should call onSubmit when form is submitted', () => {
+  vi.spyOn(component, 'onSubmit');
+
+  const form = fixture.nativeElement.querySelector('form');
+  form.dispatchEvent(new Event('submit'));
+
+  expect(component.onSubmit).toHaveBeenCalled();
+});
 });
