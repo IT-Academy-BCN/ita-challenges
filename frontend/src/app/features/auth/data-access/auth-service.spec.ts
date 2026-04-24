@@ -8,7 +8,7 @@ const mockUser: AuthUser = {
   avatarUrl: 'url-123',
 };
 
-describe.only('AuthService', () => {
+describe('AuthService', () => {
   let service: AuthService;
 
   beforeEach(() => {
