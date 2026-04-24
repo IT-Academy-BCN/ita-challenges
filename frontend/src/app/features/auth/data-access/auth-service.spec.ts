@@ -26,13 +26,11 @@ describe('AuthService', () => {
 
   it('should set user when setUser is called', () => {
       service.setUser(mockUser);
-
       expect(service.user()).toEqual(mockUser);
   });
 
   it('should return current user when getUser is called', () => {
     service.setUser(mockUser);
-
     expect(service.getUser()).toEqual(mockUser);
   });
 
