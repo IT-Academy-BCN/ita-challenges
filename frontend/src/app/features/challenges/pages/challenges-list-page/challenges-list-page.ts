@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { IChallenge } from '../../models/ichallenge.interface';
+import { CHALLENGES_MOCK } from '../../models/challenges.mock';
 
 @Component({
   selector: 'app-challenges-list-page',
@@ -8,4 +10,5 @@ import { Component } from '@angular/core';
 })
 export class ChallengesListPage {
 
+  challenges: IChallenge[] = CHALLENGES_MOCK;
 }
