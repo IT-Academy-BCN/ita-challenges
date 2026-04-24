@@ -1,4 +1,4 @@
-package com.ita.challenges.account.infraestructure.config;
+package com.ita.challenges.account.infrastructure.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

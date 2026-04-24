@@ -1,4 +1,4 @@
-package com.ita.challenges.account.infraestructure.config;  
+package com.ita.challenges.account.infrastructure.config;
   
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
