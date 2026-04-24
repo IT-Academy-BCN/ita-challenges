@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { ChallengeService } from '../../services/challenge.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-delete-challenge-page',
@@ -11,7 +12,8 @@ import { ChallengeService } from '../../services/challenge.service';
 export class DeleteChallengePage {
 
   readonly fb = inject(FormBuilder);
-  challengeService = inject(ChallengeService)
+  readonly challengeService = inject(ChallengeService)
+  readonly router = inject(Router)
 
   deleteChallengeForm = this.fb.group({
     challengeId: ['']
@@ -20,9 +22,14 @@ export class DeleteChallengePage {
   onSubmit(){
     const challengeId = this.deleteChallengeForm.value.challengeId ?? ''
     this.challengeService.delete(challengeId).subscribe({
-      next(value) {
-        console.log("OK")
+      next: (value) => {
+        this.goChallenges()    
       },
     })
   }
+
+  goChallenges(){
+    this.router.navigate(['/challenges/'])
+  }
+
 }
