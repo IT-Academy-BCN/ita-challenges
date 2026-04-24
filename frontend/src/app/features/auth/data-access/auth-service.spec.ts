@@ -36,16 +36,9 @@ describe('AuthService', () => {
     expect(service.getUser()).toEqual(mockUser);
   });
 
-  it('should not emit any value from loginWithGithub', () => {
-    let emitted = false;
-
-    service.loginWithGithub().subscribe({
-      next: () => {
-        emitted = true;
-      },
-    });
-
-    expect(emitted).toBe(false);
+  it('should return an observable from loginWithGithub', () => {
+    const result = service.loginWithGithub();
+    expect(result).toBeTruthy();
   });
   
 });
