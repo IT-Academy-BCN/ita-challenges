@@ -9,14 +9,14 @@ export class AuthService {
   user = signal<AuthUser | null>(null);
 
   loginWithGithub(): Observable<AuthUser> {
-    return EMPTY
+    return EMPTY;
   }
 
   setUser(user: AuthUser): void {
     this.user.set(user);
   }
 
-  getUser():AuthUser | null {
+  getUser(): AuthUser | null {
     return this.user();
   }
 

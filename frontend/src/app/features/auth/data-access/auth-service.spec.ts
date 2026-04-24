@@ -21,7 +21,7 @@ describe('AuthService', () => {
   });
 
   it('should initialize user as null', () => {
-    expect(service.user()).toBe(null)
+    expect(service.user()).toBe(null);
   });
 
   it('should set user when setUser is called', () => {
