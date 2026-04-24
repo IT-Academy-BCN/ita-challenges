@@ -1,1 +1,10 @@
-<p>delete-challenge-page works!</p>
+<h1>Esborrar Repte</h1>
+
+<form [formGroup]="deleteChallengeForm" (ngSubmit)="onSubmit()">
+    <div>
+        <label for="challengeId">ID del repte</label>
+        <input type="text" id="challengeId" formControlName="challengeId">
+    </div>
+    
+    <button type="submit">Eliminar repte</button>
+</form>
