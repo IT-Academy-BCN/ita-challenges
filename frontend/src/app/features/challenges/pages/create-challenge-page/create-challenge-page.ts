@@ -1,6 +1,8 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { IChallengeRequest } from '../../models/ichallenge-request.interface';
+import { ChallengeService } from '../../services/challenge.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-create-challenge-page',
@@ -10,6 +12,8 @@ import { IChallengeRequest } from '../../models/ichallenge-request.interface';
 })
 export class CreateChallengePage {
 
+  readonly challengeService = inject(ChallengeService)
+  readonly router = inject(Router)
   readonly fb = inject(FormBuilder)
 
   challengeForm = this.fb.group({
@@ -18,8 +22,15 @@ export class CreateChallengePage {
   })
 
   onSubmit() {
-    const newChallenge = this.challengeForm.value as IChallengeRequest
-    console.log('Challenge created:', newChallenge)
+    if (this.challengeForm.valid) {
+      const newChallenge = this.challengeForm.value as IChallengeRequest
 
-}
+      this.challengeService.create(newChallenge).subscribe({
+      next: (response) => {
+        this.router.navigate(['/challenges']);
+      }
+    });
+    }
+
+  }
 }

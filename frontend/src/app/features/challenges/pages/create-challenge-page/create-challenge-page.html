@@ -1,12 +1,12 @@
 <form [formGroup]="challengeForm" (ngSubmit)="onSubmit()">
   <div>
     <label for="title">Títol del repte</label>
-    <input type="text" id="text" formControlName="title">
+    <input type="text" id="title" formControlName="title">
   </div>
 
   <div>
     <label for="description">Descripció</label>
-    <input type="description" id="description" formControlName="description">
+    <input type="text" id="description" formControlName="description">
   </div>
 
   <button type="submit">Crear</button>
