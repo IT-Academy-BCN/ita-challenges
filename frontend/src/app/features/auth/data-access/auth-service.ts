@@ -1,6 +1,6 @@
 import { Injectable, signal } from '@angular/core';
 import { AuthUser } from '../models/auth-user.model';
-import { Observable, of } from 'rxjs';
+import { delay, Observable, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -14,7 +14,7 @@ export class AuthService {
       avatarUrl: 'https://github.com/MockUser.png',
     };
 
-    return of(MOCK_USER);
+    return of(MOCK_USER).pipe(delay(1000));
   }
 
   setUser(user: AuthUser): void {
