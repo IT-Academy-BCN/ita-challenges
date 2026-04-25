@@ -4,5 +4,5 @@ import com.itachallenges.challengeservice.catalog.domain.model.Challenge;
 import java.util.List;
 
 public interface ChallengeRepository {
-    List<Challenge> findAllChallenges();
+    List<Challenge> findAll();
 }

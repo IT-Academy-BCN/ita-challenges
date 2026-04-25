@@ -11,7 +11,7 @@ import java.util.List;
 public class InMemoryChallengeRepository implements ChallengeRepository {
 
     @Override
-    public List<Challenge> findAllChallenges() {
-        throw new UnsupportedOperationException("findAllChallenges not implemented yet");
+    public List<Challenge> findAll() {
+        throw new UnsupportedOperationException("findAll not implemented yet");
     }
 }
