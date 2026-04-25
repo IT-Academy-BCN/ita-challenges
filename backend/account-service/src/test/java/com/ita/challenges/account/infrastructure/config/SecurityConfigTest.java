@@ -29,9 +29,9 @@ class SecurityConfigTest {
     }  
   
     @Test
-    @DisplayName("Should permit all requests to /api/account/** endpoints")
+    @DisplayName("Should permit all requests to /api/account/auth/** endpoints")
     void shouldPermitAllRequestsToAccountApi() throws Exception {
-        mockMvc.perform(get("/api/account/test"))
+        mockMvc.perform(get("/api/account/auth/test"))
                 .andExpect(status().isNotFound());
     }
 
