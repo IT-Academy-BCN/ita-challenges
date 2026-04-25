@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 public class InMemoryChallengeRepository implements ChallengeRepository {
 
     @Override
-    public Challenge updateChallenge(Challenge challenge) {
+    public Challenge update(Challenge challenge) {
         throw new UnsupportedOperationException("To be implemented");
     }
 
