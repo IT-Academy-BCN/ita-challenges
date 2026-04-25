@@ -7,7 +7,7 @@ import { CHALLENGES_MOCK } from '../models/challenges.mock';
 
 describe('ChallengeService', () => {
   let service: ChallengeService;
-  let mockChallengeApiService: any;
+  let mockChallengeApiService: Partial<ChallengeApiService>;
 
   beforeEach(() => {
     mockChallengeApiService = {
