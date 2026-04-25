@@ -8,15 +8,15 @@ import { Router } from '@angular/router';
 describe('DeleteChallengePage', () => {
   let component: DeleteChallengePage;
   let fixture: ComponentFixture<DeleteChallengePage>;
-  let mockChallengeService: any;
-  let mockRouter: any;
+  let mockChallengeService: Partial<ChallengeService>;
+  let mockRouter: Partial<Router>;
 
   beforeEach(async () => {
     mockChallengeService = {
-      delete: (id: string) => of({ success: true})
+      delete: (id: string) => of(undefined)
     };
     mockRouter = {
-      navigate: vi.fn()
+      navigate: vi.fn() as any
     };
     await TestBed.configureTestingModule({
       imports: [DeleteChallengePage],
@@ -55,7 +55,7 @@ describe('DeleteChallengePage', () => {
     const testId = '123'
     component.deleteChallengeForm.setValue({challengeId: testId})
 
-    vi.spyOn(mockChallengeService, 'delete').mockReturnValue(of({success: true}))
+    vi.spyOn(mockChallengeService, 'delete').mockReturnValue(of(undefined))
 
     component.onSubmit()
     expect(mockChallengeService.delete).toHaveBeenCalledWith(testId);
