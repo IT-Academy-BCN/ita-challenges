@@ -14,7 +14,7 @@ import java.util.List;
 public class ChallengeController {
 
     @GetMapping
-    public ResponseEntity<List<ChallengeResponse>> findAllChallenges() {
+    public ResponseEntity<List<ChallengeResponse>> findAll() {
         return ResponseEntity.ok(List.of());
     }
 
