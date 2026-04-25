@@ -1,7 +1,6 @@
-package com.itachallenges.challengeservice.catalog.infrastructure.adapter.out.persistence;
+package com.itachallenges.challengeservice.catalog.infrastructure.adapter.web.out.persistence;
 
 import com.itachallenges.challengeservice.catalog.domain.model.Challenge;
-import com.itachallenges.challengeservice.catalog.infrastructure.adapter.web.out.persistence.InMemoryChallengeRepository;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
