@@ -9,12 +9,12 @@ export class AuthService {
   user = signal<AuthUser | null>(null);
 
   loginWithGithub(): Observable<AuthUser> {
-    const user: AuthUser = {
-      username: 'JordiMiravet',
-      avatarUrl: 'https://github.com/JordiMiravet.png',
+    const MOCK_USER: AuthUser = {
+      username: 'MockUser',
+      avatarUrl: 'https://github.com/MockUser.png',
     };
 
-    return of(user);
+    return of(MOCK_USER);
   }
 
   setUser(user: AuthUser): void {

@@ -4,9 +4,9 @@ import { firstValueFrom } from 'rxjs';
 import { AuthService } from './auth-service';
 import { AuthUser } from '../models/auth-user.model';
 
-const mockUser: AuthUser = {
-  username: 'JordiMiravet',
-  avatarUrl: 'https://github.com/JordiMiravet.png',
+const MOCK_USER: AuthUser = {
+  username: 'MockUser',
+  avatarUrl: 'https://github.com/MockUser.png',
 };
 
 describe('AuthService', () => {
@@ -29,13 +29,13 @@ describe('AuthService', () => {
   });
 
   it('should return current user when getUser is called', () => {
-    service.setUser(mockUser);
-    expect(getUser()).toEqual(mockUser);
+    service.setUser(MOCK_USER);
+    expect(getUser()).toEqual(MOCK_USER);
   });
 
   it('should return mock user when loginWithGithub is called', async () => {
     const result = await firstValueFrom(service.loginWithGithub());
-    expect(result).toEqual(mockUser);
+    expect(result).toEqual(MOCK_USER);
   });
 
   it('should not modify user signal when loginWithGithub is called', () => {
