@@ -7,9 +7,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/challenge")
 public class ChallengeController {
+
+    @GetMapping
+    public ResponseEntity<List<ChallengeResponse>> findAllChallenges() {
+        return ResponseEntity.ok(List.of());
+    }
 
     @PostMapping
     public ResponseEntity<ChallengeResponse> create(@RequestBody ChallengeRequest request) {
