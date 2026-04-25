@@ -2,7 +2,7 @@
     <h1>Login</h1>
 
     <button (click)="login()" [disabled]="loading()" class="auth__button">
-        @if(loading()) {
+        @if (loading()) {
             <span>Loading...</span>
         } @else {
             <span>Login with GitHub</span>

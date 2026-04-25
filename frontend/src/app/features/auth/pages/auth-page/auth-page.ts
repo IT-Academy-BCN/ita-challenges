@@ -9,7 +9,7 @@ import { AuthService } from '../../data-access/auth-service';
   styleUrl: './auth-page.css',
 })
 export class AuthPageComponent {
-  authService = inject(AuthService);
+  private readonly authService = inject(AuthService);
 
   loading = signal(false);
   error = signal(false);
