@@ -13,9 +13,9 @@ import { IChallengeRequest } from '../../models/ichallenge-request.interface';
 })
 export class EditChallengePage {
 
-  readonly challengeService = inject(ChallengeService)
-  readonly router = inject(Router)
-  readonly fb = inject(FormBuilder)
+  private readonly challengeService = inject(ChallengeService)
+  private readonly router = inject(Router)
+  private readonly fb = inject(FormBuilder)
 
   editForm = this.fb.group({
     id: [''],
