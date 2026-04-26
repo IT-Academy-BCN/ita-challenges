@@ -1,4 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
+import { Router } from '@angular/router';
 import { AuthService } from '../../data-access/auth-service';
 
 @Component({
@@ -10,6 +11,7 @@ import { AuthService } from '../../data-access/auth-service';
 })
 export class AuthPageComponent {
   private readonly authService = inject(AuthService);
+  private readonly router = inject(Router)
 
   loading = signal(false);
   error = signal(false);
@@ -23,7 +25,7 @@ export class AuthPageComponent {
     this.authService.loginWithGithub().subscribe({
       next: (user) => {
         this.authService.setUser(user);
-        this.loading.set(false);
+        this.router.navigate(['/profile']);
       }, 
       error: () => {
         this.error.set(true);
