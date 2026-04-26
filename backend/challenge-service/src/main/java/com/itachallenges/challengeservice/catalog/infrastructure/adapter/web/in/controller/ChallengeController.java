@@ -23,4 +23,29 @@ public class ChallengeController {
                 )
         );
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable String id) {
+        // TODO: Implement #381 by calling the appropriate UseCase later
+        // For now, returning 204 to satisfy the endpoint definition
+        return ResponseEntity.noContent().build();
+    }
+
+
+
 }
