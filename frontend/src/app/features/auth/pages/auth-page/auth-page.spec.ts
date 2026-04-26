@@ -3,10 +3,14 @@ import { AuthPageComponent } from './auth-page';
 import { AuthService } from '../../data-access/auth-service';
 import { of, throwError } from 'rxjs';
 import { vi } from 'vitest';
+import { Router } from '@angular/router';
 
 describe('AuthPageComponent', () => {
   let component: AuthPageComponent;
   let fixture: ComponentFixture<AuthPageComponent>;
+
+  let router: Router;
+  let navigateSpy: ReturnType<typeof vi.spyOn>;
 
   const authServiceMock = {
     loginWithGithub: vi.fn(),
@@ -31,6 +35,8 @@ describe('AuthPageComponent', () => {
 
     fixture = TestBed.createComponent(AuthPageComponent);
     component = fixture.componentInstance;
+    router = TestBed.inject(Router);
+    navigateSpy = vi.spyOn(router, 'navigate').mockResolvedValue(true);
 
     fixture.detectChanges();
   });
@@ -52,6 +58,12 @@ describe('AuthPageComponent', () => {
 
     expect(authServiceMock.setUser).toHaveBeenCalledWith(MOCK_USER);
     expect(component.loading()).toBe(false);
+  });
+
+  it('should navigate to /profile on success', () => {
+    authServiceMock.loginWithGithub.mockReturnValue(of(MOCK_USER));
+    component.login();
+    expect(navigateSpy).toHaveBeenCalledWith(['/profile']);
   });
 
   it('should set error on failure', () => {

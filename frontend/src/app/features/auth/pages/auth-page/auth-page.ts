@@ -25,6 +25,7 @@ export class AuthPageComponent {
     this.authService.loginWithGithub().subscribe({
       next: (user) => {
         this.authService.setUser(user);
+        this.loading.set(false);
         this.router.navigate(['/profile']);
       }, 
       error: () => {
