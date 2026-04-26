@@ -14,8 +14,8 @@ public class HomeController {
     public Map<String, Object> success(@AuthenticationPrincipal OAuth2User principal){
         return Map.of(
                 "username", principal.getAttribute("login"),
-                "avatarUrl",principal.getAttribute("avartar_url") !=null
-                ? principal.getAttribute("avartar_url"): ""
+                "avatarUrl",principal.getAttribute("avatar_url") !=null
+                ? principal.getAttribute("avatar_url"): ""
         );
     }
 }
