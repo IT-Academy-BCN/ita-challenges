@@ -9,5 +9,5 @@ import { AuthService } from '../../../auth/data-access/auth-service';
 })
 export class ProfilePageComponent {
   private readonly authService = inject(AuthService);
-  public user = this.authService.user;
+  public readonly user = this.authService.user;
 }
