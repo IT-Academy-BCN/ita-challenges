@@ -1,14 +1,31 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { CreateChallengePage } from './create-challenge-page';
+import { ChallengeService } from '../../services/challenge.service';
+import { Router } from '@angular/router';
+import { of } from 'rxjs';
 
 describe('CreateChallengePage', () => {
   let component: CreateChallengePage;
   let fixture: ComponentFixture<CreateChallengePage>;
+  let mockChallengeService: Partial<ChallengeService>;
+  let mockRouter: Partial<Router>;
 
   beforeEach(async () => {
+
+    mockChallengeService = {
+      create: () => of({ id: '1', title: '', description: '' })
+    };
+
+    mockRouter = {
+      navigate: vi.fn() as any
+    };
+
     await TestBed.configureTestingModule({
-      imports: [CreateChallengePage]
+      imports: [CreateChallengePage],
+      providers: [
+        { provide: ChallengeService, useValue: mockChallengeService },
+        { provide: Router, useValue: mockRouter }
+      ]
     })
     .compileComponents();
 
@@ -22,19 +39,44 @@ describe('CreateChallengePage', () => {
   });
 
   it('should start the form with empty fields', () => {
-    const title = component.challengeForm.get('title')
-    const description = component.challengeForm.get('description')
+    const title = component.challengeForm.get('title');
+    const description = component.challengeForm.get('description');
 
-    expect(title?.value).toBe('')
-    expect(description?.value).toBe('')
-  })
+    expect(title?.value).toBe('');
+    expect(description?.value).toBe('');
+  });
 
-it('should call onSubmit when form is submitted', () => {
-  vi.spyOn(component, 'onSubmit');
+  it('should call onSubmit when form is submitted', () => {
+    vi.spyOn(component, 'onSubmit');
 
-  const form = fixture.nativeElement.querySelector('form');
-  form.dispatchEvent(new Event('submit'));
+    const form = fixture.nativeElement.querySelector('form');
+    form.dispatchEvent(new Event('submit'));
 
-  expect(component.onSubmit).toHaveBeenCalled();
-});
+    expect(component.onSubmit).toHaveBeenCalled();
+  });
+
+  it('should call challengeService.create when call onSubmit with correct data', () => {
+    const testData = { title: 'Nou Repte', description: 'Descripció' };
+    component.challengeForm.setValue(testData);
+
+    vi.spyOn(mockChallengeService, 'create').mockReturnValue(of({ id: '1', ...testData }));
+
+    component.onSubmit();
+
+    expect(mockChallengeService.create).toHaveBeenCalledWith(testData);
+  });
+
+  it('should call goChallenges when call onSubmit', () => {
+    vi.spyOn(component, 'goChallenges');
+
+    component.onSubmit();
+
+    expect(component.goChallenges).toHaveBeenCalled();
+  });
+
+  it('should navigate when call goChallenges', () => {
+    component.goChallenges();
+
+    expect(mockRouter.navigate).toHaveBeenCalledWith(['/challenges']);
+  });
 });

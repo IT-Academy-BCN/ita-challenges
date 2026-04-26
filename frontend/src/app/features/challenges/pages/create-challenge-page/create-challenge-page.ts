@@ -26,11 +26,14 @@ export class CreateChallengePage {
       const newChallenge = this.challengeForm.value as IChallengeRequest
 
       this.challengeService.create(newChallenge).subscribe({
-      next: (response) => {
-        this.router.navigate(['/challenges']);
+      next: () => {
+        this.goChallenges();
       }
     });
     }
+  }
 
+  goChallenges() {
+    this.router.navigate(['/challenges']);
   }
 }
