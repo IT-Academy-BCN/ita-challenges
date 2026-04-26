@@ -66,6 +66,15 @@ describe('AuthPageComponent', () => {
     expect(navigateSpy).toHaveBeenCalledWith(['/profile']);
   });
 
+  it('should not call loginWithGithub if already loading', () => {
+    authServiceMock.loginWithGithub.mockReturnValue(of(MOCK_USER));
+    component.loading.set(true);
+    component.login();
+
+    expect(authServiceMock.loginWithGithub).not.toHaveBeenCalled();
+    expect(authServiceMock.setUser).not.toHaveBeenCalled();
+  });
+
   it('should set error on failure', () => {
     authServiceMock.loginWithGithub.mockReturnValue(
       throwError(() => new Error('fail'))
