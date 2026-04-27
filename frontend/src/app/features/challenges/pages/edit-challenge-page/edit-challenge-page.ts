@@ -13,34 +13,34 @@ import { IChallengeRequest } from '../../models/ichallenge-request.interface';
 })
 export class EditChallengePage {
 
-  private readonly challengeService = inject(ChallengeService)
-  private readonly router = inject(Router)
-  private readonly fb = inject(FormBuilder)
+  private readonly challengeService = inject(ChallengeService);
+  private readonly router = inject(Router);
+  private readonly fb = inject(FormBuilder);
 
   editForm = this.fb.group({
     id: [{value: '', disabled: true}],
     title: [''],
     description: ['']
-  })
+  });
 
   onSubmit() {
 
-    const { id, title, description} = this.editForm.getRawValue()
+    const { id, title, description} = this.editForm.getRawValue();
 
     const challengePayload: IChallengeRequest = {
       title: title ?? '',
       description: description ?? ''
-    }
+    };
 
     this.challengeService.update(id?? '', challengePayload).subscribe({
       next: () => {
         this.goChallenges()
       },
-    })
-  }
+    });
+  };
 
   goChallenges() {
     this.router.navigate(['/challenges']);
-  }
+  };
 
 }
