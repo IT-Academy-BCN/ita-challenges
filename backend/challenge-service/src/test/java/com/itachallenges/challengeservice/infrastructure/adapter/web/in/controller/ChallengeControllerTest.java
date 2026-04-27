@@ -39,14 +39,8 @@ class ChallengeControllerTest {
     }
 
 
-    /**
-     * Skeleton Test for Delete endpoint (#381).
-     * Only verifying that the path exists and returns 204.
-     */
     @Test
     void should_return_204_when_delete_challenge_by_id() throws Exception {
-        // Currently, we don't 'verify' the repository call because the
-        // controller method is just a placeholder and doesn't call it yet.
         mockMvc.perform(delete("/api/challenge/{id}",  "dcacb291-ea40-4924-8430-6d4ef63908f2"))
                 .andExpect(status().isNoContent());
     }
