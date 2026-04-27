@@ -17,10 +17,6 @@ import java.util.List;
 public class ChallengeController {
 
     private final ChallengeRepository challengeRepository;
-    @GetMapping
-    public ResponseEntity<List<ChallengeResponse>> findAll() {
-        return ResponseEntity.ok(List.of());
-    }
 
     @PostMapping
     public ResponseEntity<ChallengeResponse> create(@RequestBody ChallengeRequest request) {
@@ -34,5 +30,14 @@ public class ChallengeController {
                         challenge.getDescription().toString()
                 )
         );
+    }
+
+    @GetMapping
+    public ResponseEntity<List<ChallengeResponse>> findAll() {
+        List<ChallengeResponse> challenges = challengeRepository.findAll()
+                .stream()
+                .map(c -> new ChallengeResponse(c.getId().toString(), c.getTitle().toString(), c.getDescription().toString()))
+                .toList();
+        return ResponseEntity.ok(challenges);
     }
 }
