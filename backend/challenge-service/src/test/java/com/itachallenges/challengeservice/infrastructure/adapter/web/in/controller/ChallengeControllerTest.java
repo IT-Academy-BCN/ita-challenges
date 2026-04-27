@@ -39,20 +39,6 @@ class ChallengeControllerTest {
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     /**
      * Skeleton Test for Delete endpoint (#381).
      * Only verifying that the path exists and returns 204.

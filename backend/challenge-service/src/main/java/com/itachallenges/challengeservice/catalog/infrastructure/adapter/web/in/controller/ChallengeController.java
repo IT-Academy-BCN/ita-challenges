@@ -26,19 +26,6 @@ public class ChallengeController {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable String id) {
         // TODO: Implement #381 by calling the appropriate UseCase later
