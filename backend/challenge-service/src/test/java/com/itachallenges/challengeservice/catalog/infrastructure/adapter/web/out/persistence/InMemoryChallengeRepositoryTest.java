@@ -12,7 +12,6 @@ class InMemoryChallengeRepositoryTest {
 
     @Test
     void should_update_existing_challenge() {
-
         Challenge original = Challenge.create("Old title", "Old description");
 
         repository.storage.put(original.getId(), original);
@@ -25,7 +24,11 @@ class InMemoryChallengeRepositoryTest {
 
         Challenge result = repository.update(updated);
 
+        assertThat(result.getTitle().toString()).isEqualTo("New title");
         assertThat(result.getDescription().toString()).isEqualTo("New description");
+    }
+
+    @Test
     void delete_shouldThrowUnsupportedOperationException() {
         InMemoryChallengeRepository repository = new InMemoryChallengeRepository();
         assertThrows(UnsupportedOperationException.class, () -> repository.delete("any-id"));
