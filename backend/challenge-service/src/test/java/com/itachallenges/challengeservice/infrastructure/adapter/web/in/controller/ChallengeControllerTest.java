@@ -10,6 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -28,8 +29,15 @@ class ChallengeControllerTest {
     );
 
     @Test
+    void should_return_200_with_empty_list_when_requesting_all_challenges() throws Exception {
+        mockMvc.perform(get("/api/challenge"))
+                .andExpect(status().isOk())
+                .andExpect(content().json("[]"));
+    }
+
+    @Test
     void should_return_201_with_challenge_when_valid_request() throws Exception {
-        mockMvc.perform(post("/challenge")
+        mockMvc.perform(post("/api/challenge")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
@@ -44,4 +52,5 @@ class ChallengeControllerTest {
         mockMvc.perform(delete("/api/challenge/{id}",  "dcacb291-ea40-4924-8430-6d4ef63908f2"))
                 .andExpect(status().isNoContent());
     }
+}
 }
