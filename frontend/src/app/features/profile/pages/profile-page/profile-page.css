@@ -1,0 +1,30 @@
+:host {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+.profile__container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 2rem;
+
+    padding: 2.5rem;
+    border-radius: .5rem;
+
+    color: rgb(68, 68, 68);
+    background-color: white;
+    box-shadow: 0 5px 15px 5px rgba(0, 0, 0, 0.5);
+}
+
+.profile__image {
+    width: 10rem;
+    border-radius: 10rem;
+}
+
+.profile__empty {
+    font-size: 2rem;
+}

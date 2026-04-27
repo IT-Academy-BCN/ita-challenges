@@ -23,5 +23,9 @@ public class InMemoryChallengeRepository implements ChallengeRepository {
     @Override
     public void save(Challenge challenge) {
         storage.put(challenge.getId(), challenge);
+    
+    @Override
+    public void delete(String id) {
+        throw new UnsupportedOperationException("Not implemented yet");
     }
 }

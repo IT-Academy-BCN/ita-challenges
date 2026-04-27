@@ -11,6 +11,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -30,6 +31,13 @@ class ChallengeControllerTest {
             "Clean Code Challenge",
             "A challenge about writing clean and maintainable code"
     );
+
+    @Test
+    void should_return_200_with_empty_list_when_requesting_all_challenges() throws Exception {
+        mockMvc.perform(get("/api/challenge"))
+                .andExpect(status().isOk())
+                .andExpect(content().json("[]"));
+    }
 
     @Test
     void should_return_201_with_challenge_when_valid_request() throws Exception {

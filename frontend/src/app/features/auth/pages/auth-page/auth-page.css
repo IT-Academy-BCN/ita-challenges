@@ -1,0 +1,27 @@
+.auth {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 1rem;
+    min-height: 100vh;
+}
+
+.auth__button {
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    border: 1px solid gray;
+    transition: background-color 0.25s ease;
+    cursor: pointer;
+}
+.auth__button:hover:not(:disabled) {
+    background-color: gray;
+}
+.auth__button:disabled {
+    color: gray;
+    cursor: not-allowed;  
+}
+
+.auth__error {
+    color: red;
+}
