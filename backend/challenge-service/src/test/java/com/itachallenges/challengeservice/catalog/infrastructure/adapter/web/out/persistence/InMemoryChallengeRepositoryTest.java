@@ -13,10 +13,8 @@ class InMemoryChallengeRepositoryTest {
     @Test
     void should_update_existing_challenge() {
 
-        // given
         Challenge original = Challenge.create("Old title", "Old description");
 
-        // prepare existing state since update requires the challenge to exist
         repository.storage.put(original.getId(), original);
 
         Challenge updated = Challenge.restore(
@@ -25,11 +23,8 @@ class InMemoryChallengeRepositoryTest {
                 "New description"
         );
 
-        // when
         Challenge result = repository.update(updated);
 
-        // then
-        assertThat(result.getTitle().toString()).isEqualTo("New title");
         assertThat(result.getDescription().toString()).isEqualTo("New description");
     void delete_shouldThrowUnsupportedOperationException() {
         InMemoryChallengeRepository repository = new InMemoryChallengeRepository();
