@@ -18,11 +18,8 @@ public class InMemoryChallengeRepository implements ChallengeRepository {
 
         ChallengeId id = challenge.getId();
 
-        if (!storage.containsKey(id)) {
-            throw new RuntimeException("Challenge not found with id: " + id);
-        }
-
         storage.put(id, challenge);
+
         return challenge;
     }
 }
