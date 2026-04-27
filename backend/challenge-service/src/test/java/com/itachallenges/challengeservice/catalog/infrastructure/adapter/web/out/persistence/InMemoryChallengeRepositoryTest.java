@@ -1,6 +1,5 @@
-package com.itachallenges.challengeservice.catalog.infrastructure.adapter.out.persistence;
+package com.itachallenges.challengeservice.catalog.infrastructure.adapter.web.out.persistence;
 
-import com.itachallenges.challengeservice.catalog.infrastructure.adapter.web.out.persistence.InMemoryChallengeRepository;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
