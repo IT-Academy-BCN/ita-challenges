@@ -18,7 +18,7 @@ export class EditChallengePage {
   private readonly fb = inject(FormBuilder);
 
   editForm = this.fb.group({
-    id: [{value: '', disabled: true}],
+    id: [''],
     title: [''],
     description: ['']
   });
