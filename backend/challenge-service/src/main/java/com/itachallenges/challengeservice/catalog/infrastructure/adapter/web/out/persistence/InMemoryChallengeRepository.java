@@ -19,4 +19,9 @@ public class InMemoryChallengeRepository implements ChallengeRepository {
     public List<Challenge> findAll() {
         return new ArrayList<>(storage.values());
     }
+
+    @Override
+    public void save(Challenge challenge) {
+        storage.put(challenge.getId(), challenge);
+    }
 }
