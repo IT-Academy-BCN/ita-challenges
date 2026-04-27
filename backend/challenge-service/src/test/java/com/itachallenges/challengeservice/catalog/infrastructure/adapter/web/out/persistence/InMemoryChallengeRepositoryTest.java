@@ -14,4 +14,9 @@ class InMemoryChallengeRepositoryTest {
         Challenge newChallenge = Challenge.create("New Challenge Title", "New Challenge Description");
         assertThrows(UnsupportedOperationException.class, () -> repository.save(newChallenge));
     }
+    
+    @Test
+    void delete_shouldThrowUnsupportedOperationException() {
+        assertThrows(UnsupportedOperationException.class, () -> repository.delete("any-id"));
+    }
 }

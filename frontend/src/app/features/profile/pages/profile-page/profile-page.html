@@ -1,0 +1,8 @@
+@if (user()) {
+    <div class="profile__container">
+        <img [src]="user()?.avatarUrl" alt="avatar" class="profile__image"/>
+        <h2 class="profile__text">{{ user()?.username }}</h2>
+    </div>
+} @else {
+    <p class="profile__empty">No user logged in</p>
+}
