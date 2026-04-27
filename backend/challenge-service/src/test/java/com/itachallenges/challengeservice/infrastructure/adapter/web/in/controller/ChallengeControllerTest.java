@@ -1,11 +1,13 @@
 package com.itachallenges.challengeservice.infrastructure.adapter.web.in.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.itachallenges.challengeservice.catalog.domain.port.out.ChallengeRepository;
 import com.itachallenges.challengeservice.catalog.infrastructure.adapter.web.in.controller.ChallengeController;
 import com.itachallenges.challengeservice.catalog.infrastructure.adapter.web.in.dto.ChallengeRequest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -21,6 +23,9 @@ class ChallengeControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @MockBean
+    private ChallengeRepository challengeRepository;
+
     ChallengeRequest request = new ChallengeRequest(
             "Clean Code Challenge",
             "A challenge about writing clean and maintainable code"
@@ -28,7 +33,7 @@ class ChallengeControllerTest {
 
     @Test
     void should_return_201_with_challenge_when_valid_request() throws Exception {
-        mockMvc.perform(post("/challenge")
+        mockMvc.perform(post("/api/challenge")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
