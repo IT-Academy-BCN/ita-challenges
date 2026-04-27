@@ -5,4 +5,6 @@ import java.util.List;
 
 public interface ChallengeRepository {
     List<Challenge> findAll();
+    Challenge save(Challenge challenge);
+    void delete(String id);
 }

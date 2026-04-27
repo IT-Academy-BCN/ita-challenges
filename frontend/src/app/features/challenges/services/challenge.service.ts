@@ -1,13 +1,16 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { IChallengeRequest } from '../models/ichallenge-request.interface';
 import { IChallenge } from '../models/ichallenge.interface';
 import { Observable, of } from 'rxjs';
+import { ChallengeApiService } from '../data-access/challenge-api.service';
 
 @Injectable({
   providedIn: 'root',
 })
 
 export class ChallengeService {
+
+  challengeApiService = inject(ChallengeApiService)
   
   create(challenge: IChallengeRequest): Observable<IChallenge>  { 
     return of ({
@@ -18,7 +21,7 @@ export class ChallengeService {
   }
 
   loadAll(): Observable<IChallenge[]> {
-    return of ([])
+    return this.challengeApiService.loadAll();
   }
 
   update(id: string, challenge: IChallengeRequest): Observable<IChallenge> { 
@@ -29,6 +32,6 @@ export class ChallengeService {
     })
   }
 
-  delete(id: string): Observable<void> { return of(undefined) }
+  delete(id: string): Observable<void> { return this.challengeApiService.delete(id) }
 
 }
