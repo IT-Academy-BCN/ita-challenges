@@ -12,8 +12,6 @@ export class ChallengeService {
 
   challengeApiService = inject(ChallengeApiService)
   
-  challengeApiService = inject(ChallengeApiService)
-
   create(challenge: IChallengeRequest): Observable<IChallenge>  { 
     return of ({
       id: "1",
