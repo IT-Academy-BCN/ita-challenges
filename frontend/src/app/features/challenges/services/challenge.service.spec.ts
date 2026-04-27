@@ -11,6 +11,7 @@ describe('ChallengeService', () => {
 
   beforeEach(() => {
     mockChallengeApiService = {
+      delete: (id: string) => of(undefined)
       loadAll: () => of(CHALLENGES_MOCK)
     };
 
@@ -26,6 +27,17 @@ describe('ChallengeService', () => {
     expect(service).toBeTruthy();
   });
 
+  describe('delete', () => {
+    it('should call challengeApiService.delete with the correct id and return its observable', () => {
+      const testId = '123';
+      const expectedObservable = of(undefined);
+      vi.spyOn(mockChallengeApiService, 'delete').mockReturnValue(expectedObservable);
+
+      const result = service.delete(testId);
+
+      expect(mockChallengeApiService.delete).toHaveBeenCalledWith(testId);
+      expect(result).toBe(expectedObservable);
+    });
   it('should return challenges from loadAll', () => {
     let result: any;
     service.loadAll().subscribe((challenges) => {

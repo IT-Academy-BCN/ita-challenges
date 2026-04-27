@@ -32,6 +32,6 @@ export class ChallengeService {
     })
   }
 
-  delete(id: string): Observable<void> { return of(undefined) }
+  delete(id: string): Observable<void> { return this.challengeApiService.delete(id) }
 
 }
