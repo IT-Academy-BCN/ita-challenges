@@ -3,6 +3,7 @@ import { of } from 'rxjs';
 
 import { ChallengeService } from './challenge.service';
 import { ChallengeApiService } from '../data-access/challenge-api.service';
+import { CHALLENGES_MOCK } from '../models/challenges.mock';
 
 describe('ChallengeService', () => {
   let service: ChallengeService;
@@ -11,6 +12,7 @@ describe('ChallengeService', () => {
   beforeEach(() => {
     mockChallengeApiService = {
       delete: (id: string) => of(undefined)
+      loadAll: () => of(CHALLENGES_MOCK)
     };
 
     TestBed.configureTestingModule({
@@ -36,5 +38,11 @@ describe('ChallengeService', () => {
       expect(mockChallengeApiService.delete).toHaveBeenCalledWith(testId);
       expect(result).toBe(expectedObservable);
     });
+  it('should return challenges from loadAll', () => {
+    let result: any;
+    service.loadAll().subscribe((challenges) => {
+      result = challenges;
+    });
+    expect(result).toEqual(CHALLENGES_MOCK);
   });
 });

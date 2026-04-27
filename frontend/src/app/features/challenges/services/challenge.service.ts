@@ -9,6 +9,8 @@ import { ChallengeApiService } from '../data-access/challenge-api.service';
 })
 
 export class ChallengeService {
+
+  challengeApiService = inject(ChallengeApiService)
   
   challengeApiService = inject(ChallengeApiService)
 
@@ -21,7 +23,7 @@ export class ChallengeService {
   }
 
   loadAll(): Observable<IChallenge[]> {
-    return of ([])
+    return this.challengeApiService.loadAll();
   }
 
   update(id: string, challenge: IChallengeRequest): Observable<IChallenge> { 
