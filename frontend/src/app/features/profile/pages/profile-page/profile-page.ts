@@ -9,14 +9,22 @@ import { AuthService } from '../../../auth/data-access/auth-service';
 })
 export class ProfilePageComponent implements OnInit {
   private readonly authService = inject(AuthService);
-  
+
   public user = this.authService.user;
-  error = signal(false);
+
+  public loading = signal(true);
+  public error = signal(false);
 
   ngOnInit(): void {
     this.authService.fetchUser().subscribe({
-      next: (user) => this.authService.setUser(user),
-      error: () => this.error.set(true),
+      next: (user) => {
+        this.authService.setUser(user);
+        this.loading.set(false);
+      },
+      error: () => {
+        this.error.set(true);
+        this.loading.set(false);
+      },
     });
   }
 }
