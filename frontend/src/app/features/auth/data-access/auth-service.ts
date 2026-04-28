@@ -13,7 +13,7 @@ export class AuthService {
   private readonly URL = '/api/account/oauth2/authorization/github';
 
   loginWithGithub(): void {
-    globalThis.location.href = this.URL
+    globalThis.location.href = this.URL;
   }
 
   fetchUser(): Observable<AuthUser> {
