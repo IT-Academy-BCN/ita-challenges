@@ -4,6 +4,7 @@ import { AuthService } from '../../../auth/data-access/auth-service';
 @Component({
   selector: 'app-profile-page',
   standalone: true,
+  imports: [],
   templateUrl: './profile-page.html',
   styleUrl: './profile-page.css',
 })

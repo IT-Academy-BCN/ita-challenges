@@ -1,7 +1,8 @@
 import { TestBed } from '@angular/core/testing';
+import { firstValueFrom } from 'rxjs';
+
 import { AuthService } from './auth-service';
 import { AuthUser } from '../models/auth-user.model';
-import { firstValueFrom } from 'rxjs';
 
 const MOCK_USER: AuthUser = {
   username: 'mockUser',

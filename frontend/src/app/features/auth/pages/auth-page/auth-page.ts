@@ -14,7 +14,7 @@ export class AuthPageComponent {
 
   login(): void {
     if (this.loading()) return;
-    
+
     this.loading.set(true);
     this.authService.loginWithGithub();
   }

@@ -17,9 +17,9 @@ describe('AuthPageComponent', () => {
     await TestBed.configureTestingModule({
       imports: [AuthPageComponent],
       providers: [
-        {
-          provide: AuthService,
-          useValue: authServiceMock,
+        { 
+          provide: AuthService, 
+          useValue: authServiceMock 
         },
       ],
     }).compileComponents();
