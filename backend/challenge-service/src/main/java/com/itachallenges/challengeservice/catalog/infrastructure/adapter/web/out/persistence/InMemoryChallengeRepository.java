@@ -11,12 +11,17 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @Repository
 public class InMemoryChallengeRepository implements ChallengeRepository {
-
+  
     private final Map<ChallengeId, Challenge> storage = new ConcurrentHashMap<>();
-
+    
     @Override
     public Challenge save(Challenge challenge) {
         storage.put(challenge.getId(), challenge);
         return challenge;
+    }
+    
+    @Override
+    public void delete(String id) {
+        throw new UnsupportedOperationException("Not implemented yet");
     }
 }

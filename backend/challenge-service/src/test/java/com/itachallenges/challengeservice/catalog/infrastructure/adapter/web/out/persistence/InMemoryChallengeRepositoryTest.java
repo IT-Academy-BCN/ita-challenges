@@ -4,6 +4,7 @@ import com.itachallenges.challengeservice.catalog.domain.model.Challenge;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class InMemoryChallengeRepositoryTest {
 
@@ -17,5 +18,10 @@ class InMemoryChallengeRepositoryTest {
 
         assertThat(result.getTitle().toString()).isEqualTo("New Challenge Title");
         assertThat(result.getDescription().toString()).isEqualTo("New Challenge Description");
+    }
+    
+    @Test
+    void delete_shouldThrowUnsupportedOperationException() {
+        assertThrows(UnsupportedOperationException.class, () -> repository.delete("any-id"));
     }
 }

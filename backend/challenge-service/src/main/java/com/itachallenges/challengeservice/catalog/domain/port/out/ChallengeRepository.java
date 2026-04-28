@@ -4,4 +4,5 @@ import com.itachallenges.challengeservice.catalog.domain.model.Challenge;
 
 public interface ChallengeRepository {
     Challenge save(Challenge challenge);
+    void delete(String id);
 }
