@@ -20,6 +20,7 @@ import java.util.UUID;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(ChallengeController.class)
@@ -40,8 +41,15 @@ class ChallengeControllerTest {
     );
 
     @Test
+    void should_return_200_with_empty_list_when_requesting_all_challenges() throws Exception {
+        mockMvc.perform(get("/api/challenge"))
+                .andExpect(status().isOk())
+                .andExpect(content().json("[]"));
+    }
+
+    @Test
     void should_return_201_with_challenge_when_valid_request() throws Exception {
-        mockMvc.perform(post("/challenge")
+        mockMvc.perform(post("/api/challenge")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())

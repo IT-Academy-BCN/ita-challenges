@@ -22,4 +22,14 @@ public class InMemoryChallengeRepository implements ChallengeRepository {
 
         return challenge;
     }
+   
+      @Override
+    public Challenge save(Challenge challenge) {
+        throw new UnsupportedOperationException("To be implemented");
+    }
+    
+    @Override
+    public void delete(String id) {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
 }

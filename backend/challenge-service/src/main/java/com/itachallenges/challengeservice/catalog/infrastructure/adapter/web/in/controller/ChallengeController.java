@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/challenge")
@@ -19,6 +20,10 @@ public class ChallengeController {
 
     public ChallengeController(ChallengeRepository repository) {
         this.repository = repository;
+    }
+      @GetMapping
+    public ResponseEntity<List<ChallengeResponse>> findAll() {
+        return ResponseEntity.ok(List.of());
     }
 
     @PostMapping
@@ -58,4 +63,5 @@ public class ChallengeController {
 
         return ResponseEntity.ok(response);
     }
+}
 }
