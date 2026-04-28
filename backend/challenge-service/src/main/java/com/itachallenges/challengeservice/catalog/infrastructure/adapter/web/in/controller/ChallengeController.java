@@ -22,7 +22,7 @@ public class ChallengeController {
         this.repository = repository;
     }
     
-   @GetMapping
+    @GetMapping
     public ResponseEntity<List<ChallengeResponse>> findAll() {
         return ResponseEntity.ok(List.of());
     }
