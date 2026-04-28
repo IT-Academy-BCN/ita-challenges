@@ -33,9 +33,9 @@ describe('AuthPageComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should call loginWithGithub on login', async () => {
+  it('should call loginWithGithub on login', () => {
     component.login();
-    await new Promise(resolve => setTimeout(resolve, 0));
+
     expect(authServiceMock.loginWithGithub).toHaveBeenCalled();
   });
 
