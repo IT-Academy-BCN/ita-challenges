@@ -16,9 +16,6 @@ export class AuthPageComponent {
     if (this.loading()) return;
     
     this.loading.set(true);
-
-    setTimeout(() => {
-      this.authService.loginWithGithub();
-    }, 0);
+    this.authService.loginWithGithub();
   }
 }
