@@ -31,23 +31,23 @@ describe('ChallengeService', () => {
   });
 
   describe('create', () => {
-  it('should call challengeApiService.create with correct data and return the observable', () => {
-    const newChallenge: IChallengeRequest = { title: 'New', description: 'Desc' };
+    it('should call challengeApiService.create with correct data and return the observable', () => {
+      const newChallenge: IChallengeRequest = { title: 'New', description: 'Desc' };
 
-    vi.mocked(mockChallengeApiService.create!).mockImplementation((data) =>
-      of({ id: '1', ...data } as IChallenge)
-    );
+      vi.mocked(mockChallengeApiService.create!).mockImplementation((data) =>
+        of({ id: '1', ...data } as IChallenge)
+      );
 
-    const result = service.create(newChallenge);
+      const result = service.create(newChallenge);
 
-    expect(mockChallengeApiService.create).toHaveBeenCalledWith(newChallenge);
+      expect(mockChallengeApiService.create).toHaveBeenCalledWith(newChallenge);
 
-    result.subscribe(response => {
-      expect(response.title).toBe(newChallenge.title);
-      expect(response.description).toBe(newChallenge.description);
+      result.subscribe(response => {
+        expect(response.title).toBe(newChallenge.title);
+        expect(response.description).toBe(newChallenge.description);
+      });
     });
   });
-});
 
   describe('delete', () => {
     it('should call challengeApiService.delete with the correct id and return its observable', () => {
