@@ -9,23 +9,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import java.util.ArrayList;
 
 @Repository
 public class InMemoryChallengeRepository implements ChallengeRepository {
 
     Map<ChallengeId, Challenge> storage = new ConcurrentHashMap<>();
-    
+
     @Override
     public Challenge save(Challenge challenge) {
         storage.put(challenge.getId(), challenge);
         return challenge;
     }
-    
-    @Override
-    public List<Challenge> findAll() {
-        throw new UnsupportedOperationException("findAll not implemented yet"); 
-    }
-    
+
     @Override
     public Challenge update(Challenge challenge) {
         ChallengeId id = challenge.getId();
@@ -36,9 +32,14 @@ public class InMemoryChallengeRepository implements ChallengeRepository {
         storage.put(id, challenge);
         return challenge;
     }
-    
+
     @Override
     public void delete(String id) {
         throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    @Override
+    public List<Challenge> findAll() {
+        return new ArrayList<>(storage.values());
     }
 }

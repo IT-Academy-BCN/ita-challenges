@@ -3,6 +3,8 @@ package com.itachallenges.challengeservice.catalog.infrastructure.adapter.web.ou
 import com.itachallenges.challengeservice.catalog.domain.model.Challenge;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -11,6 +13,11 @@ class InMemoryChallengeRepositoryTest {
     private final InMemoryChallengeRepository repository = new InMemoryChallengeRepository();
 
     @Test
+    void should_return_empty_list_when_no_challenges_exist() {
+        List<Challenge> result = repository.findAll();
+
+        assertThat(result).isEmpty();
+    }
     void should_create_new_challenge() {
         Challenge newChallenge = Challenge.create("New Challenge Title", "New Challenge Description");
 
@@ -19,7 +26,7 @@ class InMemoryChallengeRepositoryTest {
         assertThat(result.getTitle().toString()).isEqualTo("New Challenge Title");
         assertThat(result.getDescription().toString()).isEqualTo("New Challenge Description");
     }
-    
+
     @Test
     void findAll_should_throw_unsupported_operation_exception() {
         assertThrows(UnsupportedOperationException.class, repository::findAll);

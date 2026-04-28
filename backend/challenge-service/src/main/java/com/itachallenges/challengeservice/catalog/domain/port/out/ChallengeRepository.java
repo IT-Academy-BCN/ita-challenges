@@ -9,5 +9,4 @@ public interface ChallengeRepository {
     Challenge update(Challenge challenge);
     Challenge save(Challenge challenge);
     void delete(String id);
-
 }
