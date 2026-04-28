@@ -12,7 +12,6 @@ describe('ChallengeService', () => {
   let mockChallengeApiService: Partial<ChallengeApiService>;
 
   beforeEach(() => {
-
     mockChallengeApiService = {
       delete: (id: string) => of(undefined),
       loadAll: () => of(CHALLENGES_MOCK),
@@ -65,7 +64,7 @@ describe('ChallengeService', () => {
       expect(mockChallengeApiService.delete).toHaveBeenCalledWith(testId);
       expect(result).toBe(expectedObservable);
     });
-    });
+  });
 
   it('should return challenges from loadAll', () => {
     let result: any;
