@@ -22,7 +22,7 @@ public class ChallengeController {
         this.repository = repository;
     }
     
-      @GetMapping
+   @GetMapping
     public ResponseEntity<List<ChallengeResponse>> findAll() {
         return ResponseEntity.ok(List.of());
     }
@@ -30,9 +30,7 @@ public class ChallengeController {
     @PostMapping
     public ResponseEntity<ChallengeResponse> create(@RequestBody ChallengeRequest request) {
         Challenge challenge = Challenge.create(request.title(), request.description());
-
         repository.update(challenge);
-
         return ResponseEntity.status(HttpStatus.CREATED).body(
                 new ChallengeResponse(
                         challenge.getId().toString(),
@@ -47,15 +45,14 @@ public class ChallengeController {
             @PathVariable String id,
             @RequestBody ChallengeRequest request
     ) {
-
+        
         Challenge challenge = Challenge.restore(
                 new ChallengeId(UUID.fromString(id)),
                 request.title(),
                 request.description()
         );
-
+        
         Challenge updated = repository.update(challenge);
-
         ChallengeResponse response = new ChallengeResponse(
                 updated.getId().toString(),
                 updated.getTitle().toString(),
