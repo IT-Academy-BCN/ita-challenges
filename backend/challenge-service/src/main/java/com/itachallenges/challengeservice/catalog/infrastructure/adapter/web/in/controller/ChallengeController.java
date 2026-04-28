@@ -21,6 +21,7 @@ public class ChallengeController {
     public ChallengeController(ChallengeRepository repository) {
         this.repository = repository;
     }
+    
       @GetMapping
     public ResponseEntity<List<ChallengeResponse>> findAll() {
         return ResponseEntity.ok(List.of());
