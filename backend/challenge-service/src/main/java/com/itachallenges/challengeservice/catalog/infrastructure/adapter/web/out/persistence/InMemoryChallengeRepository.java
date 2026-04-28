@@ -4,6 +4,10 @@ import com.itachallenges.challengeservice.catalog.domain.model.Challenge;
 import com.itachallenges.challengeservice.catalog.domain.port.out.ChallengeRepository;
 import com.itachallenges.challengeservice.catalog.domain.valueobject.ChallengeId;
 import org.springframework.stereotype.Repository;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
+import java.util.List;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -11,7 +15,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @Repository
 public class InMemoryChallengeRepository implements ChallengeRepository {
-  
+    
     private final Map<ChallengeId, Challenge> storage = new ConcurrentHashMap<>();
     
     @Override
@@ -21,8 +25,21 @@ public class InMemoryChallengeRepository implements ChallengeRepository {
     }
     
     @Override
+    public List<Challenge> findAll() {
+        throw new UnsupportedOperationException("findAll not implemented yet"); 
+    }
+    
+    @Override
     public Challenge update(Challenge challenge) {
-        throw new UnsupportedOperationException("To be implemented");
+
+        ChallengeId id = challenge.getId();
+
+        if (!storage.containsKey(id)) {
+            throw new RuntimeException("Challenge not found with id: " + id);
+        }
+
+        storage.put(id, challenge);
+        return challenge;
     }
     
     @Override
