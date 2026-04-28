@@ -5,7 +5,6 @@ import java.util.List;
 
 public interface ChallengeRepository {
 
-    Challenge update(Challenge challenge);
     List<Challenge> findAll();
     Challenge update(Challenge challenge);
     Challenge save(Challenge challenge);
