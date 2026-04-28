@@ -7,19 +7,29 @@ import org.springframework.stereotype.Repository;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import java.util.List;
+
 
 @Repository
 public class InMemoryChallengeRepository implements ChallengeRepository {
 
     Map<ChallengeId, Challenge> storage = new ConcurrentHashMap<>();
+  
+    @Override
+    public List<Challenge> findAll() {
+        throw new UnsupportedOperationException("findAll not implemented yet"); 
+    }
 
     @Override
     public Challenge update(Challenge challenge) {
 
         ChallengeId id = challenge.getId();
 
-        storage.put(id, challenge);
+        if (!storage.containsKey(id)) {
+            throw new RuntimeException("Challenge not found with id: " + id);
+        }
 
+        storage.put(id, challenge);
         return challenge;
     }
    
