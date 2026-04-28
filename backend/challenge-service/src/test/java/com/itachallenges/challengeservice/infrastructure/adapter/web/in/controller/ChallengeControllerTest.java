@@ -52,5 +52,5 @@ class ChallengeControllerTest {
         mockMvc.perform(delete("/api/challenge/{id}",  "dcacb291-ea40-4924-8430-6d4ef63908f2"))
                 .andExpect(status().isNoContent());
     }
-}
+
 }
