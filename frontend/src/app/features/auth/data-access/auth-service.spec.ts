@@ -1,34 +1,20 @@
 import { TestBed } from '@angular/core/testing';
-import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
-import { provideHttpClient } from '@angular/common/http';
-import { firstValueFrom } from 'rxjs';
-import { vi } from 'vitest';
 import { AuthService } from './auth-service';
 import { AuthUser } from '../models/auth-user.model';
+import { firstValueFrom } from 'rxjs';
 
 const MOCK_USER: AuthUser = {
-  username: 'MockUser',
+  username: 'mockUser',
   avatarUrl: 'https://github.com/MockUser.png',
+  token: 'token-808',
 };
 
 describe('AuthService', () => {
   let service: AuthService;
-  let httpMock: HttpTestingController;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({
-      providers: [
-        provideHttpClient(),
-        provideHttpClientTesting(),
-      ],
-    });
-
+    TestBed.configureTestingModule({});
     service = TestBed.inject(AuthService);
-    httpMock = TestBed.inject(HttpTestingController);
-  });
-
-  afterEach(() => {
-    httpMock.verify();
   });
 
   it('should be created', () => {
@@ -45,32 +31,22 @@ describe('AuthService', () => {
     expect(service.getUser()).toEqual(MOCK_USER);
   });
 
-  it('should redirect to github when loginWithGithub is called', () => {
+  it('should set mock user and redirect to profile when loginWithGithub is called', () => {
     const originalLocation = globalThis.location;
     const locationMock = { href: '' };
+
     vi.stubGlobal('location', locationMock);
 
     service.loginWithGithub();
 
-    expect(locationMock.href).toBe('/api/account/oauth2/authorization/github');
+    expect(service.user()).toEqual(MOCK_USER);
+    expect(locationMock.href).toBe('/profile');
 
     vi.stubGlobal('location', originalLocation);
   });
 
-  it('should not modify user signal when loginWithGithub is called', () => {
-    service.loginWithGithub();
-    expect(service.user()).toBeNull();
-  });
-
-  it('should fetch user from API', async () => {
-    const promise = firstValueFrom(service.fetchUser());
-
-    const req = httpMock.expectOne('/api/account/user/me');
-    expect(req.request.method).toBe('GET');
-    expect(req.request.withCredentials).toBe(true);
-    req.flush(MOCK_USER);
-
-    const result = await promise;
+  it('should fetch mock user', async () => {
+    const result = await firstValueFrom(service.fetchUser());
     expect(result).toEqual(MOCK_USER);
   });
 });
