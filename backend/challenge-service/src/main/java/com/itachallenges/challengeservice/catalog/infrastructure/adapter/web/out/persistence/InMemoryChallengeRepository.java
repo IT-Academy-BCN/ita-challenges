@@ -12,7 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @Repository
 public class InMemoryChallengeRepository implements ChallengeRepository {
-    
+
     Map<ChallengeId, Challenge> storage = new ConcurrentHashMap<>();
     
     @Override
@@ -28,13 +28,11 @@ public class InMemoryChallengeRepository implements ChallengeRepository {
     
     @Override
     public Challenge update(Challenge challenge) {
-
         ChallengeId id = challenge.getId();
-
         if (!storage.containsKey(id)) {
             throw new RuntimeException("Challenge not found with id: " + id);
         }
-
+        
         storage.put(id, challenge);
         return challenge;
     }
