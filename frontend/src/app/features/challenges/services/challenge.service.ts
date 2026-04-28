@@ -21,13 +21,13 @@ export class ChallengeService {
   }
 
   loadAll(): Observable<IChallenge[]> {
-    return of ([])
+    return this.challengeApiService.loadAll();
   }
 
   update(id: string, challenge: IChallengeRequest): Observable<IChallenge> {
     return this.challengeApiService.update(id, challenge)
   }
 
-  delete(id: string): Observable<void> { return of(undefined) }
+  delete(id: string): Observable<void> { return this.challengeApiService.delete(id) }
 
 }
