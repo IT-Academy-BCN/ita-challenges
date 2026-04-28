@@ -8,6 +8,7 @@ import com.itachallenges.challengeservice.catalog.infrastructure.adapter.web.in.
 import com.itachallenges.challengeservice.catalog.infrastructure.adapter.web.in.dto.ChallengeRequest;
 import org.junit.jupiter.api.Test;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.List;
 import java.util.UUID;
 
 import static org.mockito.Mockito.when;
@@ -42,6 +44,8 @@ class ChallengeControllerTest {
 
     @Test
     void should_return_200_with_empty_list_when_requesting_all_challenges() throws Exception {
+        when(repository.findAll()).thenReturn(List.of());
+
         mockMvc.perform(get("/api/challenge"))
                 .andExpect(status().isOk())
                 .andExpect(content().json("[]"));
@@ -49,6 +53,9 @@ class ChallengeControllerTest {
 
     @Test
     void should_return_201_with_challenge_when_valid_request() throws Exception {
+        Challenge saved = Challenge.create(request.title(), request.description());
+        when(repository.save(any(Challenge.class))).thenReturn(saved);
+
         mockMvc.perform(post("/api/challenge")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
@@ -60,9 +67,7 @@ class ChallengeControllerTest {
 
     @Test
     void should_update_challenge_and_return_200() throws Exception {
-
         String id = UUID.randomUUID().toString();
-
         ChallengeRequest request = new ChallengeRequest(
                 "Updated title",
                 "Updated description"
@@ -74,7 +79,7 @@ class ChallengeControllerTest {
                 "Updated description"
         );
 
-        when(repository.update(org.mockito.ArgumentMatchers.any(Challenge.class)))
+        when(repository.update(any(Challenge.class)))
                 .thenReturn(updatedChallenge);
 
         mockMvc.perform(put("/api/challenge/" + id)

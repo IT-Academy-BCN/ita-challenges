@@ -20,21 +20,17 @@ public class ChallengeController {
 
     private final ChallengeRepository repository;
 
-    public ChallengeController(ChallengeRepository repository) {
-        this.repository = repository;
-    }
-
-
     @PostMapping
     public ResponseEntity<ChallengeResponse> create(@RequestBody ChallengeRequest request) {
-        Challenge challenge = Challenge.create(request.title(), request.description());
-        repository.save(challenge);
+        Challenge saved = repository.save(
+                Challenge.create(request.title(), request.description())
+        );
 
         return ResponseEntity.status(HttpStatus.CREATED).body(
                 new ChallengeResponse(
-                        challenge.getId().toString(),
-                        challenge.getTitle().toString(),
-                        challenge.getDescription().toString()
+                        saved.getId().toString(),
+                        saved.getTitle().toString(),
+                        saved.getDescription().toString()
                 )
         );
     }
