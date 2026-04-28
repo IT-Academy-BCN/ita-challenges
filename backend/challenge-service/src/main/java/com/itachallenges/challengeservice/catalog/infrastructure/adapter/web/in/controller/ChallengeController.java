@@ -64,4 +64,4 @@ public class ChallengeController {
         return ResponseEntity.ok(response);
     }
 }
-}
+
