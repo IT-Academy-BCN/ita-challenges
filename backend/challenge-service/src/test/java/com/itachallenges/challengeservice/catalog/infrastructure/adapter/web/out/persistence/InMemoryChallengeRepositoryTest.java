@@ -21,6 +21,41 @@ class InMemoryChallengeRepositoryTest {
     }
 
     @Test
+    void should_return_empty_list_when_no_challenges_exist() {
+        List<Challenge> result = repository.findAll();
+
+        assertThat(result).isEmpty();
+    }
+    void should_create_new_challenge() {
+        Challenge newChallenge = Challenge.create("New Challenge Title", "New Challenge Description");
+
+        Challenge result = repository.save(newChallenge);
+
+        assertThat(result.getTitle().toString()).isEqualTo("New Challenge Title");
+        assertThat(result.getDescription().toString()).isEqualTo("New Challenge Description");
+    }
+
+    @Test
+    void findAll_should_throw_unsupported_operation_exception() {
+        assertThrows(UnsupportedOperationException.class, repository::findAll);
+    }
+
+    @Test
+    void should_update_existing_challenge() {
+        Challenge original = Challenge.create("Old title", "Old description");
+
+        repository.storage.put(original.getId(), original);
+
+        Challenge updated = Challenge.restore(
+                original.getId(),
+                "New title",
+                "New description"
+        );
+
+        Challenge result = repository.update(updated);
+
+        assertThat(result.getTitle().toString()).isEqualTo("New title");
+        assertThat(result.getDescription().toString()).isEqualTo("New description");
     void save_should_store_challenge() {
         repository.save(challenge);
 
@@ -34,7 +69,7 @@ class InMemoryChallengeRepositoryTest {
     void findAll_should_return_empty_when_no_challenges() {
         assertThat(repository.findAll()).isEmpty();
     }
-    
+
     @Test
     void delete_shouldThrowUnsupportedOperationException() {
         assertThrows(UnsupportedOperationException.class, () -> repository.delete("any-id"));
