@@ -49,7 +49,7 @@ class InMemoryChallengeRepositoryTest {
         assertThat(result.getTitle().toString()).isEqualTo("New title");
         assertThat(result.getDescription().toString()).isEqualTo("New description");
     }
-
+   
     @Test
     void delete_shouldThrowUnsupportedOperationException() {
         assertThrows(UnsupportedOperationException.class, () -> repository.delete("any-id"));
