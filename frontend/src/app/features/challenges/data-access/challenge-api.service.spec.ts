@@ -33,7 +33,7 @@ describe('ChallengeApiService', () => {
       expect(challenges).toEqual(CHALLENGES_MOCK);
     });
 
-    const req = httpTestingController.expectOne('http://localhost:8080/api/challenge/');
+    const req = httpTestingController.expectOne('http://localhost:8080/api/challenge');
     expect(req.request.method).toBe('GET');
     
     req.flush(CHALLENGES_MOCK); 
@@ -44,7 +44,7 @@ describe('ChallengeApiService', () => {
       expect(challenges).toEqual(CHALLENGES_MOCK);
     });
 
-    const req = httpTestingController.expectOne('http://localhost:8080/api/challenge/');
+    const req = httpTestingController.expectOne('http://localhost:8080/api/challenge');
     
     req.flush('Error interno', { status: 500, statusText: 'Internal Server Error' });
   });
