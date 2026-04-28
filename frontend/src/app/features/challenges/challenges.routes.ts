@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
-import { ChallengeDetailPage } from './pages/challenge-detail-page.component';
 import { CreateChallengePage } from './pages/create-challenge-page/create-challenge-page';
 import { DeleteChallengePage } from './pages/delete-challenge-page/delete-challenge-page';
+import { ChallengesListPage } from './pages/challenges-list-page/challenges-list-page';
 
 export const CHALLENGES_ROUTES: Routes = [
   {
