@@ -3,7 +3,7 @@ import { AuthService } from '../../../auth/data-access/auth-service';
 
 @Component({
   selector: 'app-profile-page',
-  imports: [],
+  standalone: true,
   templateUrl: './profile-page.html',
   styleUrl: './profile-page.css',
 })
@@ -16,6 +16,13 @@ export class ProfilePageComponent implements OnInit {
   public error = signal(false);
 
   ngOnInit(): void {
+    const user = this.user();
+
+    if (user) {
+      this.loading.set(false);
+      return;
+    }
+
     this.authService.fetchUser().subscribe({
       next: (user) => {
         this.authService.setUser(user);
