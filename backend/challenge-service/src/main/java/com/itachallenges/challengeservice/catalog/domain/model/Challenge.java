@@ -25,4 +25,12 @@ public class Challenge {
                 new ChallengeDescription(description)
         );
     }
+
+    public static Challenge restore(ChallengeId id, String title, String description) {
+        return new Challenge(
+                id,
+                new ChallengeTitle(title),
+                new ChallengeDescription(description)
+        );
+    }
 }
