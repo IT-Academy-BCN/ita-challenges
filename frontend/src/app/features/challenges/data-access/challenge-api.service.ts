@@ -20,7 +20,7 @@ export class ChallengeApiService {
   }
 
   loadAll(): Observable<IChallenge[]> {
-    return this.http.get<IChallenge[]>('http://localhost:8080/api/challenge/')
+    return this.http.get<IChallenge[]>('http://localhost:8080/api/challenge')
     .pipe(
       catchError((error: HttpErrorResponse) => {
         return of(CHALLENGES_MOCK);
