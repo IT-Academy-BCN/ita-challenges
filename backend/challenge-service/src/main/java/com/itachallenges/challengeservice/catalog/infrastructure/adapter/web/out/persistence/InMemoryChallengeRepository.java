@@ -5,15 +5,40 @@ import com.itachallenges.challengeservice.catalog.domain.port.out.ChallengeRepos
 import com.itachallenges.challengeservice.catalog.domain.valueobject.ChallengeId;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import java.util.ArrayList;
+
 @Repository
 public class InMemoryChallengeRepository implements ChallengeRepository {
 
-    private final Map<ChallengeId, Challenge> storage = new ConcurrentHashMap<>();
+    Map<ChallengeId, Challenge> storage = new ConcurrentHashMap<>();
+
+    @Override
+    public Challenge save(Challenge challenge) {
+        storage.put(challenge.getId(), challenge);
+        return challenge;
+    }
+
+    @Override
+    public Challenge update(Challenge challenge) {
+
+        ChallengeId id = challenge.getId();
+
+        if (!storage.containsKey(id)) {
+            throw new RuntimeException("Challenge not found with id: " + id);
+        }
+
+        storage.put(id, challenge);
+        return challenge;
+    }
+
+    @Override
+    public void delete(String id) {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
 
     @Override
     public List<Challenge> findAll() {
