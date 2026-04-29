@@ -1,13 +1,18 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { IChallengeRequest } from '../models/ichallenge-request.interface';
 import { IChallenge } from '../models/ichallenge.interface';
-import { Observable, of } from 'rxjs';
+import { catchError, Observable, of } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ChallengeApiService {
-  create(challenge: IChallengeRequest): Observable<IChallenge> { 
+
+  private readonly http = inject(HttpClient);
+  private readonly apiUrl = 'http://localhost:8080/api/challenge';
+
+  create(challenge: IChallengeRequest): Observable<IChallenge> {
     return of({
       id: "1",
       title: challenge.title,
@@ -19,16 +24,20 @@ export class ChallengeApiService {
     return of([])
   }
 
-  update(id: string, challenge: IChallengeRequest): Observable<IChallenge> { 
-    return of({
-      id: id,
-      title: challenge.title,
-      description:challenge.description,
-    })
+  update(id: string, challenge: IChallengeRequest): Observable<IChallenge> {
+    return this.http.put<IChallenge>(`${this.apiUrl}/${id}`, challenge).pipe(
+      catchError(() =>
+        of({
+          id: id,
+          title: challenge.title,
+          description: challenge.description,
+        })
+      )
+    );
   }
 
-  delete(id: string): Observable<void> { 
-    return of(undefined) 
+  delete(id: string): Observable<void> {
+    return of(undefined)
   }
 
 }
