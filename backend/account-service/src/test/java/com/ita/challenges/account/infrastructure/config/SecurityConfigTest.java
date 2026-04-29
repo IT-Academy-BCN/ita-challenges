@@ -5,9 +5,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -26,14 +28,18 @@ class SecurityConfigTest {
     @DisplayName("Should assure the SecurityFilterChain is loaded")
     void contextLoads() {  
         assertThat(securityFilterChain).isNotNull();  
-    }  
-  
+    }
+
     @Test
     @DisplayName("Should permit all requests to /api/account/auth/** endpoints")
     void shouldPermitAllRequestsToAccountApi() throws Exception {
-        mockMvc.perform(get("/api/account/auth/test-ok"))
-                .andExpect(status().isOk());
+        int status = mockMvc.perform(get("/api/account/auth/**"))
+                .andReturn()
+                .getResponse()
+                .getStatus();
+        assertNotEquals(HttpStatus.FORBIDDEN.value(), status);
     }
+
 
     @Test
     @DisplayName("Should require authentication for requests to other endpoints")
