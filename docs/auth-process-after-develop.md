@@ -14,7 +14,7 @@ Provide clear and complete documentation to configure, run, and manually test th
 
 ## Minimal Validation
 
-- A teammate follows the documented steps and successfully authenticates with GitHub, reaching the `/profile` page with user data displayed
+- A teammate follows the documented steps and successfully authenticates with GitHub, confirming the flow works and that `/profile` is the expected frontend destination once that integration is completed
 
 ---
 
@@ -57,7 +57,7 @@ http://localhost:8080
 **Authorization callback URL**
 
 ```text
-http://localhost:8080/login/oauth2/code/github
+http://localhost:8080/api/account/auth/github/callback
 ```
 
 After creating the app, copy:
@@ -88,10 +88,10 @@ http://localhost:8080/auth
 ### GitHub OAuth callback
 
 ```text
-http://localhost:8080/login/oauth2/code/github
+http://localhost:8080/api/account/auth/github/callback
 ```
 
-### Final profile page
+### Expected frontend destination
 
 ```text
 http://localhost:8080/profile
@@ -146,13 +146,13 @@ http://localhost:8080/auth
 5. Click the GitHub login button
 6. Authenticate with GitHub
 7. GitHub redirects back to the local application through the callback URL
-8. After successful authentication, confirm that the user reaches:
+8. After successful authentication, confirm that the backend flow completes correctly and that the expected frontend destination is:
 
 ```text
 /profile
 ```
 
-9. Verify that user data is displayed there, at minimum:
+9. Once frontend integration is completed, verify that user data is displayed there, at minimum:
    - GitHub username
    - avatar if available
 
@@ -165,5 +165,5 @@ http://localhost:8080/auth
 - The application starts locally without auth configuration errors
 - The GitHub login button starts the authentication flow
 - GitHub redirects back to the local app
-- The user reaches `/profile`
-- The username is displayed correctly
+- The backend auth flow completes correctly
+- `/profile` is documented as the expected frontend destination
