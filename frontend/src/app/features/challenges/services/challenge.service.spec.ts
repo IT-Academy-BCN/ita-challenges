@@ -3,9 +3,10 @@ import { of } from 'rxjs';
 import { vi } from 'vitest';
 import { ChallengeService } from './challenge.service';
 import { ChallengeApiService } from '../data-access/challenge-api.service';
-import { CHALLENGES_MOCK } from '../models/challenges.mock';
 import { IChallengeRequest } from '../models/ichallenge-request.interface';
 import { IChallenge } from '../models/ichallenge.interface';
+import { CHALLENGES_MOCK } from '../models/challenges.mock';
+
 
 describe('ChallengeService', () => {
   let service: ChallengeService;
@@ -15,6 +16,7 @@ describe('ChallengeService', () => {
     mockChallengeApiService = {
       delete: (id: string) => of(undefined),
       loadAll: () => of(CHALLENGES_MOCK),
+      update: vi.fn(),
       create: vi.fn()
     };
 
@@ -29,6 +31,30 @@ describe('ChallengeService', () => {
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
+
+  describe('update', () => {
+    it('should call challengeApiService.update with correct data and return the same observable', () => {
+      const testId = '123';
+      const testChallenge: IChallengeRequest = {
+        title: 'New Title',
+        description: 'New description'
+      };
+
+      vi.mocked(mockChallengeApiService.update!).mockImplementation((id, data) =>
+        of({ id, ...data } as IChallenge)
+      );
+
+      const result = service.update(testId, testChallenge);
+
+      expect(mockChallengeApiService.update).toHaveBeenCalledWith(testId, testChallenge);
+
+      result.subscribe(response => {
+        expect(response.id).toBe(testId);
+        expect(response.title).toBe(testChallenge.title);
+        });
+      });
+    });
+
 
   describe('create', () => {
     it('should call challengeApiService.create with correct data and return the observable', () => {
