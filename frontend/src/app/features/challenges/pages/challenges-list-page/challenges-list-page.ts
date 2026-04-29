@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { IChallenge } from '../../models/ichallenge.interface';
 import { ChallengeService } from '../../services/challenge.service';
 
@@ -11,7 +11,7 @@ import { ChallengeService } from '../../services/challenge.service';
 export class ChallengesListPage implements OnInit {
 
   challengesService = inject(ChallengeService);
-  challenges: IChallenge[] = [];
+  challenges = signal<IChallenge[]>([]);
 
   ngOnInit(): void {
     this.loadChallenges();
@@ -20,7 +20,8 @@ export class ChallengesListPage implements OnInit {
   loadChallenges(){
     this.challengesService.loadAll().subscribe({
       next: (result) => {
-        this.challenges = result;
+        this.challenges.set(result);
+        console.log(result)
       }
     });
   }
