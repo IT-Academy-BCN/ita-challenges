@@ -1,6 +1,7 @@
 package com.itachallenges.challengeservice.catalog.infrastructure.adapter.web.out.persistence;
 
 import com.itachallenges.challengeservice.catalog.domain.model.Challenge;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -10,7 +11,14 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class InMemoryChallengeRepositoryTest {
 
-    private final InMemoryChallengeRepository repository = new InMemoryChallengeRepository();
+    private InMemoryChallengeRepository repository;
+    private Challenge challenge;
+
+    @BeforeEach
+    void setUp() {
+        repository = new InMemoryChallengeRepository();
+        challenge = Challenge.create("Clean Code Challenge", "A challenge about writing clean and maintainable code");
+    }
 
     @Test
     void should_return_empty_list_when_no_challenges_exist() {
@@ -18,9 +26,10 @@ class InMemoryChallengeRepositoryTest {
 
         assertThat(result).isEmpty();
     }
+
+    @Test
     void should_create_new_challenge() {
         Challenge newChallenge = Challenge.create("New Challenge Title", "New Challenge Description");
-
         Challenge result = repository.save(newChallenge);
 
         assertThat(result.getTitle().toString()).isEqualTo("New Challenge Title");
@@ -28,15 +37,8 @@ class InMemoryChallengeRepositoryTest {
     }
 
     @Test
-    void findAll_should_throw_unsupported_operation_exception() {
-        assertThrows(UnsupportedOperationException.class, repository::findAll);
-    }
-
-    @Test
     void should_update_existing_challenge() {
-        Challenge original = Challenge.create("Old title", "Old description");
-
-        repository.storage.put(original.getId(), original);
+        Challenge original = repository.save(Challenge.create("Old title", "Old description"));
 
         Challenge updated = Challenge.restore(
                 original.getId(),
@@ -49,9 +51,20 @@ class InMemoryChallengeRepositoryTest {
         assertThat(result.getTitle().toString()).isEqualTo("New title");
         assertThat(result.getDescription().toString()).isEqualTo("New description");
     }
-   
+
     @Test
-    void delete_shouldThrowUnsupportedOperationException() {
+    void save_should_store_challenge() {
+        repository.save(challenge);
+
+        List<Challenge> result = repository.findAll();
+
+        assertThat(result).hasSize(1);
+        assertThat(result.get(0).getId()).isEqualTo(challenge.getId());
+    }
+
+    @Test
+    void delete_should_throw_unsupported_operation_exception() {
         assertThrows(UnsupportedOperationException.class, () -> repository.delete("any-id"));
     }
+
 }

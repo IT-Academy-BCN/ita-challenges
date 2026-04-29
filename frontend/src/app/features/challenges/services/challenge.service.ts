@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { IChallengeRequest } from '../models/ichallenge-request.interface';
 import { IChallenge } from '../models/ichallenge.interface';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { ChallengeApiService } from '../data-access/challenge-api.service';
 
 @Injectable({
@@ -13,11 +13,7 @@ export class ChallengeService {
   challengeApiService = inject(ChallengeApiService)
 
   create(challenge: IChallengeRequest): Observable<IChallenge>  {
-    return of ({
-      id: "1",
-      title: challenge.title,
-      description:challenge.description,
-    })
+    return this.challengeApiService.create(challenge)
   }
 
   loadAll(): Observable<IChallenge[]> {
