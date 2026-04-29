@@ -10,7 +10,7 @@ import { ChallengeService } from '../../services/challenge.service';
 })
 export class ChallengesListPage implements OnInit {
 
-  challengesService = inject(ChallengeService);
+  private readonly challengesService = inject(ChallengeService);
   challenges = signal<IChallenge[]>([]);
 
   ngOnInit(): void {
