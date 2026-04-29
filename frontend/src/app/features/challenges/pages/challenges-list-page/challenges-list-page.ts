@@ -21,7 +21,6 @@ export class ChallengesListPage implements OnInit {
     this.challengesService.loadAll().subscribe({
       next: (result) => {
         this.challenges.set(result);
-        console.log(result)
       }
     });
   }
