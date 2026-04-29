@@ -10,21 +10,17 @@ import { ChallengeApiService } from '../data-access/challenge-api.service';
 
 export class ChallengeService {
 
-  challengeApiService = inject(ChallengeApiService)
-  
-  create(challenge: IChallengeRequest): Observable<IChallenge>  { 
-    return of ({
-      id: "1",
-      title: challenge.title,
-      description:challenge.description,
-    })
+  private readonly challengeApiService = inject(ChallengeApiService)
+
+  create(challenge: IChallengeRequest): Observable<IChallenge>  {
+    return this.challengeApiService.create(challenge);
   }
 
   loadAll(): Observable<IChallenge[]> {
     return this.challengeApiService.loadAll();
   }
 
-  update(id: string, challenge: IChallengeRequest): Observable<IChallenge> { 
+  update(id: string, challenge: IChallengeRequest): Observable<IChallenge> {
     return of ({
       id: id,
       title: challenge.title,
