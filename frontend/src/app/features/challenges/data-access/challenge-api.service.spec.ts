@@ -42,5 +42,17 @@ describe('ChallengeApiService', () => {
       expect(req.request.body).toEqual(newChallenge);
       req.flush(mockResponse, { status: 201, statusText: 'Created' });
     });
+
+    it('should return undefined if HTTP error happens', () => {
+      const newChallenge: IChallengeRequest = { title: 'Test', description: 'Desc' };
+      let responseResult: any = 'initial_value';
+
+      service.create(newChallenge).subscribe(result => responseResult = result);
+
+      const req = httpTestingController.expectOne('http://localhost:8080/api/challenge');
+      req.error(new ProgressEvent('error'));
+
+      expect(responseResult).toBeUndefined();
+    });
   });
 });

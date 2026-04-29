@@ -12,7 +12,7 @@ export class ChallengeService {
 
   private readonly challengeApiService = inject(ChallengeApiService)
 
-  create(challenge: IChallengeRequest): Observable<IChallenge>  {
+  create(challenge: IChallengeRequest): Observable<IChallenge | undefined>  {
     return this.challengeApiService.create(challenge);
   }
 

@@ -1,8 +1,8 @@
 import { inject, Injectable } from '@angular/core';
 import { IChallengeRequest } from '../models/ichallenge-request.interface';
 import { IChallenge } from '../models/ichallenge.interface';
-import { Observable, of } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { catchError, Observable, of } from 'rxjs';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
@@ -12,8 +12,12 @@ export class ChallengeApiService {
   private readonly http = inject(HttpClient);
   private readonly apiUrl = 'http://localhost:8080/api/challenge';
 
-  create(challenge: IChallengeRequest): Observable<IChallenge> {
-    return this.http.post<IChallenge>(this.apiUrl, challenge);
+  create(challenge: IChallengeRequest): Observable<IChallenge | undefined> {
+    return this.http.post<IChallenge>(this.apiUrl, challenge).pipe(
+      catchError((error: HttpErrorResponse) => {
+        return of(undefined);
+    })
+    );
   }
 
   loadAll(): Observable<IChallenge[]> {
