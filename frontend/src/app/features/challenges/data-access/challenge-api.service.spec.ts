@@ -43,16 +43,17 @@ describe('ChallengeApiService', () => {
       req.flush(mockResponse, { status: 201, statusText: 'Created' });
     });
 
-    it('should return undefined if HTTP error happens', () => {
+    it('should return default challenge when API fails (Happy Path Fallback)', () => {
       const newChallenge: IChallengeRequest = { title: 'Test', description: 'Desc' };
-      let responseResult: any = 'initial_value';
 
-      service.create(newChallenge).subscribe(result => responseResult = result);
+      service.create(newChallenge).subscribe(response => {
+        expect(response.id).toBe('1');
+        expect(response.title).toBe(newChallenge.title);
+      });
 
       const req = httpTestingController.expectOne('http://localhost:8080/api/challenge');
-      req.error(new ProgressEvent('error'));
 
-      expect(responseResult).toBeUndefined();
+      req.flush('Error', { status: 500, statusText: 'Server Error' });
     });
   });
 });
