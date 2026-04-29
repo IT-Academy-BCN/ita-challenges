@@ -8,6 +8,8 @@ import com.itachallenges.challengeservice.catalog.infrastructure.adapter.web.in.
 import com.itachallenges.challengeservice.catalog.infrastructure.adapter.web.in.dto.ChallengeRequest;
 import org.junit.jupiter.api.Test;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,11 +62,15 @@ class ChallengeControllerTest {
     }
 
 
-    @Test
-    void should_return_204_when_delete_challenge_by_id() throws Exception {
-        mockMvc.perform(delete("/api/challenge/{id}",  "dcacb291-ea40-4924-8430-6d4ef63908f2"))
+    @Test  void should_return_204_when_delete_challenge_by_id() throws Exception {
+        String challengeIdStr = UUID.randomUUID().toString();
+
+        mockMvc.perform(delete("/api/challenge/{id}", challengeIdStr))
                 .andExpect(status().isNoContent());
+
+        verify(repository).delete(any(ChallengeId.class));
     }
+
 
     @Test
     void should_update_challenge_and_return_200() throws Exception {
@@ -82,7 +88,7 @@ class ChallengeControllerTest {
                 "Updated description"
         );
 
-        when(repository.update(org.mockito.ArgumentMatchers.any(Challenge.class)))
+        when(repository.update(any(Challenge.class)))
                 .thenReturn(updatedChallenge);
 
         mockMvc.perform(put("/api/challenge/" + id)
