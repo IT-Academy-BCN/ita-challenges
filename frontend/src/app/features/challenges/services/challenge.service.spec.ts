@@ -39,7 +39,7 @@ describe('ChallengeService', () => {
       expect(result).toBe(expectedObservable);
     });
   });
-  
+
   it('should return challenges from loadAll', () => {
     let result: any;
     service.loadAll().subscribe((challenges) => {
