@@ -38,7 +38,8 @@ describe('ChallengeService', () => {
       expect(mockChallengeApiService.delete).toHaveBeenCalledWith(testId);
       expect(result).toBe(expectedObservable);
     });
-    });
+  });
+
   it('should return challenges from loadAll', () => {
     let result: any;
     service.loadAll().subscribe((challenges) => {
