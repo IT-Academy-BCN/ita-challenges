@@ -18,6 +18,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.List;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import java.util.UUID;
 
@@ -45,6 +46,8 @@ class ChallengeControllerTest {
 
     @Test
     void should_return_200_with_empty_list_when_requesting_all_challenges() throws Exception {
+        when(repository.findAll()).thenReturn(List.of());
+
         mockMvc.perform(get("/api/challenge"))
                 .andExpect(status().isOk())
                 .andExpect(content().json("[]"));
@@ -52,6 +55,9 @@ class ChallengeControllerTest {
 
     @Test
     void should_return_201_with_challenge_when_valid_request() throws Exception {
+        Challenge saved = Challenge.create(request.title(), request.description());
+        when(repository.save(any(Challenge.class))).thenReturn(saved);
+
         mockMvc.perform(post("/api/challenge")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
@@ -74,9 +80,7 @@ class ChallengeControllerTest {
 
     @Test
     void should_update_challenge_and_return_200() throws Exception {
-
         String id = UUID.randomUUID().toString();
-
         ChallengeRequest request = new ChallengeRequest(
                 "Updated title",
                 "Updated description"

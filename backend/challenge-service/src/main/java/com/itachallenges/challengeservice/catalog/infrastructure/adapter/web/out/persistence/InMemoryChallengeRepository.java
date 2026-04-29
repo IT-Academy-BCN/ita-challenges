@@ -28,7 +28,7 @@ public class InMemoryChallengeRepository implements ChallengeRepository {
         if (!storage.containsKey(id)) {
             throw new RuntimeException("Challenge not found with id: " + id);
         }
-        
+
         storage.put(id, challenge);
         return challenge;
     }
