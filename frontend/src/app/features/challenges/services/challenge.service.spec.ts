@@ -1,9 +1,11 @@
 import { TestBed } from '@angular/core/testing';
 import { of } from 'rxjs';
-
+import { vi } from 'vitest';
 import { ChallengeService } from './challenge.service';
 import { ChallengeApiService } from '../data-access/challenge-api.service';
 import { CHALLENGES_MOCK } from '../models/challenges.mock';
+import { IChallengeRequest } from '../models/ichallenge-request.interface';
+import { IChallenge } from '../models/ichallenge.interface';
 
 describe('ChallengeService', () => {
   let service: ChallengeService;
@@ -12,7 +14,8 @@ describe('ChallengeService', () => {
   beforeEach(() => {
     mockChallengeApiService = {
       delete: (id: string) => of(undefined),
-      loadAll: () => of(CHALLENGES_MOCK)
+      loadAll: () => of(CHALLENGES_MOCK),
+      create: vi.fn()
     };
 
     TestBed.configureTestingModule({
@@ -25,6 +28,25 @@ describe('ChallengeService', () => {
 
   it('should be created', () => {
     expect(service).toBeTruthy();
+  });
+
+  describe('create', () => {
+    it('should call challengeApiService.create with correct data and return the observable', () => {
+      const newChallenge: IChallengeRequest = { title: 'New', description: 'Desc' };
+
+      vi.mocked(mockChallengeApiService.create!).mockImplementation((data) =>
+        of({ id: '1', ...data } as IChallenge)
+      );
+
+      const result = service.create(newChallenge);
+
+      expect(mockChallengeApiService.create).toHaveBeenCalledWith(newChallenge);
+
+      result.subscribe(response => {
+        expect(response.title).toBe(newChallenge.title);
+        expect(response.description).toBe(newChallenge.description);
+      });
+    });
   });
 
   describe('delete', () => {
