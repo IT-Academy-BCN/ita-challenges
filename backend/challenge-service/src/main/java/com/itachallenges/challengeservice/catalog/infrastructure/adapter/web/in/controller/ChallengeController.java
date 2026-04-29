@@ -40,6 +40,14 @@ public class ChallengeController {
         );
     }
 
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable String id) {
+        return ResponseEntity.noContent().build();
+    }
+
+
+
     @PutMapping("/{id}")
     public ResponseEntity<ChallengeResponse> update(
             @PathVariable String id,

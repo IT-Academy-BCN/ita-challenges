@@ -16,6 +16,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import java.util.UUID;
 
 import static org.mockito.Mockito.when;
@@ -56,6 +57,13 @@ class ChallengeControllerTest {
                 .andExpect(jsonPath("$.id").isNotEmpty())
                 .andExpect(jsonPath("$.title").value("Clean Code Challenge"))
                 .andExpect(jsonPath("$.description").value("A challenge about writing clean and maintainable code"));
+    }
+
+
+    @Test
+    void should_return_204_when_delete_challenge_by_id() throws Exception {
+        mockMvc.perform(delete("/api/challenge/{id}",  "dcacb291-ea40-4924-8430-6d4ef63908f2"))
+                .andExpect(status().isNoContent());
     }
 
     @Test
