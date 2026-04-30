@@ -1,6 +1,6 @@
-package com.ita.challenges.account.infrastucture.adapter.web.in;
+package com.ita.challenges.account.infrastructure.adapter.web.in;
 
-import com.ita.challenges.account.infrastucture.adapter.web.in.dto.AuthUserDto;
+import com.ita.challenges.account.infrastructure.adapter.web.in.dto.AuthUserDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;

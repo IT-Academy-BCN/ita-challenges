@@ -1,6 +1,5 @@
 package com.ita.challenges.account.infrastructure.adapter.web.in;
 
-import com.ita.challenges.account.infrastucture.adapter.web.in.AuthController;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
