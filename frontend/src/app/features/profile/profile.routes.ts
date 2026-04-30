@@ -1,9 +1,9 @@
 import { Routes } from '@angular/router';
-import { ProfilePage } from './pages/profile-page.component';
+import { ProfilePageComponent } from './pages/profile-page/profile-page';
 
 export const PROFILE_ROUTES: Routes = [
   {
     path: '',
-    component: ProfilePage,
+    component: ProfilePageComponent,
   },
 ];
