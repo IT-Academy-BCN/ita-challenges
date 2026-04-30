@@ -22,3 +22,4 @@ Defines where GitHub should send the user after they log in.
 
 ## Notes
 Screenshots of the GitHub setup are attached for reference.
+- (path : ita-challenges/docs/images/GitHub-oauth-flow.png)
