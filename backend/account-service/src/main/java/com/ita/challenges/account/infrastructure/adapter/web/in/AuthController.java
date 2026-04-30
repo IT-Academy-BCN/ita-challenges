@@ -13,6 +13,8 @@ public class AuthController {
 
     @GetMapping("/me")
     public ResponseEntity<Void> me(@AuthenticationPrincipal OAuth2User user) {
+
         return ResponseEntity.ok().build();
     }
 }
+
