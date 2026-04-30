@@ -1,8 +1,8 @@
 <h1>Llistat de Reptes</h1>
 
-@if (challenges.length > 0) {
+@if (challenges().length > 0) {
 <ul>
-    @for (challenge of challenges; track $index) {
+    @for (challenge of challenges(); track $index) {
     <li>
         <h2>{{ challenge.title }}</h2>
         <p>{{ challenge.description }}</p>
