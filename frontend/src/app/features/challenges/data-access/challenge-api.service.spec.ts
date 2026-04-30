@@ -3,6 +3,7 @@ import { HttpTestingController, provideHttpClientTesting } from '@angular/common
 import { provideHttpClient } from '@angular/common/http';
 
 import { ChallengeApiService } from './challenge-api.service';
+import { CHALLENGES_MOCK } from '../models/challenges.mock';
 
 describe('ChallengeApiService', () => {
   let service: ChallengeApiService;
@@ -48,6 +49,29 @@ describe('ChallengeApiService', () => {
       req.flush('Not Found', { status: 404, statusText: 'Not Found' }); 
       
       expect(responseResult).toBeUndefined();
+    });
+  });
+
+  describe('loadAll()', () => {
+    it('should load all challenges via GET', () => {
+      service.loadAll().subscribe((challenges) => {
+        expect(challenges).toEqual(CHALLENGES_MOCK);
+      });
+
+      const req = httpTestingController.expectOne('http://localhost:8080/api/challenge');
+      expect(req.request.method).toBe('GET');
+      
+      req.flush(CHALLENGES_MOCK); 
+    });
+
+    it('should return mocked challenges on HTTP error', () => {
+      service.loadAll().subscribe((challenges) => {
+        expect(challenges).toEqual(CHALLENGES_MOCK);
+      });
+
+      const req = httpTestingController.expectOne('http://localhost:8080/api/challenge');
+      
+      req.flush('Error interno', { status: 500, statusText: 'Internal Server Error' });
     });
   });
 });
