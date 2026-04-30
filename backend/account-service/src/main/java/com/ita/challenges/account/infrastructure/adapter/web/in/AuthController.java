@@ -15,8 +15,8 @@ public class AuthController {
     @GetMapping("/me")
     public ResponseEntity<AuthUserDto> me(@AuthenticationPrincipal OAuth2User user) {
         AuthUserDto dto = new AuthUserDto(
-                user.getAttribute("login"),     // GitHub username
-                user.getAttribute("avatar_url") // GitHub avatar
+                user.getAttribute("login"),     
+                user.getAttribute("avatar_url") 
         );
         return ResponseEntity.ok(dto);
     }
