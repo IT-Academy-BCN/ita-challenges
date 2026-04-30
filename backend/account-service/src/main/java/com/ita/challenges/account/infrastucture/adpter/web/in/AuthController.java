@@ -11,14 +11,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/account/auth")
 public class AuthController {
 
-    // GET /api/account/login
-    // No method needed — Spring Security owns this route.
-    // It redirects the user to GitHub automatically via SecurityConfig.
-
-    // GET /api/account/me
-    // Scaffold only — Task 2 will fill in username + avatarUrl.
+   
     @GetMapping("/me")
-    public ResponseEntity<?> me(@AuthenticationPrincipal OAuth2User user) {
+    public ResponseEntity<void> me(@AuthenticationPrincipal OAuth2User user) {
         return ResponseEntity.ok().build();
     }
 }
