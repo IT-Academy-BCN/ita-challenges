@@ -12,12 +12,21 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/account")
 public class AuthController {
 
-    @GetMapping("/me")
+   @GetMapping("/me")
     public ResponseEntity<AuthUserDto> me(@AuthenticationPrincipal OAuth2User user) {
-        AuthUserDto dto = new AuthUserDto(
-                user.getAttribute("login"),     
-                user.getAttribute("avatar_url") 
-        );
+
+        if (user == null) {
+            return ResponseEntity.ok(new AuthUserDto("anonymous", null));
+        }
+
+        String login = user.getAttribute("login");
+        String avatarUrl = user.getAttribute("avatar_url");
+
+        if (login == null) {
+            login = "unknown";
+        }
+
+        AuthUserDto dto = new AuthUserDto(login, avatarUrl);
         return ResponseEntity.ok(dto);
     }
 }
