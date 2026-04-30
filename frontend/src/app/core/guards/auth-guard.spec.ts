@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { Router } from '@angular/router';
+import { Router, UrlTree } from '@angular/router';
 import { authGuard } from './auth-guard';
 import { AuthService } from '../../features/auth/data-access/auth-service';
 import { AuthUser } from '../../features/auth/models/auth-user.model';
@@ -19,7 +19,10 @@ describe('authGuard', () => {
         AuthService,
         {
           provide: Router,
-          useValue: { navigate: vi.fn() },
+          useValue: {
+            navigate: vi.fn(),
+            createUrlTree: vi.fn(() => ({} as UrlTree)),
+          },
         },
       ],
     });
@@ -30,15 +33,20 @@ describe('authGuard', () => {
 
   it('should allow navigation when user is authenticated', () => {
     authService.setUser(MOCK_USER);
-    const result = TestBed.runInInjectionContext(() => authGuard({} as any, {} as any));
+
+    const result = TestBed.runInInjectionContext(() =>
+      authGuard({} as any, {} as any)
+    );
 
     expect(result).toBe(true);
   });
 
   it('should redirect to /auth when no user is authenticated', () => {
-    const result = TestBed.runInInjectionContext(() => authGuard({} as any, {} as any));
-    expect(result).toBe(false);
-
-    expect(router.navigate).toHaveBeenCalledWith(['/auth']);
+    const result = TestBed.runInInjectionContext(() =>
+      authGuard({} as any, {} as any)
+    );
+    
+    expect(result).toEqual({});
+    expect(router.createUrlTree).toHaveBeenCalledWith(['/auth']);
   });
 });
