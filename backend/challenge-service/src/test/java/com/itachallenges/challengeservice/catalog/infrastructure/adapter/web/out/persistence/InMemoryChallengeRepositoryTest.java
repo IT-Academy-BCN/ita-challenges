@@ -66,6 +66,7 @@ class InMemoryChallengeRepositoryTest {
         repository.delete(id);
 
         assertThat(repository.findAll()).isEmpty();
+    }
 
     @Test
     void save_should_store_challenge() {
