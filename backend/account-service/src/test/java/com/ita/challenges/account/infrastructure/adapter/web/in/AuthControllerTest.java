@@ -25,6 +25,6 @@ class AuthControllerTest {
     @Test
     void me_whenNotAuthenticated_redirectsToGitHub() throws Exception {
         mockMvc.perform(get("/api/account/me"))
-                .andExpect(status().isFound()); // 302
+                .andExpect(status().isFound());
     }
 }
