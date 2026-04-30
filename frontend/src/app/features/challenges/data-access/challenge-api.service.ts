@@ -2,7 +2,8 @@ import { inject, Injectable } from '@angular/core';
 import { IChallengeRequest } from '../models/ichallenge-request.interface';
 import { IChallenge } from '../models/ichallenge.interface';
 import { catchError, Observable, of } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { CHALLENGES_MOCK } from '../models/challenges.mock';
 
 @Injectable({
   providedIn: 'root',
@@ -25,7 +26,12 @@ export class ChallengeApiService {
   }
 
   loadAll(): Observable<IChallenge[]> {
-    return of([])
+    return this.http.get<IChallenge[]>('http://localhost:8080/api/challenge')
+    .pipe(
+      catchError((error: HttpErrorResponse) => {
+        return of(CHALLENGES_MOCK);
+      })
+    );
   }
 
   update(id: string, challenge: IChallengeRequest): Observable<IChallenge> {
