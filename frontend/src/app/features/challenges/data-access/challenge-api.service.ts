@@ -9,8 +9,9 @@ import { CHALLENGES_MOCK } from '../models/challenges.mock';
   providedIn: 'root',
 })
 export class ChallengeApiService {
-  readonly http = inject(HttpClient);
 
+  readonly http = inject(HttpClient);
+  
   create(challenge: IChallengeRequest): Observable<IChallenge> { 
     return of({
       id: "1",
@@ -37,7 +38,11 @@ export class ChallengeApiService {
   }
 
   delete(id: string): Observable<void> { 
-    return of(undefined) 
+    return this.http.delete<void>(`http://localhost:8080/api/challenge/${id}`)
+    .pipe(
+      catchError((error: HttpErrorResponse) => {
+        return of(undefined);
+      })
+    )
   }
-
 }

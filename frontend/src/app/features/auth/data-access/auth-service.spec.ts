@@ -5,41 +5,49 @@ import { AuthService } from './auth-service';
 import { AuthUser } from '../models/auth-user.model';
 
 const MOCK_USER: AuthUser = {
-  username: 'MockUser',
+  username: 'mockUser',
   avatarUrl: 'https://github.com/MockUser.png',
+  token: 'token-808',
 };
 
 describe('AuthService', () => {
   let service: AuthService;
-  let getUser: () => AuthUser | null;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
     service = TestBed.inject(AuthService);
-
-    getUser = () => service.user();
   });
 
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should initialize user as null', () => {
-    expect(getUser()).toBeNull();
+  it('should start with null user', () => {
+    expect(service.user()).toBeNull();
   });
 
-  it('should return current user when getUser is called', () => {
+  it('should set and get user correctly', () => {
     service.setUser(MOCK_USER);
-    expect(getUser()).toEqual(MOCK_USER);
+    expect(service.user()).toEqual(MOCK_USER);
+    expect(service.getUser()).toEqual(MOCK_USER);
   });
 
-  it('should return mock user when loginWithGithub is called', async () => {
-    const result = await firstValueFrom(service.loginWithGithub());
+  it('should set mock user and redirect to profile when loginWithGithub is called', () => {
+    const originalLocation = globalThis.location;
+    const locationMock = { href: '' };
+
+    vi.stubGlobal('location', locationMock);
+
+    service.loginWithGithub();
+
+    expect(service.user()).toEqual(MOCK_USER);
+    expect(locationMock.href).toBe('/profile');
+
+    vi.stubGlobal('location', originalLocation);
+  });
+
+  it('should fetch mock user', async () => {
+    const result = await firstValueFrom(service.fetchUser());
     expect(result).toEqual(MOCK_USER);
-  });
-
-  it('should not modify user signal when loginWithGithub is called', () => {
-    service.loginWithGithub().subscribe();
-    expect(getUser()).toBeNull();
   });
 });
