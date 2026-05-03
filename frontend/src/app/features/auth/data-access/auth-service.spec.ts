@@ -50,7 +50,6 @@ describe('AuthService', () => {
   it('should redirect to github when loginWithGithub is called', () => {
     const locationMock = { href: '' };
     vi.stubGlobal('location', locationMock);
-
     service.loginWithGithub();
 
     expect(locationMock.href).toBe('/api/account/oauth2/authorization/github');
@@ -61,7 +60,6 @@ describe('AuthService', () => {
   it('should not modify user signal when loginWithGithub is called', () => {
     const locationMock = { href: '' };
     vi.stubGlobal('location', locationMock);
-
     service.loginWithGithub();
 
     expect(service.user()).toBeNull();
