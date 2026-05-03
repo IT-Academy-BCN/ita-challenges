@@ -11,20 +11,13 @@ export class AuthService {
 
   user = signal<AuthUser | null>(null);
 
-  private readonly mockUser: AuthUser = {
-    username: 'mockUser',
-    avatarUrl: 'https://github.com/MockUser.png',
-    token: 'token-808'
-  };
 
   loginWithGithub(): void {
-    this.setUser(this.mockUser);
-
-    globalThis.location.href = '/profile';
+    globalThis.location.href = '/api/account/oauth2/authorization/github';
   }
 
   fetchUser(): Observable<AuthUser> {
-    return of(this.mockUser);
+    return this.http.get<AuthUser>('/api/account/auth/me');
   }
 
   setUser(user: AuthUser): void {
