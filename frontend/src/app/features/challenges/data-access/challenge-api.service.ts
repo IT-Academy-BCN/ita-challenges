@@ -26,7 +26,7 @@ export class ChallengeApiService {
   }
 
   loadAll(): Observable<IChallenge[]> {
-    return this.http.get<IChallenge[]>('http://localhost:8080/api/challenge')
+    return this.http.get<IChallenge[]>(this.apiUrl)
     .pipe(
       catchError((error: HttpErrorResponse) => {
         return of(CHALLENGES_MOCK);
@@ -35,15 +35,19 @@ export class ChallengeApiService {
   }
 
   update(id: string, challenge: IChallengeRequest): Observable<IChallenge> {
-    return of({
-      id: id,
-      title: challenge.title,
-      description:challenge.description,
-    })
+    return this.http.put<IChallenge>(`${this.apiUrl}/${id}`, challenge).pipe(
+      catchError(() =>
+        of({
+          id: id,
+          title: challenge.title,
+          description: challenge.description,
+        })
+      )
+    );
   }
 
   delete(id: string): Observable<void> {
-    return this.http.delete<void>(`http://localhost:8080/api/challenge/${id}`)
+    return this.http.delete<void>(`${this.apiUrl}/${id}`)
     .pipe(
       catchError((error: HttpErrorResponse) => {
         return of(undefined);
