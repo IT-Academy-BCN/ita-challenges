@@ -33,7 +33,7 @@ describe('ChallengesListPage', () => {
   });
 
   it('should load challenges on initialization', () => {
-    expect(component.challenges).toEqual(CHALLENGES_MOCK);
+    expect(component.challenges()).toEqual(CHALLENGES_MOCK);
   });
 
   it('should render challenges in the template', () => {

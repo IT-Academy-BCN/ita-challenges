@@ -43,7 +43,11 @@ export class ChallengeApiService {
   }
 
   delete(id: string): Observable<void> {
-    return of(undefined)
+    return this.http.delete<void>(`http://localhost:8080/api/challenge/${id}`)
+    .pipe(
+      catchError((error: HttpErrorResponse) => {
+        return of(undefined);
+      })
+    )
   }
-
 }

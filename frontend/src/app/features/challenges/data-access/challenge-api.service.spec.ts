@@ -57,25 +57,28 @@ describe('ChallengeApiService', () => {
       req.flush('Error', { status: 500, statusText: 'Server Error' });
     });
   });
-  
-  it('should load all challenges via GET', () => {
-    service.loadAll().subscribe((challenges) => {
-      expect(challenges).toEqual(CHALLENGES_MOCK);
+
+
+  describe('loadAll()', () => {
+    it('should load all challenges via GET', () => {
+      service.loadAll().subscribe((challenges) => {
+        expect(challenges).toEqual(CHALLENGES_MOCK);
+      });
+
+      const req = httpTestingController.expectOne('http://localhost:8080/api/challenge');
+      expect(req.request.method).toBe('GET');
+
+      req.flush(CHALLENGES_MOCK);
     });
 
-    const req = httpTestingController.expectOne('http://localhost:8080/api/challenge');
-    expect(req.request.method).toBe('GET');
+    it('should return mocked challenges on HTTP error', () => {
+      service.loadAll().subscribe((challenges) => {
+        expect(challenges).toEqual(CHALLENGES_MOCK);
+      });
 
-    req.flush(CHALLENGES_MOCK);
-  });
+      const req = httpTestingController.expectOne('http://localhost:8080/api/challenge');
 
-  it('should return mocked challenges on HTTP error', () => {
-    service.loadAll().subscribe((challenges) => {
-      expect(challenges).toEqual(CHALLENGES_MOCK);
+      req.flush('Error interno', { status: 500, statusText: 'Internal Server Error' });
     });
-
-    const req = httpTestingController.expectOne('http://localhost:8080/api/challenge');
-
-    req.flush('Error interno', { status: 500, statusText: 'Internal Server Error' });
   });
 });

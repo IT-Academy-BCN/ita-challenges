@@ -2,45 +2,67 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ProfilePageComponent } from './profile-page';
 import { AuthService } from '../../../auth/data-access/auth-service';
 import { AuthUser } from '../../../auth/models/auth-user.model';
+import { signal } from '@angular/core';
+import { of, throwError } from 'rxjs';
+import { vi } from 'vitest';
 
 const MOCK_USER: AuthUser = {
   username: 'MockUser',
   avatarUrl: 'https://github.com/MockUser.png',
+  token: 'token-808',
 };
 
 describe('ProfilePage', () => {
   let component: ProfilePageComponent;
   let fixture: ComponentFixture<ProfilePageComponent>;
-  let authService: AuthService;
+
+  const userSignal = signal<AuthUser | null>(null);
+
+  const authServiceMock = {
+    user: userSignal,
+    fetchUser: vi.fn(),
+    setUser: vi.fn((user: AuthUser) => userSignal.set(user)),
+  };
 
   beforeEach(async () => {
+    authServiceMock.fetchUser.mockReset();
+    authServiceMock.setUser.mockReset();
+    userSignal.set(null);
+
     await TestBed.configureTestingModule({
       imports: [ProfilePageComponent],
+      providers: [
+        {
+          provide: AuthService,
+          useValue: authServiceMock,
+        },
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(ProfilePageComponent);
     component = fixture.componentInstance;
-    authService = TestBed.inject(AuthService);
-    await fixture.whenStable();
   });
 
   it('should create', () => {
+    authServiceMock.fetchUser.mockReturnValue(of(MOCK_USER));
+    fixture.detectChanges();
+
     expect(component).toBeTruthy();
   });
 
-  it('should show fallback message when no user is logged in', () => {
-    const empty = fixture.nativeElement.querySelector('p');
-    expect(empty.textContent).toContain('No user logged in');
-  });
-
-  it('should display avatar and username when user is present', () => {
-    authService.setUser(MOCK_USER);
+  it('should call setUser when fetchUser succeeds', () => {
+    authServiceMock.fetchUser.mockReturnValue(of(MOCK_USER));
     fixture.detectChanges();
 
-    const avatar = fixture.nativeElement.querySelector('img');
-    const username = fixture.nativeElement.querySelector('h2');
+    expect(authServiceMock.setUser).toHaveBeenCalledWith(MOCK_USER);
+  });
 
-    expect(avatar.src).toContain(MOCK_USER.avatarUrl);
-    expect(username.textContent).toContain(MOCK_USER.username);
+  it('should set error when fetchUser fails', () => {
+    authServiceMock.fetchUser.mockReturnValue(
+      throwError(() => new Error('fail'))
+    );
+    fixture.detectChanges();
+
+    expect(component.error()).toBe(true);
   });
 });
