@@ -10,10 +10,10 @@ import { ChallengeApiService } from '../data-access/challenge-api.service';
 
 export class ChallengeService {
 
-  challengeApiService = inject(ChallengeApiService)
+  private readonly challengeApiService = inject(ChallengeApiService)
 
   create(challenge: IChallengeRequest): Observable<IChallenge>  {
-    return this.challengeApiService.create(challenge)
+    return this.challengeApiService.create(challenge);
   }
 
   loadAll(): Observable<IChallenge[]> {

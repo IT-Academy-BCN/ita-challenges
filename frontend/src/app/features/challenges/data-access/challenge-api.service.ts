@@ -14,15 +14,19 @@ export class ChallengeApiService {
   private readonly apiUrl = 'http://localhost:8080/api/challenge';
 
   create(challenge: IChallengeRequest): Observable<IChallenge> {
-    return of({
-      id: "1",
-      title: challenge.title,
-      description:challenge.description,
-    })
+    return this.http.post<IChallenge>(this.apiUrl, challenge).pipe(
+      catchError(() => {
+        return of({
+          id: '1',
+          title: challenge.title,
+          description:challenge.description,
+        })
+      })
+    );
   }
 
   loadAll(): Observable<IChallenge[]> {
-    return this.http.get<IChallenge[]>('http://localhost:8080/api/challenge')
+    return this.http.get<IChallenge[]>(this.apiUrl)
     .pipe(
       catchError((error: HttpErrorResponse) => {
         return of(CHALLENGES_MOCK);
@@ -43,7 +47,11 @@ export class ChallengeApiService {
   }
 
   delete(id: string): Observable<void> {
-    return of(undefined)
+    return this.http.delete<void>(`${this.apiUrl}/${id}`)
+    .pipe(
+      catchError((error: HttpErrorResponse) => {
+        return of(undefined);
+      })
+    )
   }
-
 }

@@ -62,25 +62,58 @@ describe('ChallengeApiService', () => {
       req.flush('Error', { status: 500, statusText: 'Server Error' });
     });
   });
-  
-  it('should load all challenges via GET', () => {
-    service.loadAll().subscribe((challenges) => {
-      expect(challenges).toEqual(CHALLENGES_MOCK);
+
+
+  describe('create', () => {
+    it('should call POST with the correct URL and body and return the created challenge', () => {
+      const newChallenge: IChallengeRequest = { title: 'Test', description: 'Desc' };
+      const mockResponse: IChallenge = { id: '1', ...newChallenge };
+
+      service.create(newChallenge).subscribe(result => {
+        expect(result).toEqual(mockResponse);
+      });
+
+      const req = httpTestingController.expectOne(apiUrl);
+      expect(req.request.method).toBe('POST');
+      expect(req.request.body).toEqual(newChallenge);
+      req.flush(mockResponse, { status: 201, statusText: 'Created' });
     });
 
-    const req = httpTestingController.expectOne('http://localhost:8080/api/challenge');
-    expect(req.request.method).toBe('GET');
+    it('should return default challenge when API fails (Happy Path Fallback)', () => {
+      const newChallenge: IChallengeRequest = { title: 'Test', description: 'Desc' };
 
-    req.flush(CHALLENGES_MOCK);
+      service.create(newChallenge).subscribe(response => {
+        expect(response.id).toBe('1');
+        expect(response.title).toBe(newChallenge.title);
+      });
+
+      const req = httpTestingController.expectOne(apiUrl);
+
+      req.flush('Error', { status: 500, statusText: 'Server Error' });
+    });
   });
 
-  it('should return mocked challenges on HTTP error', () => {
-    service.loadAll().subscribe((challenges) => {
-      expect(challenges).toEqual(CHALLENGES_MOCK);
+
+  describe('loadAll()', () => {
+    it('should load all challenges via GET', () => {
+      service.loadAll().subscribe((challenges) => {
+        expect(challenges).toEqual(CHALLENGES_MOCK);
+      });
+
+      const req = httpTestingController.expectOne(apiUrl);
+      expect(req.request.method).toBe('GET');
+
+      req.flush(CHALLENGES_MOCK);
     });
 
-    const req = httpTestingController.expectOne('http://localhost:8080/api/challenge');
+    it('should return mocked challenges on HTTP error', () => {
+      service.loadAll().subscribe((challenges) => {
+        expect(challenges).toEqual(CHALLENGES_MOCK);
+      });
 
-    req.flush('Error interno', { status: 500, statusText: 'Internal Server Error' });
+      const req = httpTestingController.expectOne(apiUrl);
+
+      req.flush('Error interno', { status: 500, statusText: 'Internal Server Error' });
+    });
   });
 });
