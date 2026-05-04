@@ -1,5 +1,5 @@
 import { inject, Injectable, signal } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { AuthUser } from '../models/auth-user.model';
 
@@ -9,22 +9,17 @@ import { AuthUser } from '../models/auth-user.model';
 export class AuthService {
   private readonly http = inject(HttpClient);
 
+  private readonly githubLoginUrl = '/api/account/oauth2/authorization/github';
+  private readonly currentUserUrl = '/api/account/auth/me';
+
   user = signal<AuthUser | null>(null);
 
-  private readonly mockUser: AuthUser = {
-    username: 'mockUser',
-    avatarUrl: 'https://github.com/MockUser.png',
-    token: 'token-808'
-  };
-
   loginWithGithub(): void {
-    this.setUser(this.mockUser);
-
-    globalThis.location.href = '/profile';
+    globalThis.location.href = this.githubLoginUrl;
   }
 
   fetchUser(): Observable<AuthUser> {
-    return of(this.mockUser);
+    return this.http.get<AuthUser>(this.currentUserUrl);
   }
 
   setUser(user: AuthUser): void {
