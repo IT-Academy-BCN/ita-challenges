@@ -1,6 +1,7 @@
 package com.itachallenges.challengeservice.catalog.infrastructure.adapter.web.out.persistence;
 
 import com.itachallenges.challengeservice.catalog.domain.model.Challenge;
+import com.itachallenges.challengeservice.catalog.domain.valueobject.ChallengeId;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -51,6 +52,21 @@ class InMemoryChallengeRepositoryTest {
         assertThat(result.getTitle().toString()).isEqualTo("New title");
         assertThat(result.getDescription().toString()).isEqualTo("New description");
     }
+   
+
+
+    @Test
+    void should_delete_existing_challenge() {
+        Challenge challenge = Challenge.create("To be deleted", "Description");
+
+        ChallengeId id = challenge.getId();
+        repository.save(challenge);
+        assertThat(repository.findAll()).hasSize(1);
+
+        repository.delete(id);
+
+        assertThat(repository.findAll()).isEmpty();
+    }
 
     @Test
     void save_should_store_challenge() {
@@ -60,11 +76,6 @@ class InMemoryChallengeRepositoryTest {
 
         assertThat(result).hasSize(1);
         assertThat(result.get(0).getId()).isEqualTo(challenge.getId());
-    }
-
-    @Test
-    void delete_should_throw_unsupported_operation_exception() {
-        assertThrows(UnsupportedOperationException.class, () -> repository.delete("any-id"));
     }
 
 }

@@ -47,6 +47,7 @@ public class ChallengeController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable String id) {
+        repository.delete(ChallengeId.of(id));
         return ResponseEntity.noContent().build();
     }
 

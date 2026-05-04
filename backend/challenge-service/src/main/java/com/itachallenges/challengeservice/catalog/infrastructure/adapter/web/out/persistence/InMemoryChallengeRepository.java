@@ -34,8 +34,8 @@ public class InMemoryChallengeRepository implements ChallengeRepository {
     }
 
     @Override
-    public void delete(String id) {
-        throw new UnsupportedOperationException("Not implemented yet");
+    public void delete(ChallengeId id) {
+        storage.remove(id);
     }
 
     @Override
