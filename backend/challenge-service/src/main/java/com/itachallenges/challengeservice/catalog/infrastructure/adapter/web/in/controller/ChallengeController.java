@@ -16,6 +16,7 @@ import java.util.List;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/challenge")
+@CrossOrigin(origins = "http://localhost:4200")
 public class ChallengeController {
 
     private final ChallengeRepository repository;
