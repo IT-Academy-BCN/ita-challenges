@@ -10,14 +10,19 @@ import { CHALLENGES_MOCK } from '../models/challenges.mock';
 })
 export class ChallengeApiService {
 
-  readonly http = inject(HttpClient);
-  
-  create(challenge: IChallengeRequest): Observable<IChallenge> { 
-    return of({
-      id: "1",
-      title: challenge.title,
-      description:challenge.description,
-    })
+  private readonly http = inject(HttpClient);
+  private readonly apiUrl = 'http://localhost:8080/api/challenge';
+
+  create(challenge: IChallengeRequest): Observable<IChallenge> {
+    return this.http.post<IChallenge>(this.apiUrl, challenge).pipe(
+      catchError(() => {
+        return of({
+          id: '1',
+          title: challenge.title,
+          description:challenge.description,
+        })
+      })
+    );
   }
 
   loadAll(): Observable<IChallenge[]> {
@@ -29,7 +34,7 @@ export class ChallengeApiService {
     );
   }
 
-  update(id: string, challenge: IChallengeRequest): Observable<IChallenge> { 
+  update(id: string, challenge: IChallengeRequest): Observable<IChallenge> {
     return of({
       id: id,
       title: challenge.title,
@@ -37,7 +42,7 @@ export class ChallengeApiService {
     })
   }
 
-  delete(id: string): Observable<void> { 
+  delete(id: string): Observable<void> {
     return this.http.delete<void>(`http://localhost:8080/api/challenge/${id}`)
     .pipe(
       catchError((error: HttpErrorResponse) => {

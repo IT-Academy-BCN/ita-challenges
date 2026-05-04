@@ -1,8 +1,9 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideHttpClient } from '@angular/common/http';
-
+import { IChallengeRequest } from '../models/ichallenge-request.interface';
 import { ChallengeApiService } from './challenge-api.service';
+import { IChallenge } from '../models/ichallenge.interface';
 import { CHALLENGES_MOCK } from '../models/challenges.mock';
 
 describe('ChallengeApiService', () => {
@@ -28,29 +29,35 @@ describe('ChallengeApiService', () => {
     expect(service).toBeTruthy();
   });
 
-  describe('delete', () => {
-    it('should call DELETE with the correct URL', () => {
-      const mockId = '123';
-      
-      service.delete(mockId).subscribe();
+  describe('create', () => {
+    it('should call POST with the correct URL and body and return the created challenge', () => {
+      const newChallenge: IChallengeRequest = { title: 'Test', description: 'Desc' };
+      const mockResponse: IChallenge = { id: '1', ...newChallenge };
 
-      const req = httpTestingController.expectOne(`http://localhost:8080/api/challenge/${mockId}`);
-      expect(req.request.method).toBe('DELETE');
-      req.flush(null);
+      service.create(newChallenge).subscribe(result => {
+        expect(result).toEqual(mockResponse);
+      });
+
+      const req = httpTestingController.expectOne('http://localhost:8080/api/challenge');
+      expect(req.request.method).toBe('POST');
+      expect(req.request.body).toEqual(newChallenge);
+      req.flush(mockResponse, { status: 201, statusText: 'Created' });
     });
 
-    it('should return undefined if HTTP error happens', () => {
-      const mockId = '456';
-      let responseResult: any = 'initial_value'; 
-      
-      service.delete(mockId).subscribe(result => responseResult = result);
+    it('should return default challenge when API fails (Happy Path Fallback)', () => {
+      const newChallenge: IChallengeRequest = { title: 'Test', description: 'Desc' };
 
-      const req = httpTestingController.expectOne(`http://localhost:8080/api/challenge/${mockId}`);
-      req.flush('Not Found', { status: 404, statusText: 'Not Found' }); 
-      
-      expect(responseResult).toBeUndefined();
+      service.create(newChallenge).subscribe(response => {
+        expect(response.id).toBe('1');
+        expect(response.title).toBe(newChallenge.title);
+      });
+
+      const req = httpTestingController.expectOne('http://localhost:8080/api/challenge');
+
+      req.flush('Error', { status: 500, statusText: 'Server Error' });
     });
   });
+
 
   describe('loadAll()', () => {
     it('should load all challenges via GET', () => {
@@ -60,8 +67,8 @@ describe('ChallengeApiService', () => {
 
       const req = httpTestingController.expectOne('http://localhost:8080/api/challenge');
       expect(req.request.method).toBe('GET');
-      
-      req.flush(CHALLENGES_MOCK); 
+
+      req.flush(CHALLENGES_MOCK);
     });
 
     it('should return mocked challenges on HTTP error', () => {
@@ -70,7 +77,7 @@ describe('ChallengeApiService', () => {
       });
 
       const req = httpTestingController.expectOne('http://localhost:8080/api/challenge');
-      
+
       req.flush('Error interno', { status: 500, statusText: 'Internal Server Error' });
     });
   });
