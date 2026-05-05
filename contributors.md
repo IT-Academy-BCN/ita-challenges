@@ -1,4 +1,4 @@
 # List of developers contributors
 
 - Rafael di Candia
-- Jordi Miravet https://github.com/JordiMiravet
+- Jordi Miravet - https://github.com/JordiMiravet
