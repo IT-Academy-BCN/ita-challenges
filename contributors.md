@@ -1,3 +1,3 @@
 # List of developers contributors
 
-- Rafael di Candia
+- Rafael di Candia - https://github.com/Rafadicandia
