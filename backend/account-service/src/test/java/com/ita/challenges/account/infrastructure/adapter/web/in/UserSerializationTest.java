@@ -19,7 +19,7 @@ class UserSerializationTest {
         String json = mapper.writeValueAsString(response);
 
         assertThat(json)
-                .contains("\"username\":\"john\"")
+                .contains("\"username\":\"natasha\"")
                 .contains("\"role\":\"" + role.name() + "\"");
     }
 }
