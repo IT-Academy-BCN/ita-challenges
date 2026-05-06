@@ -9,7 +9,7 @@ import { AuthUser } from '../models/auth-user.model';
 export class AuthService {
   private readonly http = inject(HttpClient);
 
-  private readonly githubLoginUrl = '/api/account/auth/login';
+  private readonly githubLoginUrl = '/api/account/oauth2/authorization/github';
   private readonly currentUserUrl = '/api/account/auth/me';
 
   user = signal<AuthUser | null>(null);
@@ -19,9 +19,7 @@ export class AuthService {
   }
 
   fetchUser(): Observable<AuthUser> {
-    return this.http.get<AuthUser>(this.currentUserUrl, {
-      withCredentials: true,
-      });
+    return this.http.get<AuthUser>(this.currentUserUrl);
   }
 
   setUser(user: AuthUser): void {
