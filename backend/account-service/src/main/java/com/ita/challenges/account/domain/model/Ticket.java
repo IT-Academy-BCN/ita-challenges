@@ -1,20 +1,15 @@
 package com.ita.challenges.account.domain.model;
 
-import com.ita.challenges.account.domain.valueobject.TicketDescription;
-import com.ita.challenges.account.domain.valueobject.TicketId;
-import com.ita.challenges.account.domain.valueobject.TicketTitle;
-import com.ita.challenges.account.domain.valueobject.UserId;
-import lombok.Getter;
+import java.util.UUID;
 
-@Getter
 public class Ticket {
 
-    private final TicketId id;
-    private final UserId userId;
-    private final TicketTitle title;
-    private final TicketDescription description;
+    private final String id;
+    private final String userId;
+    private final String title;
+    private final String description;
 
-    private Ticket(TicketId id, UserId userId, TicketTitle title, TicketDescription description) {
+    private Ticket(String id, String userId, String title, String description) {
         this.id = id;
         this.userId = userId;
         this.title = title;
@@ -23,10 +18,26 @@ public class Ticket {
 
     public static Ticket create(String userId, String title, String description) {
         return new Ticket(
-                TicketId.generate(),
-                new UserId(userId),
-                new TicketTitle(title),
-                new TicketDescription(description)
+                UUID.randomUUID().toString(),
+                userId,
+                title,
+                description
         );
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getDescription() {
+        return description;
     }
 }

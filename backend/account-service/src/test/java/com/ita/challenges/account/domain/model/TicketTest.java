@@ -11,8 +11,8 @@ class TicketTest {
         Ticket ticket = Ticket.create("user-1", "Login issue", "Unable to access my account");
 
         assertNotNull(ticket.getId());
-        assertEquals("user-1", ticket.getUserId().toString());
-        assertEquals("Login issue", ticket.getTitle().toString());
-        assertEquals("Unable to access my account", ticket.getDescription().toString());
+        assertEquals("user-1", ticket.getUserId());
+        assertEquals("Login issue", ticket.getTitle());
+        assertEquals("Unable to access my account", ticket.getDescription());
     }
 }
