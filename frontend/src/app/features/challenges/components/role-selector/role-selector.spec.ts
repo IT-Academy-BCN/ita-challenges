@@ -40,7 +40,6 @@ describe('RoleSelectorComponent', () => {
     const button = fixture.debugElement.query(
       By.css('.role-selector__switch')
     );
-    
     button.triggerEventHandler('click', null);
     fixture.detectChanges();
 
