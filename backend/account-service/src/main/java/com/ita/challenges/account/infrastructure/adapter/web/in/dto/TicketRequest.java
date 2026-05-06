@@ -1,3 +1,3 @@
 package com.ita.challenges.account.infrastructure.adapter.web.in.dto;
 
-public record CreateTicketRequest(String title, String description) {}
+public record TicketRequest(String title, String description) {}
