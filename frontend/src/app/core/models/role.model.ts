@@ -1,1 +1,1 @@
-export type Role = 'mentor' | 'student';
+export type Role = 'mentor' | 'student' | 'guest';
