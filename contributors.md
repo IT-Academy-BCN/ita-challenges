@@ -7,3 +7,4 @@
 - Jordi Miravet - https://github.com/JordiMiravet
 - Jordi Casas - https://github.com/JordiCasas87
 - Andrés Rojo Cabrera - https://github.com/andyrouge81
+- Albert Medina - https://github.com/AlbertMedina
