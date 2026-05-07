@@ -5,6 +5,7 @@ import com.itachallenges.challengeservice.catalog.domain.port.out.ChallengeRepos
 import com.itachallenges.challengeservice.catalog.domain.valueobject.ChallengeId;
 import com.itachallenges.challengeservice.catalog.infrastructure.adapter.web.in.dto.ChallengeResponse;
 import com.itachallenges.challengeservice.catalog.infrastructure.adapter.web.in.dto.ChallengeRequest;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,45 +14,58 @@ import java.util.UUID;
 import java.util.List;
 
 @RestController
+@AllArgsConstructor
 @RequestMapping("/api/challenge")
+@CrossOrigin(origins = "http://localhost:4200")
 public class ChallengeController {
 
     private final ChallengeRepository repository;
 
-    public ChallengeController(ChallengeRepository repository) {
-        this.repository = repository;
-    }
-    
-    @GetMapping
-    public ResponseEntity<List<ChallengeResponse>> findAll() {
-        return ResponseEntity.ok(List.of());
-    }
-
     @PostMapping
     public ResponseEntity<ChallengeResponse> create(@RequestBody ChallengeRequest request) {
-        Challenge challenge = Challenge.create(request.title(), request.description());
-        repository.update(challenge);
+        Challenge saved = repository.save(
+                Challenge.create(request.title(), request.description())
+        );
+
         return ResponseEntity.status(HttpStatus.CREATED).body(
                 new ChallengeResponse(
-                        challenge.getId().toString(),
-                        challenge.getTitle().toString(),
-                        challenge.getDescription().toString()
+                        saved.getId().toString(),
+                        saved.getTitle().toString(),
+                        saved.getDescription().toString()
                 )
         );
     }
+
+    @GetMapping
+    public ResponseEntity<List<ChallengeResponse>> findAll() {
+        List<ChallengeResponse> challenges = repository.findAll()
+                .stream()
+                .map(c -> new ChallengeResponse(c.getId().toString(), c.getTitle().toString(), c.getDescription().toString()))
+                .toList();
+        return ResponseEntity.ok(challenges);
+    }
+
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable String id) {
+        repository.delete(ChallengeId.of(id));
+        return ResponseEntity.noContent().build();
+    }
+
+
 
     @PutMapping("/{id}")
     public ResponseEntity<ChallengeResponse> update(
             @PathVariable String id,
             @RequestBody ChallengeRequest request
     ) {
-        
+
         Challenge challenge = Challenge.restore(
                 new ChallengeId(UUID.fromString(id)),
                 request.title(),
                 request.description()
         );
-        
+
         Challenge updated = repository.update(challenge);
         ChallengeResponse response = new ChallengeResponse(
                 updated.getId().toString(),
@@ -62,4 +76,3 @@ public class ChallengeController {
         return ResponseEntity.ok(response);
     }
 }
-
