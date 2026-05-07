@@ -6,6 +6,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
@@ -17,8 +18,9 @@ class TicketControllerTest {
 
     @Test
     @WithMockUser
-    void shouldLoadTicketEndpoint() throws Exception {
+    void should_return_200_with_empty_list_when_requesting_ticket_list() throws Exception {
         mockMvc.perform(get("/api/account/tickets"))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isOk())
+                .andExpect(content().json("[]"));
     }
 }
