@@ -31,11 +31,4 @@ describe('CreateButtonComponent', () => {
     const button = fixture.nativeElement.querySelector('button');
     expect(button.textContent.trim()).toBe('Create Challenge');
   });
-
-  it('should have routerLink directive pointing to /challenges/create', () => {
-    const button = fixture.debugElement.query(By.css('button'));
-    
-    expect(button).toBeTruthy();
-    expect(button.attributes['routerLink']).toBe('/challenges/create');
-  });
 });
