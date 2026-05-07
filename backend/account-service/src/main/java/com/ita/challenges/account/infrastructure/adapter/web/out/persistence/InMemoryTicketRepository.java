@@ -12,7 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Repository
 public class InMemoryTicketRepository implements TicketRepository {
 
-    Map<String, Ticket> storage = new ConcurrentHashMap<>();
+    private final Map<String, Ticket> storage = new ConcurrentHashMap<>();
 
     @Override
     public List<Ticket> findAllByUserId(String userId) {
