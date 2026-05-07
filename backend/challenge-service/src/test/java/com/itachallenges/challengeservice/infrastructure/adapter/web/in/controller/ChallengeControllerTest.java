@@ -54,7 +54,7 @@ class ChallengeControllerTest {
     }
 
     @Test
-    void should_create_challenge_with_tittle_and_description_and_return_201() throws Exception {
+    void should_create_challenge_with_title_and_description_and_return_201() throws Exception {
         Challenge saved = Challenge.create(request.title(), request.description());
         when(repository.save(any(Challenge.class))).thenReturn(saved);
 
