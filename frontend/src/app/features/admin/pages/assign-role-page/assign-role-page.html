@@ -1,1 +1,31 @@
-<p>assign-role-page works!</p>
+<h2>Assignar Rol</h2>
+
+<form [formGroup]="roleForm" (ngSubmit)="onSubmit()">
+  <div>
+    <label for="username">Nom d'usuari</label>
+    <input type="text" id="username" formControlName="username">
+    @if (roleForm.controls.username.invalid && roleForm.controls.username.touched){
+        <small>El nom es obligatori i no ha de tenir caracters especials</small>
+    }
+  </div>
+
+  <div>
+    <label for="role">Rol</label>
+    <select id="role" formControlName="role">
+        <option value="" disabled>-- Sel.lecciona el rol --</option>
+        @for (option of roleOptions; track option.value){
+            <option [value]="option.value">{{option.label}}</option>
+        }
+    </select>
+
+    @if (roleForm.controls.role.invalid && roleForm.controls.role.touched){
+        <small>El rol es obligatori</small>
+    }
+  </div>
+
+  <button type="submit" [disabled]="roleForm.invalid || isSubmitting()">{{ isSubmitting() ? 'Assignant...' : 'Assignar'}}</button>
+
+   @if (submitError()) {
+      <small>{{ submitError() }}</small>
+   }
+</form>
