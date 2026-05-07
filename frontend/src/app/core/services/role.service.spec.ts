@@ -66,8 +66,7 @@ describe('RoleService', () => {
     service.setRole('guest');
     values.push(service.role());
 
-    expect(values).toEqual(['guest','mentor','student','guest',
-    ]);
+    expect(values).toEqual(['guest','mentor','student','guest']);
   });
 
   it('should keep computed isMentor reactive', () => {
