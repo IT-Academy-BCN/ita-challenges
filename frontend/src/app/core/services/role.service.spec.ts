@@ -20,7 +20,6 @@ describe('RoleService', () => {
 
   it('should update role when setRole is called', () => {
     service.setRole('mentor');
-
     expect(service.role()).toBe('mentor');
   });
 
@@ -30,7 +29,6 @@ describe('RoleService', () => {
 
   it('should reflect isMentor as true when role is mentor', () => {
     service.setRole('mentor');
-
     expect(service.isMentor()).toBe(true);
   });
 
@@ -44,17 +42,13 @@ describe('RoleService', () => {
 
   it('should reflect isStudent correctly', () => {
     expect(service.isStudent()).toBeFalsy();
-
     service.setRole('student');
-
     expect(service.isStudent()).toBe(true);
   });
 
   it('should reflect isGuest correctly', () => {
     expect(service.isGuest()).toBe(true);
-
     service.setRole('mentor');
-
     expect(service.isGuest()).toBe(false);
   });
 
@@ -72,11 +66,7 @@ describe('RoleService', () => {
     service.setRole('guest');
     values.push(service.role());
 
-    expect(values).toEqual([
-      'guest',
-      'mentor',
-      'student',
-      'guest',
+    expect(values).toEqual(['guest','mentor','student','guest',
     ]);
   });
 
