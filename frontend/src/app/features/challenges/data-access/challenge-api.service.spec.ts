@@ -116,4 +116,28 @@ describe('ChallengeApiService', () => {
       req.flush('Error interno', { status: 500, statusText: 'Internal Server Error' });
     });
   });
+
+  describe('delete', () => {
+    it('should call DELETE with the correct URL', () => {
+      const mockId = '123';
+
+      service.delete(mockId).subscribe();
+
+      const req = httpTestingController.expectOne(`${apiUrl}/${mockId}`);
+      expect(req.request.method).toBe('DELETE');
+      req.flush(null);
+    });
+
+    it('should return undefined if HTTP error happens', () => {
+      const mockId = '456';
+      let responseResult: any = 'initial_value';
+
+      service.delete(mockId).subscribe(result => responseResult = result);
+
+      const req = httpTestingController.expectOne(`${apiUrl}/${mockId}`);
+      req.flush('Not Found', { status: 404, statusText: 'Not Found' });
+
+      expect(responseResult).toBeUndefined();
+    });
+  });
 });
