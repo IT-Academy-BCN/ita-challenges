@@ -1,0 +1,140 @@
+{
+  "info": {
+    "name": "ITA Services",
+    "description": "Unified collection for all ITA project microservices. Includes implemented endpoints and placeholders for pending endpoints.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_postman_id": "8c12ca4f-dc7e-4422-b98d-f5b59bf2ed50"
+  },
+  "variable": [
+    { "key": "host", "value": "http://localhost" },
+    { "key": "challengePort", "value": "8080" },
+    { "key": "accountPort", "value": "8081" },
+    { "key": "challengeId", "value": "00000000-0000-0000-0000-000000000001" }
+  ],
+  "item": [
+    {
+      "name": "challenge-service",
+      "item": [
+        {
+          "name": "Catalog / Create challenge",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const json = pm.response.json();",
+                  "pm.environment.set('challengeId', json.id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Sum of two numbers\",\n  \"description\": \"Implement a function that sums two integers.\"\n}"
+            },
+            "url": {
+              "raw": "{{host}}:{{challengePort}}/api/challenge",
+              "host": ["{{host}}"],
+              "port": "{{challengePort}}",
+              "path": ["api", "challenge"]
+            }
+          }
+        },
+        {
+          "name": "Catalog / List challenges",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{host}}:{{challengePort}}/api/challenge",
+              "host": ["{{host}}"],
+              "port": "{{challengePort}}",
+              "path": ["api", "challenge"]
+            }
+          }
+        },
+        {
+          "name": "Catalog / Update challenge",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Sum of two numbers (updated)\",\n  \"description\": \"Update the solution to handle negative numbers.\"\n}"
+            },
+            "url": {
+              "raw": "{{host}}:{{challengePort}}/api/challenge/{{challengeId}}",
+              "host": ["{{host}}"],
+              "port": "{{challengePort}}",
+              "path": ["api", "challenge", "{{challengeId}}"]
+            }
+          }
+        },
+        {
+          "name": "Catalog / Delete challenge",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{host}}:{{challengePort}}/api/challenge/{{challengeId}}",
+              "host": ["{{host}}"],
+              "port": "{{challengePort}}",
+              "path": ["api", "challenge", "{{challengeId}}"]
+            }
+          }
+        },
+        {
+          "name": "Activity / TODO endpoints",
+          "request": {
+            "method": "POST",
+            "url": {
+              "raw": "{{host}}:{{challengePort}}/api/v1/challenges/{{challengeId}}/favorite",
+              "host": ["{{host}}"],
+              "port": "{{challengePort}}",
+              "path": ["api", "v1", "challenges", "{{challengeId}}", "favorite"]
+            },
+            "description": "Placeholder: endpoint marked as TODO in ActivityController."
+          }
+        },
+        {
+          "name": "Submission / TODO endpoints",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": \"00000000-0000-0000-0000-000000000001\",\n  \"challengeId\": \"{{challengeId}}\",\n  \"code\": \"print(\\\"hello\\\")\"\n}"
+            },
+            "url": {
+              "raw": "{{host}}:{{challengePort}}/api/v1/submissions/draft",
+              "host": ["{{host}}"],
+              "port": "{{challengePort}}",
+              "path": ["api", "v1", "submissions", "draft"]
+            },
+            "description": "Placeholder: endpoint marked as TODO in SubmissionController."
+          }
+        }
+      ]
+    },
+    {
+      "name": "account-service",
+      "item": [
+        {
+          "name": "No HTTP endpoints implemented yet",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{host}}:{{accountPort}}/",
+              "host": ["{{host}}"],
+              "port": "{{accountPort}}",
+              "path": [""]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
