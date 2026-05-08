@@ -10,11 +10,11 @@ public class User {
         this.userRole = userRole;
     }
 
-    public String getUserName() {
+    public String userName() {
         return userName;
     }
 
-    public Role getUserRole() {
+    public Role userRole() {
         return userRole;
     }
 }
