@@ -84,4 +84,18 @@ class UserControllerTest {
                 .andExpect(jsonPath("$.username").value("ID12345"))
                 .andExpect(jsonPath("$.role").value(Role.STUDENT.name()));
     }
+
+    @Test
+    void create_shouldReturn404WhenGitHubUserNotFound() throws Exception {
+        when(restTemplate.getForObject(anyString(), eq(GitHubUserResponse.class)))
+                .thenReturn(null);
+
+        UserRequest request = new UserRequest("username12345", Role.GUEST);
+        mockMvc.perform(post("/api/account/users")
+                        .with(oauth2Login()).with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request))
+                )
+                .andExpect(status().isNotFound());
+    }
 }
