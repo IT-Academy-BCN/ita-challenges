@@ -54,4 +54,4 @@ class SecurityConfigTest {
    .andExpect(redirectedUrlPattern("**/oauth2/authorization/github"));
  }
 
-}
+}

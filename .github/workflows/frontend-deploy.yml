@@ -1,0 +1,36 @@
+name: ita-frontend (DEPLOY)
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [develop, staging, main]
+    paths:
+      - frontend/**
+      - infra/deploy/frontend.sh
+      - .github/workflows/frontend-deploy.yml
+      - docker-compose.yml
+
+permissions:
+  contents: read
+
+concurrency:
+  group: frontend-deploy-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Deploy frontend (placeholder until AWS infra exists)
+        run: |
+          chmod +x infra/deploy/frontend.sh
+          infra/deploy/frontend.sh "${{ github.ref_name }}" "${{ github.sha }}"
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          SSH_PORT: ${{ secrets.SSH_PORT }}
+          DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}

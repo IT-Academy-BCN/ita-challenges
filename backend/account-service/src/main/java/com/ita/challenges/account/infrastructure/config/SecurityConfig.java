@@ -20,8 +20,8 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
                 )
                 .oauth2Login(oauth2 -> oauth2
-                        .defaultSuccessUrl("/profile", true)
+                        .defaultSuccessUrl("/api/account/profile", true)
                 );
         return http.build();
     }
-}
+}
