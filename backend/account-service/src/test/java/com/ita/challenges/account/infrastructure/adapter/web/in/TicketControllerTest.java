@@ -2,6 +2,7 @@ package com.ita.challenges.account.infrastructure.adapter.web.in;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ita.challenges.account.infrastructure.adapter.web.in.dto.TicketRequest;
+import jakarta.servlet.ServletException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -38,7 +39,7 @@ class TicketControllerTest {
         String ticketId = "123";
         TicketRequest request = new TicketRequest("title","description");
 
-        Exception exception = assertThrows(Exception.class, () -> {
+        ServletException exception = assertThrows(ServletException.class, () -> {
             mockMvc.perform(put("/api/account/tickets/{id}", ticketId)
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
