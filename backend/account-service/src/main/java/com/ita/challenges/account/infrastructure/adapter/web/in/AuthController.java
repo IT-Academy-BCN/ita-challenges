@@ -32,12 +32,5 @@ public class AuthController {
         }
 
         return new AuthUserDto(login, avatarUrl);
-    }
-
-    @GetMapping("/auth/login")
-    public ResponseEntity<Void> login() {
-        return ResponseEntity.status(302)
-                .location(URI.create("/oauth2/authorization/github"))
-                .build();
-    }
+    }   
 }

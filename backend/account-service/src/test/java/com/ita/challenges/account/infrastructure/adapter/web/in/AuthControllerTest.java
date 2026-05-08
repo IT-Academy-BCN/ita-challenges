@@ -37,12 +37,4 @@ class AuthControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.username").value("anonymous"));
     }
-
-    @Test
-    void login_redirectsToGitHub() throws Exception {
-        mockMvc.perform(get("/api/account/auth/login"))
-                .andExpect(status().isFound())
-                .andExpect(header().string("Location",
-                        org.hamcrest.Matchers.containsString("/oauth2/authorization/github")));
-    }
-}
+}
