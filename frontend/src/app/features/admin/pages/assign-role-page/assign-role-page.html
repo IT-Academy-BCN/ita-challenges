@@ -1,12 +1,9 @@
-<h2>Assignar Rol</h2>
+<h1>Assignar Rol</h1>
 
 <form [formGroup]="roleForm" (ngSubmit)="onSubmit()">
   <div>
     <label for="username">Nom d'usuari</label>
     <input type="text" id="username" formControlName="username">
-    @if (roleForm.controls.username.invalid && roleForm.controls.username.touched){
-        <small>El nom es obligatori i no ha de tenir caracters especials</small>
-    }
   </div>
 
   <div>
@@ -17,15 +14,8 @@
             <option [value]="option.value">{{option.label}}</option>
         }
     </select>
-
-    @if (roleForm.controls.role.invalid && roleForm.controls.role.touched){
-        <small>El rol es obligatori</small>
-    }
   </div>
 
-  <button type="submit" [disabled]="roleForm.invalid || isSubmitting()">{{ isSubmitting() ? 'Assignant...' : 'Assignar'}}</button>
+  <button type="submit">Assignar</button>
 
-   @if (submitError()) {
-      <small>{{ submitError() }}</small>
-   }
 </form>
