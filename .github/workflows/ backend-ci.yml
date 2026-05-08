@@ -6,13 +6,18 @@ on:
     branches: [develop, staging, main]
     paths:
       - backend/**
+      - .github/workflows/backend-ci.yml
   pull_request:
-    branches: [staging, main]
+    branches: [develop, staging, main]
     paths:
       - backend/**
+      - .github/workflows/backend-ci.yml
+
+permissions:
+  contents: read
 
 concurrency:
-  group: backend-${{ github.ref }}
+  group: backend-ci-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -37,7 +42,7 @@ jobs:
         working-directory: backend
         run: |
           ./gradlew --version
-          ./gradlew :challenge-service:bootJar :user-service:bootJar -x test --no-daemon
+          ./gradlew :challenge-service:bootJar :account-service:bootJar -x test --no-daemon
 
   docker-build:
     name: Build Docker images
@@ -50,6 +55,6 @@ jobs:
         working-directory: backend
         run: docker build -t challenge-service -f challenge-service/Dockerfile .
 
-      - name: Build user-service image
+      - name: Build account-service image
         working-directory: backend
-        run: docker build -t user-service -f user-service/Dockerfile .
+        run: docker build -t account-service -f account-service/Dockerfile .

@@ -71,3 +71,29 @@ coverage/
 #######################################
 reports/
 test-output/
+
+#######################################
+# Allow Gradle wrapper jar (required)
+#######################################
+!backend/gradle/wrapper/gradle-wrapper.jar
+
+# Angular / Vite cache
+frontend/.angular/
+frontend/**/.angular/
+
+# Vite cache (por si existe fuera)
+frontend/**/node_modules/.vite/
+frontend/**/.vite/
+
+# Node artifacts
+frontend/**/node_modules/
+frontend/**/dist/
+frontend/**/build/
+frontend/**/.cache/
+
+# TS build info
+frontend/**/*.tsbuildinfo
+
+# Random local DB/cache files
+frontend/**/*.db
+frontend/**/*.db-lock

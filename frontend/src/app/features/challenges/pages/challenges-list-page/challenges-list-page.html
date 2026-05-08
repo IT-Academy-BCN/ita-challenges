@@ -1,0 +1,14 @@
+<h1>Llistat de Reptes</h1>
+
+@if (challenges().length > 0) {
+<ul>
+    @for (challenge of challenges(); track $index) {
+    <li>
+        <h2>{{ challenge.title }}</h2>
+        <p>{{ challenge.description }}</p>
+    </li>
+    }
+</ul>
+} @else {
+<p>No hi ha reptes disponibles en aquest moment.</p>
+}
