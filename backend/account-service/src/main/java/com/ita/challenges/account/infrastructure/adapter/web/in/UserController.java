@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/account/users")
@@ -34,10 +34,21 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
-        User user = new User(gitHubUserResponse.id(), request.role());
+        Optional<User> userOptional = repository.findByUsername(gitHubUserResponse.id());
+        User user;
+        HttpStatus status;
+
+        if (userOptional.isPresent()) {
+            user = userOptional.get().withRole(request.role());
+            status = HttpStatus.OK;
+        } else {
+            user = new User(gitHubUserResponse.id(), request.role());
+            status = HttpStatus.CREATED;
+        }
+
         User saved = repository.save(user);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(
+        return ResponseEntity.status(status).body(
                 new UserResponse(
                         saved.userName(),
                         saved.userRole()
