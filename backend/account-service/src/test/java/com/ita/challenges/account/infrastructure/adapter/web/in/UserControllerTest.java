@@ -34,7 +34,7 @@ class UserControllerTest {
 
     @Test
     void create_shouldReturn201() throws Exception {
-        UserRequest request = new UserRequest("user123", Role.GUEST);
+        UserRequest request = new UserRequest("ID12345", Role.GUEST);
         User saved = new User(request.username(), request.role());
         when(repository.save(any(User.class))).thenReturn(saved);
 
@@ -45,7 +45,7 @@ class UserControllerTest {
                         .content(objectMapper.writeValueAsString(request))
                 )
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.username").value("user123"))
+                .andExpect(jsonPath("$.username").value("ID12345"))
                 .andExpect(jsonPath("$.role").value(Role.GUEST.name()));
     }
 }
