@@ -18,16 +18,17 @@ import java.util.Optional;
 public class UserController {
 
     private final UserRepository repository;
+    private final RestTemplate restTemplate;
 
-    public UserController(UserRepository repository) {
+    public UserController(UserRepository repository, RestTemplate restTemplate) {
         this.repository = repository;
+        this.restTemplate = restTemplate;
     }
 
     @PostMapping
     public ResponseEntity<UserResponse> create(@RequestBody UserRequest request) {
         String url = "https://api.github.com/users/" + request.username();
-        RestTemplate restTemplate = new RestTemplate();
-
+        
         GitHubUserResponse gitHubUserResponse = restTemplate.getForObject(url, GitHubUserResponse.class);
 
         if (gitHubUserResponse == null) {
