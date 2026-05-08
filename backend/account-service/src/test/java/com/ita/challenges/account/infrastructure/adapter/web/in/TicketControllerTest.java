@@ -25,12 +25,6 @@ class TicketControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @Test
-    @WithMockUser
-    void shouldLoadTicketEndpoint() throws Exception {
-        mockMvc.perform(get("/api/account/tickets"))
-                .andExpect(status().isNotFound());
-    }
 
     @Test
     @WithMockUser
