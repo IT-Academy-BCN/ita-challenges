@@ -17,8 +17,8 @@ class UserTest {
         User user = new User(userName, userRole);
 
         assertNotNull(user);
-        assertEquals(userName, user.getUserName());
-        assertEquals(userRole, user.getUserRole());
+        assertEquals(userName, user.userName());
+        assertEquals(userRole, user.userRole());
     }
 
 }

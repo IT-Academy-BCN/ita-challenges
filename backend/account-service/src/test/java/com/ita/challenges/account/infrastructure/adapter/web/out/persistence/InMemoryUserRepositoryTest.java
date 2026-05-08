@@ -31,6 +31,6 @@ class InMemoryUserRepositoryTest {
     void should_overwrite_existing_user() {
         repository.save(new User("john", Role.GUEST));
         repository.save(new User("john", Role.MENTOR));
-        assertThat(repository.storage.get("john").role()).isEqualTo(Role.MENTOR);
+        assertThat(repository.storage.get("john").userRole()).isEqualTo(Role.MENTOR);
     }
 }
