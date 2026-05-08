@@ -34,7 +34,6 @@ export class AssignRolePage {
       this.submitError.set(null);
 
       const {username, role} = this.roleForm.getRawValue()
-      console.log(`${username} ${role}`)
       
       this.adminApiService.setUserRole(username as string, role as Role).subscribe({
         next: () => {

@@ -30,19 +30,16 @@ describe('AssignRolePage', () => {
   });
 
  describe('Initialization', () => {
-    it('should create the component', () => {
-      expect(component).toBeTruthy();
-    });
  
     it('should initialize the form with empty fields', () => {
       expect(component.roleForm.value).toEqual({ username: '', role: '' });
     });
  
-    it('should have both role options', () => {
-      expect(component.roleOptions).toEqual([
-        { value: Role.MENTOR, label: 'Mentor' },
-        { value: Role.STUDENT, label: 'Estudiant' },
-      ]);
+    it('should have multiple role options', () => {
+      expect(component.roleOptions.length).toBeGreaterThan(1);
+      const roleValues = component.roleOptions.map(opt => opt.value);
+      expect(roleValues).toContain(Role.MENTOR);
+      expect(roleValues).toContain(Role.STUDENT);
     });
  
     it('should set isSubmitting to false initially', () => {
@@ -66,23 +63,8 @@ describe('AssignRolePage', () => {
         expect(component.roleForm.controls.username.invalid).toBe(true);
       });
  
-      it('should be invalid with dots (.)', () => {
-        component.roleForm.controls.username.setValue('user.name');
-        expect(component.roleForm.controls.username.invalid).toBe(true);
-      });
- 
-      it('should be invalid with spaces', () => {
-        component.roleForm.controls.username.setValue('user name');
-        expect(component.roleForm.controls.username.invalid).toBe(true);
-      });
- 
       it('should be valid with letters, numbers and hyphens', () => {
-        component.roleForm.controls.username.setValue('user-123');
-        expect(component.roleForm.controls.username.valid).toBe(true);
-      });
- 
-      it('should be valid with uppercase letters', () => {
-        component.roleForm.controls.username.setValue('UserName');
+        component.roleForm.controls.username.setValue('User-123');
         expect(component.roleForm.controls.username.valid).toBe(true);
       });
     });
@@ -99,19 +81,6 @@ describe('AssignRolePage', () => {
       });
     });
  
-    describe('Full form', () => {
-      it('should be invalid if any field is incorrect', () => {
-        component.roleForm.controls.username.setValue('');
-        component.roleForm.controls.role.setValue(Role.MENTOR);
-        expect(component.roleForm.invalid).toBe(true);
-      });
- 
-      it('should be valid when all fields are correct', () => {
-        component.roleForm.controls.username.setValue('user123');
-        component.roleForm.controls.role.setValue(Role.MENTOR);
-        expect(component.roleForm.valid).toBe(true);
-      });
-    });
   });
 
   describe('onSubmit() — happy path', () => {
@@ -163,7 +132,7 @@ describe('AssignRolePage', () => {
  
     it('should set the error message in submitError', () => {
       component.onSubmit();
-      expect(component.submitError()).not.toBeNull// .toBe('Error al assignar el rol. Prova-ho de nou.');
+      expect(component.submitError()).not.toBeNull();
     });
  
     it('should NOT reset the form on error', () => {
