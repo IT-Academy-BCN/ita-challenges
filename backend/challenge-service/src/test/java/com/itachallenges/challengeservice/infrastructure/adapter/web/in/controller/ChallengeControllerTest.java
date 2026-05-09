@@ -1,6 +1,7 @@
 package com.itachallenges.challengeservice.infrastructure.adapter.web.in.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.itachallenges.challengeservice.catalog.domain.exception.ChallengeNotFoundException;
 import com.itachallenges.challengeservice.catalog.domain.port.out.ChallengeRepository;
 import com.itachallenges.challengeservice.catalog.domain.model.Challenge;
 import com.itachallenges.challengeservice.catalog.domain.valueobject.ChallengeDescription;
@@ -122,6 +123,17 @@ class ChallengeControllerTest {
                 .andExpect(jsonPath("$.id").value(uuid.toString()))
                 .andExpect(jsonPath("$.title").value("Test Title"))
                 .andExpect(jsonPath("$.description").value("Test Description"));
+    }
+
+    @Test
+    void should_return_404_when_challenge_not_found() throws Exception {
+        String nonExistentId = UUID.randomUUID().toString();
+
+        when(repository.find(any(ChallengeId.class)))
+                .thenThrow(new ChallengeNotFoundException("Challenge not found"));
+
+        mockMvc.perform(get("/api/challenge/{id}", nonExistentId))
+                .andExpect(status().isNotFound());
     }
 
 }
