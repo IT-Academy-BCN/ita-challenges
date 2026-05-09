@@ -3,14 +3,18 @@ package com.itachallenges.challengeservice.infrastructure.adapter.web.in.control
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.itachallenges.challengeservice.catalog.domain.port.out.ChallengeRepository;
 import com.itachallenges.challengeservice.catalog.domain.model.Challenge;
+import com.itachallenges.challengeservice.catalog.domain.valueobject.ChallengeDescription;
 import com.itachallenges.challengeservice.catalog.domain.valueobject.ChallengeId;
+import com.itachallenges.challengeservice.catalog.domain.valueobject.ChallengeTitle;
 import com.itachallenges.challengeservice.catalog.infrastructure.adapter.web.in.controller.ChallengeController;
 import com.itachallenges.challengeservice.catalog.infrastructure.adapter.web.in.dto.ChallengeRequest;
 import org.junit.jupiter.api.Test;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -19,13 +23,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import java.util.UUID;
-
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(ChallengeController.class)
 class ChallengeControllerTest {
@@ -103,4 +101,27 @@ class ChallengeControllerTest {
                 .andExpect(jsonPath("$.title").value("Updated title"))
                 .andExpect(jsonPath("$.description").value("Updated description"));
     }
+
+
+    @Test
+    void should_return_200_with_challenge_when_finding_by_id() throws Exception {
+        // Given
+        UUID uuid = UUID.randomUUID();
+        ChallengeId challengeId = new ChallengeId(uuid);
+
+        Challenge challenge = org.mockito.Mockito.mock(Challenge.class);
+        when(challenge.getId()).thenReturn(challengeId);
+        when(challenge.getTitle()).thenReturn(new ChallengeTitle("Test Title"));
+        when(challenge.getDescription()).thenReturn(new ChallengeDescription("Test Description"));
+
+        when(repository.find(challengeId)).thenReturn(challenge);
+
+        // When & Then
+        mockMvc.perform(get("/api/challenge/{id}", uuid.toString()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(uuid.toString()))
+                .andExpect(jsonPath("$.title").value("Test Title"))
+                .andExpect(jsonPath("$.description").value("Test Description"));
+    }
+
 }
