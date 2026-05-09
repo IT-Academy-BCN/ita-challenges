@@ -27,7 +27,7 @@ public class TicketController {
 
         String userId = "anonymous";
         if (user != null && user.getAttribute("id") != null) {
-            userId = String.valueOf(user.getAttribute("id"));
+            userId = user.getAttribute("id").toString();
         }
 
         Ticket newTicket = Ticket.create(userId, request.title(), request.description());
