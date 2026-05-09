@@ -26,8 +26,8 @@ public class TicketController {
             @AuthenticationPrincipal OAuth2User user) {
 
         String userId = "anonymous";
-        if (user != null && user.getAttribute("login") != null) {
-            userId = user.getAttribute("login");
+        if (user != null && user.getAttribute("id") != null) {
+            userId = String.valueOf(user.getAttribute("id"));
         }
 
         Ticket newTicket = Ticket.create(userId, request.title(), request.description());
