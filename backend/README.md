@@ -1,4 +1,4 @@
-git branch -d add-pedro-spook-contributors# Backend
+# Backend
 
 This directory contains all backend microservices for the ITA Challenges platform.
 
