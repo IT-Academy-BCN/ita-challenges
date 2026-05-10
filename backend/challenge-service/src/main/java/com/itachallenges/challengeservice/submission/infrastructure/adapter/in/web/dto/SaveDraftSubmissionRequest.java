@@ -2,8 +2,4 @@ package com.itachallenges.challengeservice.submission.infrastructure.adapter.in.
 
 import java.util.List;
 
-public record SaveDraftSubmissionRequest(
-        String challengeId,
-        String userId,
-        List<String> content
-) {}
+public record SaveDraftSubmissionRequest(String challengeId, String userId, List<String> content) {}
