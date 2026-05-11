@@ -1,15 +1,12 @@
 <h1>Llistat de Reptes</h1>
 
-
-<app-role-selector></app-role-selector>
-<app-create-button></app-create-button>
-
 @if (challenges().length > 0) {
 <ul>
     @for (challenge of challenges(); track $index) {
     <li>
         <h2>{{ challenge.title }}</h2>
         <p>{{ challenge.description }}</p>
+        <button [routerLink]="['/challenges', challenge.id]">Accedir al repte</button>
     </li>
     }
 </ul>

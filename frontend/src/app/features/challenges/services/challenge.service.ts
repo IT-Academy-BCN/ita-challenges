@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { IChallengeRequest } from '../models/ichallenge-request.interface';
 import { IChallenge } from '../models/ichallenge.interface';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { ChallengeApiService } from '../data-access/challenge-api.service';
 
 @Injectable({
@@ -25,5 +25,11 @@ export class ChallengeService {
   }
 
   delete(id: string): Observable<void> { return this.challengeApiService.delete(id) }
+
+  getById(id: string): Observable<IChallenge | undefined> {
+    return this.challengeApiService.loadAll().pipe(
+      map((challenges) => challenges.find(((challenge) => challenge.id === id)))
+    )
+  }
 
 }
