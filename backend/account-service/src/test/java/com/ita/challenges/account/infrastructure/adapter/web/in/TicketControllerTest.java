@@ -10,6 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -28,10 +29,18 @@ class TicketControllerTest {
 
     @Test
     @WithMockUser
+    void should_return_200_with_empty_list_when_requesting_ticket_list() throws Exception {
+        mockMvc.perform(get("/api/account/tickets"))
+                .andExpect(status().isOk())
+                .andExpect(content().json("[]"));
+    }
+  
+    @Test
+    @WithMockUser
     void should_return_error_when_updating_ticket_because_not_implemented() throws Exception {
 
         String ticketId = "123";
-        TicketRequest request = new TicketRequest("title","description");
+        TicketRequest request = new TicketRequest("title", "description");
 
         ServletException exception = assertThrows(ServletException.class, () -> {
             mockMvc.perform(put("/api/account/tickets/{id}", ticketId)
