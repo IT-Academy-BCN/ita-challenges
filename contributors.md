@@ -1,6 +1,7 @@
 # List of developers contributors
 
 - Rafael di Candia - https://github.com/Rafadicandia
+- Esther Herrero - https://github.com/EstherBlacksmith
 - Nerea Medina - https://github.com/nereame96
 - Rong Jiang - https://github.com/jrffruit518-enrich
 - Juan Delgado - https://github.com/soyjuandelgado
