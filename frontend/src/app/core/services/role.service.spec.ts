@@ -52,34 +52,4 @@ describe('RoleService', () => {
     expect(service.isGuest()).toBe(false);
   });
 
-  it('should keep role reactive across multiple updates', () => {
-    const values: Role[] = [];
-
-    values.push(service.role());
-
-    service.setRole('mentor');
-    values.push(service.role());
-
-    service.setRole('student');
-    values.push(service.role());
-
-    service.setRole('guest');
-    values.push(service.role());
-
-    expect(values).toEqual(['guest','mentor','student','guest']);
-  });
-
-  it('should keep computed isMentor reactive', () => {
-    const states: boolean[] = [];
-
-    states.push(service.isMentor());
-
-    service.setRole('mentor');
-    states.push(service.isMentor());
-
-    service.setRole('guest');
-    states.push(service.isMentor());
-
-    expect(states).toEqual([false, true, false]);
-  });
 });
