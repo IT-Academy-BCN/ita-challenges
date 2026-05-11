@@ -30,7 +30,7 @@ export class AuthService {
     return this.user();
   }
 
-  logout(): void{
-    return
+  logout(): void {
+    this.user.set(null);
   }
 }
