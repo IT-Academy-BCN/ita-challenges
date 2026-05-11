@@ -9,4 +9,16 @@ body {
     margin: 0;
     padding: 0;
     padding-top: 8rem;
+    font-size: 1.6rem;
+    font-family: sans-serif;
+}
+
+.main-container {
+  display: flex;
+}
+
+main {
+  flex-grow: 1;
+  margin-left: 25rem;
+  padding: 2rem;
 }
