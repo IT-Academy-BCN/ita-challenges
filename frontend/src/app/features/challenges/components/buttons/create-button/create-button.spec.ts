@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CreateButtonComponent } from './create-button';
 import { provideRouter } from '@angular/router';
+import { RouterLink } from '@angular/router';
+import { By } from '@angular/platform-browser';
 
 describe('CreateButtonComponent', () => {
   let component: CreateButtonComponent;
@@ -29,5 +31,12 @@ describe('CreateButtonComponent', () => {
   it('should render button with text "Create Challenge"', () => {
     const button = fixture.nativeElement.querySelector('button');
     expect(button.textContent.trim()).toBe('Create Challenge');
+  });
+
+  it('should have routerLink to /challenges/create', () => {
+    const button = fixture.nativeElement.querySelector('button');
+    
+    expect(button).toBeTruthy();
+    expect(button.getAttribute('routerLink')).toBe('/challenges/create');
   });
 });
