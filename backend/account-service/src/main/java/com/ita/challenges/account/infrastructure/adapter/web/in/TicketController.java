@@ -5,10 +5,17 @@ import com.ita.challenges.account.infrastructure.adapter.web.in.dto.TicketRespon
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/account/tickets")
 public class TicketController {
 
+    @GetMapping
+    public ResponseEntity<List<TicketResponse>> findAll() {
+        return ResponseEntity.ok(List.of());
+    }
+  
     @PutMapping("/{id}")
     public ResponseEntity<TicketResponse> update(
             @PathVariable String id,
