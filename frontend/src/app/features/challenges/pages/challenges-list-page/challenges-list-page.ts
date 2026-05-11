@@ -2,11 +2,11 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { IChallenge } from '../../models/ichallenge.interface';
 import { ChallengeService } from '../../services/challenge.service';
 import { RoleSelectorComponent } from "../../components/role-selector/role-selector";
+import { CreateButtonComponent } from '../../components/buttons/create-button/create-button';
 
 @Component({
   selector: 'app-challenges-list-page',
-  standalone: true,
-  imports: [RoleSelectorComponent],
+  imports: [CreateButtonComponent,  RoleSelectorComponent],
   templateUrl: './challenges-list-page.html',
   styleUrl: './challenges-list-page.css',
 })
