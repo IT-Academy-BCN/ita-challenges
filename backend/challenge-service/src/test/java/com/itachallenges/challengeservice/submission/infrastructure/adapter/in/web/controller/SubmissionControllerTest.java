@@ -11,6 +11,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -29,14 +30,14 @@ class SubmissionControllerTest {
     private SaveDraftSubmissionUseCase saveDraftSubmissionUseCase;
 
     @Test
-    void shouldSubmitWithEmptyContentWhenContentIsMissing() throws Exception {
+    void shouldSubmitWithEmptyCodeWhenCodeIsMissing() throws Exception {
         SaveDraftSubmissionRequest request = new SaveDraftSubmissionRequest(
                 "challenge-1",
                 "student-1",
                 null
         );
 
-        mockMvc.perform(post("/api/v1/submissions")
+        mockMvc.perform(post("/api/challenge/submissions")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated());
@@ -48,7 +49,6 @@ class SubmissionControllerTest {
 
         assertThat(captor.getValue().challengeId()).isEqualTo("challenge-1");
         assertThat(captor.getValue().userId()).isEqualTo("student-1");
-        assertThat(captor.getValue().content()).isEmpty();
+        assertThat(captor.getValue().code()).isEmpty();
     }
-
 }

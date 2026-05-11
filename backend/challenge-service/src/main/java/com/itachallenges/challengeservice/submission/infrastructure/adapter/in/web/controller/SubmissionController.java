@@ -1,7 +1,9 @@
 package com.itachallenges.challengeservice.submission.infrastructure.adapter.in.web.controller;
 
-import com.itachallenges.challengeservice.submission.domain.port.in.SaveDraftSubmissionUseCase;
 import com.itachallenges.challengeservice.submission.application.dto.SaveDraftSubmissionCommand;
+import com.itachallenges.challengeservice.submission.domain.port.in.FinalizeSubmissionUseCase;
+import com.itachallenges.challengeservice.submission.domain.port.in.MarkIncompleteUseCase;
+import com.itachallenges.challengeservice.submission.domain.port.in.SaveDraftSubmissionUseCase;
 import com.itachallenges.challengeservice.submission.infrastructure.adapter.in.web.dto.SaveDraftSubmissionRequest;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -10,10 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import java.util.List;
-
 @RestController
-@RequestMapping("/api/v1/submissions")
+@RequestMapping("/api/challenge/submissions")
 public class SubmissionController {
 
     private final SaveDraftSubmissionUseCase saveDraftSubmissionUseCase;
@@ -24,15 +24,19 @@ public class SubmissionController {
 
     @PostMapping
     public ResponseEntity<Void> submit(@RequestBody SaveDraftSubmissionRequest request) {
-        List<String> content = request.content() == null ? List.of() : request.content();
+        String code = request.code() == null ? "" : request.code();
 
         SaveDraftSubmissionCommand command = new SaveDraftSubmissionCommand(
                 request.challengeId(),
                 request.userId(),
-                content
+                code
         );
 
         saveDraftSubmissionUseCase.execute(command);
+
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }
+// TODO: POST /draft       -> save draft submission
+// TODO: POST /finalize    -> finalize submission
+// TODO: POST /incomplete  -> mark submission as incomplete
