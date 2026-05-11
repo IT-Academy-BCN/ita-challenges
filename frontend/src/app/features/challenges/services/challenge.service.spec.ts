@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { of } from 'rxjs';
+import { firstValueFrom, of } from 'rxjs';
 import { vi } from 'vitest';
 import { ChallengeService } from './challenge.service';
 import { ChallengeApiService } from '../data-access/challenge-api.service';
@@ -94,5 +94,28 @@ describe('ChallengeService', () => {
       result = challenges;
     });
     expect(result).toEqual(CHALLENGES_MOCK);
+  });
+
+  describe('getById', () => {
+    it('should return the correct challenge when id exists', async () => {
+      const targetId = CHALLENGES_MOCK[0].id;
+      const challenge = await firstValueFrom(service.getById(targetId));
+
+      expect(challenge).toEqual(CHALLENGES_MOCK[0]);
+    });
+
+    it('should return undefined when id does not exist', async () => {
+      const challenge = await firstValueFrom(service.getById('inexistente'));
+
+      expect(challenge).toBeUndefined();
+    });
+
+    it('should call loadAll from ApiService', () => {
+      const spy = vi.spyOn(mockChallengeApiService, 'loadAll');
+
+      service.getById('1').subscribe();
+
+      expect(spy).toHaveBeenCalled();
+    });
   });
 });
