@@ -1,0 +1,13 @@
+<div class="role-selector">
+    <span class="role-selector__label">Student</span>
+
+    <button
+        class="role-selector__switch"
+        [class.role-selector__switch--active]="currentRole() === 'mentor'"
+        (click)="toggle()"
+    >
+        <span class="role-selector__thumb"></span>
+    </button>
+
+    <span class="role-selector__label">Mentor</span>
+</div>
