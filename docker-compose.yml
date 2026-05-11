@@ -52,12 +52,9 @@ services:
       dockerfile: account-service/Dockerfile
     environment:
       SERVER_PORT: 8080
-<<<<<<< split-3-nginx-docker
       SERVER_FORWARD_HEADERS_STRATEGY: framework
       GITHUB_CLIENT_ID: ${GITHUB_CLIENT_ID}
       GITHUB_CLIENT_SECRET: ${GITHUB_CLIENT_SECRET}
-=======
->>>>>>> develop
     expose:
       - "8080"
     healthcheck:
