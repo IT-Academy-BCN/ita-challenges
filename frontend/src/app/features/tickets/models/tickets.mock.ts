@@ -1,4 +1,4 @@
-import { ITicket } from '../models/iticket.interface';
+import { ITicket } from './iticket.interface';
 
 export const TICKETS_MOCK: ITicket[] = [
   {

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ITicket } from '../models/iticket.interface';
 import { Observable, of } from 'rxjs';
-import { TICKETS_MOCK } from './tickets.mock';
+import { TICKETS_MOCK } from '../models/tickets.mock';
 import { ITicketRequest } from '../models/iticket-request.interface';
 
 @Injectable({
