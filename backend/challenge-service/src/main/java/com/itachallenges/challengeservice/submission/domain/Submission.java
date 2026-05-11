@@ -24,8 +24,15 @@ public class Submission {
     private Submission() {}
 
     public static Submission createInProgress(SubmissionId id, ChallengeId challengeId, UserId userId, String code) {
-        // TODO: create and return a new Submission with IN_PROGRESS status
-        return null;
+        Submission submission = new Submission();
+        submission.id = id;
+        submission.challengeId = challengeId;
+        submission.userId = userId;
+        submission.code = code;
+        submission.status = SubmissionStatus.IN_PROGRESS;
+        submission.createdAt = Instant.now();
+        submission.updatedAt = Instant.now();
+        return submission;
     }
 
     public void finalize(String code) {
