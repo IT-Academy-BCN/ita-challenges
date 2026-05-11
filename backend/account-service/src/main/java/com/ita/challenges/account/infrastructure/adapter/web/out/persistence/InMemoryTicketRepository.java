@@ -20,4 +20,9 @@ public class InMemoryTicketRepository implements TicketRepository {
                 .filter(ticket -> ticket.getUserId().equals(userId))
                 .toList());
     }
+  
+    @Override
+    public Ticket updateTicket(Ticket ticket) {
+        throw new UnsupportedOperationException("updateTicket not implemented yet");
+    }
 }
