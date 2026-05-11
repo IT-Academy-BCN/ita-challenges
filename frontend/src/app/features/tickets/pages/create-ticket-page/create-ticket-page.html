@@ -1,1 +1,18 @@
-<p>create-ticket-page works!</p>
+<form [formGroup]="ticketForm" (ngSubmit)="onSubmit()">
+  <div>
+    <label for="userId">Usuari</label>
+    <input type="text" id="userId" formControlName="userId">
+  </div>
+
+  <div>
+    <label for="title">Títol del repte</label>
+    <input type="text" id="title" formControlName="title">
+  </div>
+
+  <div>
+    <label for="description">Descripció</label>
+    <input type="text" id="description" formControlName="description">
+  </div>
+
+  <button type="submit">Crear</button>
+</form>
