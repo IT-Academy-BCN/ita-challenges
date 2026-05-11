@@ -13,4 +13,9 @@ public class InMemoryTicketRepository implements TicketRepository {
     public List<Ticket> findAllByUserId(String userId) {
         throw new UnsupportedOperationException("findAllByUserId not implemented yet");
     }
+  
+    @Override
+    public Ticket updateTicket(Ticket ticket) {
+        throw new UnsupportedOperationException("updateTicket not implemented yet");
+    }
 }

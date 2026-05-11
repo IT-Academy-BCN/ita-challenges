@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface TicketRepository {
     List<Ticket> findAllByUserId(String userId);
+
+    Ticket updateTicket(Ticket ticket);
 }
