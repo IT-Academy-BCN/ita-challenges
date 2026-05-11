@@ -1,0 +1,11 @@
+# List of developers contributors
+
+- Rafael di Candia - https://github.com/Rafadicandia
+- Nerea Medina - https://github.com/nereame96
+- Rong Jiang - https://github.com/jrffruit518-enrich
+- Juan Delgado - https://github.com/soyjuandelgado
+- Esther Arias Valor - https://github.com/eariasvalor
+- Jordi Miravet - https://github.com/JordiMiravet
+- Jordi Casas - https://github.com/JordiCasas87
+- Andrés Rojo Cabrera - https://github.com/andyrouge81
+- Albert Medina - https://github.com/AlbertMedina
