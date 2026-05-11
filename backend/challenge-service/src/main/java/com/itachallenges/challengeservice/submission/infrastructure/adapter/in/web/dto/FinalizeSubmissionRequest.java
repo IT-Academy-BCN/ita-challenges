@@ -1,3 +1,5 @@
 package com.itachallenges.challengeservice.submission.infrastructure.adapter.in.web.dto;
 
-public record FinalizeSubmissionRequest(String code) {}
+import java.util.List;
+
+public record FinalizeSubmissionRequest(String challengeId, String userId, List<String> content) {}

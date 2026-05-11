@@ -1,7 +1,9 @@
 package com.itachallenges.challengeservice.submission.application.dto;
 
+import java.util.List;
+
 public record FinalizeSubmissionCommand(
         String challengeId,
         String userId,
-        String code
+        List<String> content
 ) {}
