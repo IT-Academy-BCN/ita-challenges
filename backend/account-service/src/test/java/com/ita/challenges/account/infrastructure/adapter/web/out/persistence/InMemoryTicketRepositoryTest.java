@@ -15,6 +15,7 @@ class InMemoryTicketRepositoryTest {
 
     @Test
     void should_return_empty_list_when_no_tickets_exist_for_user() {
+
         List<Ticket> result = repository.findAllByUserId("user-1");
 
         assertThat(result).isEmpty();
@@ -26,9 +27,8 @@ class InMemoryTicketRepositoryTest {
         Ticket ticket = Ticket.create("user-1", "Update Task", "Description");
 
         UnsupportedOperationException exception =
-                assertThrows(UnsupportedOperationException.class, () -> {
-                    repository.updateTicket(ticket);
-                });
+                assertThrows(UnsupportedOperationException.class,
+                        () -> repository.updateTicket(ticket));
 
         assertEquals("updateTicket not implemented yet", exception.getMessage());
     }
