@@ -13,6 +13,8 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestClient;
 
+import java.util.Optional;
+
 @RestController
 @RequestMapping("/api/account")
 public class AuthController {
@@ -32,11 +34,21 @@ public class AuthController {
                 .retrieve()
                 .body(GitHubUserResponse.class);
 
-        User user = new User(gitHubUserResponse.id(), request.role());
+        Optional<User> userOptional = repository.findByUsername(gitHubUserResponse.id());
+        User user;
+        HttpStatus status;
+
+        if (userOptional.isPresent()) {
+            user = userOptional.get().withRole(request.role());
+            status = HttpStatus.OK;
+        } else {
+            user = new User(gitHubUserResponse.id(), request.role());
+            status = HttpStatus.CREATED;
+        }
 
         User saved = repository.save(user);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(
+        return ResponseEntity.status(status).body(
                 new UserResponse(
                         saved.userName(),
                         saved.userRole()
