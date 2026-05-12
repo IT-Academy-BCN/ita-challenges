@@ -41,13 +41,11 @@ public class JsonFileChallengeRepository implements ChallengeRepository {
 
     @Override
     public Challenge update(Challenge challenge) {
-        // TODO: implement in future sprint
         throw new UnsupportedOperationException("Not implemented yet");
     }
 
     @Override
     public void delete(ChallengeId id) {
-        // TODO: implement in future sprint
         throw new UnsupportedOperationException("Not implemented yet");
     }
 
