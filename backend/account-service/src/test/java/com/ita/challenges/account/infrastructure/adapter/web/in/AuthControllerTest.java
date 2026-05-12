@@ -82,6 +82,28 @@ class AuthControllerTest {
     }
 
     @Test
+    void create_shouldReturn200AndUpdateUserWhenAlreadyExists() throws Exception {
+        this.mockServer.expect(requestTo("https://api.github.com/users/username12345"))
+                .andRespond(withSuccess("{\"id\": \"ID12345\"}", MediaType.APPLICATION_JSON));
+
+        User existingUser = new User("ID12345", Role.GUEST);
+        when(repository.findByUsername("ID12345")).thenReturn(Optional.of(existingUser));
+
+        User saved = new User("ID12345", Role.STUDENT);
+        when(repository.save(any(User.class))).thenReturn(saved);
+
+        UserRequest request = new UserRequest("username12345", Role.STUDENT);
+        mockMvc.perform(post("/api/account/auth/register")
+                        .with(oauth2Login()).with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request))
+                )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.username").value("ID12345"))
+                .andExpect(jsonPath("$.role").value(Role.STUDENT.name()));
+    }
+
+    @Test
     void me_whenAuthenticated_returnsUsernameAndAvatarUrl() throws Exception {
         mockMvc.perform(get("/api/account/me")
                         .with(oauth2Login()
