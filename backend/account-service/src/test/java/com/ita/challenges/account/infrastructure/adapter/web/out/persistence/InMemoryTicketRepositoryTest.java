@@ -22,15 +22,17 @@ class InMemoryTicketRepositoryTest {
     }
 
     @Test
-    void updateTicket_should_throw_unsupported_operation_exception() {
+    void should_update_ticket_data_successfully() {
+        Ticket original = Ticket.create("user-1", "Old Title", "Old Desc");
+        repository.save(original);
 
-        Ticket ticket = Ticket.create("user-1", "Update Task", "Description");
+        Ticket updated = Ticket.restore(original.getId(), "user-1", "New Title", "New Desc");
+        repository.updateTicket(updated);
 
-        UnsupportedOperationException exception =
-                assertThrows(UnsupportedOperationException.class,
-                        () -> repository.updateTicket(ticket));
-
-        assertEquals("updateTicket not implemented yet", exception.getMessage());
+        Optional<Ticket> result = repository.findById(original.getId());
+        assertTrue(result.isPresent());
+        assertEquals("New Title", result.get().getTitle());
+        assertEquals("New Desc", result.get().getDescription());
     }
 
     @Test
