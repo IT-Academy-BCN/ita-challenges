@@ -65,4 +65,17 @@ describe('ProfilePage', () => {
 
     expect(component.error()).toBe(true);
   });
+
+  it('should render logout button when user exists', () => {
+
+    authServiceMock.fetchUser.mockReturnValue(of(MOCK_USER));
+
+    fixture.detectChanges();
+
+    const logoutButton =
+      fixture.nativeElement.querySelector('app-logout-button');
+
+    expect(logoutButton).toBeTruthy();
+
+  });
 });
