@@ -41,17 +41,13 @@ describe('AssignRolePage', () => {
       component.roleForm.controls.role.setValue(Role.MENTOR);
       adminApiServiceMock.setUserRole.mockReturnValue(of(void 0));
     });
- 
     it('should call setUserRole with the correct username and role', () => {
       component.onSubmit();
       expect(adminApiServiceMock.setUserRole).toHaveBeenCalledWith('user123', Role.MENTOR);
     });
- 
     it('should reset the form after success', () => {
       component.onSubmit();
       expect(component.roleForm.value).toEqual({ username: null, role: null });
     });
- 
   });  
-
 });
