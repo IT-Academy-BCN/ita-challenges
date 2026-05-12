@@ -11,27 +11,26 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
-
-import java.util.Optional;
+import org.springframework.web.client.RestClient;
 
 @RestController
 @RequestMapping("/api/account")
 public class AuthController {
 
     private final UserRepository repository;
-    private final RestTemplate restTemplate;
+    private final RestClient restClient;
 
-    public AuthController(UserRepository repository, RestTemplate restTemplate) {
+    public AuthController(UserRepository repository, RestClient restClient) {
         this.repository = repository;
-        this.restTemplate = restTemplate;
+        this.restClient = restClient;
     }
 
     @PostMapping("/auth/register")
     public ResponseEntity<UserResponse> create(@RequestBody UserRequest request) {
-        String url = "https://api.github.com/users/" + request.username();
-
-        GitHubUserResponse gitHubUserResponse = restTemplate.getForObject(url, GitHubUserResponse.class);
+        GitHubUserResponse gitHubUserResponse = restClient.get()
+                .uri("https://api.github.com/users/{username}", request.username())
+                .retrieve()
+                .body(GitHubUserResponse.class);
 
         User user = new User(gitHubUserResponse.id(), request.role());
 

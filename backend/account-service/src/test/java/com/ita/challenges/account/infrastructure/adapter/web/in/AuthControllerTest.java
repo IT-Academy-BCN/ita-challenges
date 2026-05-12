@@ -4,21 +4,26 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ita.challenges.account.domain.model.Role;
 import com.ita.challenges.account.domain.model.User;
 import com.ita.challenges.account.domain.port.out.UserRepository;
-import com.ita.challenges.account.infrastructure.adapter.web.in.dto.GitHubUserResponse;
 import com.ita.challenges.account.infrastructure.adapter.web.in.dto.UserRequest;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.client.AutoConfigureMockRestServiceServer;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.util.ReflectionTestUtils;
+import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.client.RestClient;
 
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
+import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -27,25 +32,37 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 
 
 @WebMvcTest(AuthController.class)
+@AutoConfigureMockRestServiceServer
 class AuthControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
 
-    @MockBean
-    private UserRepository repository;
-
-    @MockBean
-    private RestTemplate restTemplate;
-
     @Autowired
     private ObjectMapper objectMapper;
 
+    @MockBean
+    private UserRepository repository;
+
+    @Autowired
+    private AuthController authController;
+
+    private MockRestServiceServer mockServer;
+
+    @BeforeEach
+    void setUp() {
+        RestClient.Builder builder = RestClient.builder();
+
+        mockServer = MockRestServiceServer.bindTo(builder).build();
+
+        RestClient testClient = builder.build();
+        ReflectionTestUtils.setField(authController, "restClient", testClient);
+    }
+
     @Test
     void create_shouldReturn201WhenUserIsNew() throws Exception {
-        GitHubUserResponse gitHubUserResponse = new GitHubUserResponse("ID12345");
-        when(restTemplate.getForObject(anyString(), eq(GitHubUserResponse.class)))
-                .thenReturn(gitHubUserResponse);
+        this.mockServer.expect(requestTo("https://api.github.com/users/username12345"))
+                .andRespond(withSuccess("{\"id\": \"ID12345\"}", MediaType.APPLICATION_JSON));
 
         when(repository.findByUsername("ID12345")).thenReturn(Optional.empty());
 
