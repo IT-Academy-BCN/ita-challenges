@@ -23,6 +23,10 @@ public class TicketController {
 
     @GetMapping
     public ResponseEntity<List<TicketResponse>> findAll(@AuthenticationPrincipal OAuth2User user) {
+        if (user == null || user.getAttribute("login") == null) {
+            return ResponseEntity.status(401).build();
+        }
+
         String userId = user.getAttribute("login");
 
         List<TicketResponse> tickets = ticketRepository.findAllByUserId(userId)
