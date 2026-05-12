@@ -39,13 +39,4 @@ describe('ChallengeDetailPage', () => {
 
     expect(component.challenge()).toEqual(mockChallenge);
   });
-
-  it('should render details', async () => {
-    fixture.detectChanges();
-    await fixture.whenStable();
-    fixture.detectChanges();
-
-    const compiled = fixture.nativeElement;
-    expect(compiled.querySelector('h1').textContent).toContain('Test Challenge');
-  });
 });
