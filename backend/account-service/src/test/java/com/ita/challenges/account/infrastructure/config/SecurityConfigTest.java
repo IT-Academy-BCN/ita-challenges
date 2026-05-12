@@ -34,8 +34,8 @@ class SecurityConfigTest {
  @ParameterizedTest
  @ValueSource(strings = {
   "/api/account/auth/me",
-  "/oauth2/authorization/github",
-  "/login/oauth2"
+  "/api/account/oauth2/authorization/github",
+  "/api/account/login/oauth2"
  })
  @DisplayName("Should permit all requests to public endpoints")
  void shouldPermitAllRequestsToPublicEndpoints(String path) throws Exception {
@@ -49,7 +49,7 @@ class SecurityConfigTest {
  @Test
  @DisplayName("Should require authentication for protected endpoints and redirect to OAuth2")
  void shouldRequireAuthenticationForProtectedEndpoints() throws Exception {
-  mockMvc.perform(get("/api/other"))
+  mockMvc.perform(get("/api/account/other"))
    .andExpect(status().is3xxRedirection())
    .andExpect(redirectedUrlPattern("**/oauth2/authorization/github"));
  }
