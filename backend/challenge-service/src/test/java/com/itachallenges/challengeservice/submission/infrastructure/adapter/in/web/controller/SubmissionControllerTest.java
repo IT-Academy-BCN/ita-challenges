@@ -38,7 +38,7 @@ class SubmissionControllerTest {
 
         when(submissionRepository.existsFinalSubmission(any(), any())).thenReturn(false);
 
-        mockMvc.perform(post("/api/v1/submissions/finalize")
+        mockMvc.perform(post("/api/challenge/submissions/finalize")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated());
@@ -54,7 +54,7 @@ class SubmissionControllerTest {
 
         when(submissionRepository.existsFinalSubmission(any(), any())).thenReturn(false);
 
-        mockMvc.perform(post("/api/v1/submissions/finalize")
+        mockMvc.perform(post("/api/challenge/submissions/finalize")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated());
@@ -70,7 +70,7 @@ class SubmissionControllerTest {
 
         when(submissionRepository.existsFinalSubmission(any(), any())).thenReturn(true);
 
-        mockMvc.perform(post("/api/v1/submissions/finalize")
+        mockMvc.perform(post("/api/challenge/submissions/finalize")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isConflict());
