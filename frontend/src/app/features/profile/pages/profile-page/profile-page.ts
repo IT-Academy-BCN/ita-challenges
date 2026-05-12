@@ -1,14 +1,16 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { AuthService } from '../../../auth/data-access/auth-service';
+import { LogoutButton } from '../../../../shared/components/logout-button/logout-button';
 
 @Component({
   selector: 'app-profile-page',
   standalone: true,
-  imports: [],
+  imports: [LogoutButton],
   templateUrl: './profile-page.html',
   styleUrl: './profile-page.css',
 })
 export class ProfilePageComponent implements OnInit {
+
   private readonly authService = inject(AuthService);
 
   public user = this.authService.user;
@@ -17,6 +19,7 @@ export class ProfilePageComponent implements OnInit {
   public error = signal(false);
 
   ngOnInit(): void {
+
     const user = this.user();
 
     if (user) {
