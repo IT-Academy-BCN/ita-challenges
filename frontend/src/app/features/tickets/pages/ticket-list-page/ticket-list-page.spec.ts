@@ -21,10 +21,6 @@ describe('TicketListPage', () => {
     await fixture.whenStable();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-
   it('should load tickets on init', () => {
     expect(component.tickets()).toEqual(TICKETS_MOCK);
   });
