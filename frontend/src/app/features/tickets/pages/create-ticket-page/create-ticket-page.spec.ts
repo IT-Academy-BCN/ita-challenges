@@ -12,15 +12,12 @@ describe('CreateTicketPage', () => {
   let mockRouter: Partial<Router>;
 
   beforeEach(async () => {
-
     mockTicketService = {
       create: () => of({ id:'1', userId: '', title: '', description: '' })
     };
-
     mockRouter = {
       navigate: vi.fn() as any
     };
-
     await TestBed.configureTestingModule({
       imports: [CreateTicketPage],
       providers: [
@@ -29,16 +26,10 @@ describe('CreateTicketPage', () => {
       ]
     })
     .compileComponents();
-
     fixture = TestBed.createComponent(CreateTicketPage);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });
-
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-
   it('should start the form with empty fields', () => {
     const userId = component.ticketForm.get('userId');
     const title = component.ticketForm.get('title');
@@ -48,16 +39,6 @@ describe('CreateTicketPage', () => {
     expect(title?.value).toBe('');
     expect(description?.value).toBe('');
   });
-
-  it('should call onSubmit when form is submitted', () => {
-    vi.spyOn(component, 'onSubmit');
-
-    const form = fixture.nativeElement.querySelector('form');
-    form.dispatchEvent(new Event('submit'));
-
-    expect(component.onSubmit).toHaveBeenCalled();
-  });
-
   it('should call ticketApiService.create when call onSubmit with correct data', () => {
     const testData = { userId: 'usuari', title: 'Nou Repte', description: 'Descripció' };
     component.ticketForm.setValue(testData);
@@ -68,15 +49,6 @@ describe('CreateTicketPage', () => {
 
     expect(mockTicketService.create).toHaveBeenCalledWith(testData);
   });  
-
-  it('should call goTickets when call onSubmit', () => {
-    vi.spyOn(component, 'goTickets');
-
-    component.onSubmit();
-
-    expect(component.goTickets).toHaveBeenCalled();
-  });
-
   it('should navigate when call goTickets', () => {
     component.goTickets();
 

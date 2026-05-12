@@ -22,16 +22,12 @@ export class CreateTicketPage {
   })
 
   onSubmit() {
-    if (this.ticketForm.valid) {
-      const newTicket = this.ticketForm.value as ITicketRequest
+    const newTicket = this.ticketForm.value as ITicketRequest
 
-      this.ticketService.create(newTicket).subscribe({
-      next: () => {
-        this.goTickets();
-      }
-    });
-    }
-  }
+    this.ticketService.create(newTicket).subscribe({
+    next: () => {this.goTickets();}
+  });
+}
 
   goTickets() {
     this.router.navigate(['/tickets']);
