@@ -1,8 +1,6 @@
 package com.itachallenges.challengeservice.submission.infrastructure.adapter.in.web.controller;
 
 import com.itachallenges.challengeservice.submission.application.dto.SaveDraftSubmissionCommand;
-import com.itachallenges.challengeservice.submission.domain.port.in.FinalizeSubmissionUseCase;
-import com.itachallenges.challengeservice.submission.domain.port.in.MarkIncompleteUseCase;
 import com.itachallenges.challengeservice.submission.domain.port.in.SaveDraftSubmissionUseCase;
 import com.itachallenges.challengeservice.submission.infrastructure.adapter.in.web.dto.SaveDraftSubmissionRequest;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,6 +35,3 @@ public class SubmissionController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }
-// TODO: POST /draft       -> save draft submission
-// TODO: POST /finalize    -> finalize submission
-// TODO: POST /incomplete  -> mark submission as incomplete
