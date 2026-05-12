@@ -17,6 +17,7 @@ import java.util.Optional;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.oauth2Login;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -42,29 +43,28 @@ class TicketControllerTest {
     }
 
     @Test
-    @WithMockUser
     void should_update_ticket_successfully() throws Exception {
         String ticketId = "ticket-123";
-        Ticket existingTicket = Ticket.create("user-1", "Old Title", "Old Desc");
+        String currentUserId = "user-1";
+
+        Ticket existingTicket = Ticket.restore(ticketId, currentUserId, "Old Title", "Old Desc");
         TicketRequest updateRequest = new TicketRequest("New Title", "New Desc");
 
-
         when(ticketRepository.findById(ticketId)).thenReturn(Optional.of(existingTicket));
-
         when(ticketRepository.updateTicket(any(Ticket.class))).thenAnswer(i -> i.getArguments()[0]);
 
         mockMvc.perform(put("/api/account/tickets/{id}", ticketId)
                         .with(csrf())
+                        .with(oauth2Login().attributes(attrs -> attrs.put("login", currentUserId)))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(updateRequest)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(ticketId))
                 .andExpect(jsonPath("$.title").value("New Title"))
-                .andExpect(jsonPath("$.userId").value("user-1")); // 确保 userId 没变
+                .andExpect(jsonPath("$.userId").value(currentUserId));
     }
 
     @Test
-    @WithMockUser
     void should_return_404_when_updating_non_existing_ticket() throws Exception {
         String ticketId = "non-existent";
         TicketRequest updateRequest = new TicketRequest("Title", "Desc");
@@ -73,6 +73,7 @@ class TicketControllerTest {
 
         mockMvc.perform(put("/api/account/tickets/{id}", ticketId)
                         .with(csrf())
+                        .with(oauth2Login().attributes(attrs -> attrs.put("login", "any-user")))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(updateRequest)))
                 .andExpect(status().isNotFound());
