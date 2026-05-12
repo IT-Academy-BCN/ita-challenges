@@ -1,7 +1,9 @@
-import { Injectable } from '@angular/core';
-import { ITicket } from '../models/iticket.interface';
+import { inject, Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+
 import { Observable, of } from 'rxjs';
-import { TICKETS_MOCK } from '../models/tickets.mock';
+
+import { ITicket } from '../models/iticket.interface';
 import { ITicketRequest } from '../models/iticket-request.interface';
 
 @Injectable({
@@ -9,11 +11,16 @@ import { ITicketRequest } from '../models/iticket-request.interface';
 })
 export class TicketApiService {
 
+  private readonly http = inject(HttpClient);
+
+  private readonly ticketsUrl = '/api/accounts/tickets';
+
   create(ticket: ITicketRequest): Observable<ITicket> {
-    return of( { id: '1', ...ticket} );
+    return of({ id: '1', ...ticket });
   }
 
   loadAll(): Observable<ITicket[]> {
-    return of( TICKETS_MOCK );
+    return this.http.get<ITicket[]>(this.ticketsUrl);
   }
+
 }
