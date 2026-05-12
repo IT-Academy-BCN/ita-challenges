@@ -22,8 +22,5 @@ export class ChallengeDetailPage {
     this.challengesService.getById(id).subscribe( (selectedChallenge) => {
       this.challenge.set(selectedChallenge)
     })
-
-
   }
-
 }

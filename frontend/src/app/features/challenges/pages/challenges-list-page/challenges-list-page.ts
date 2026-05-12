@@ -7,11 +7,7 @@ import { CreateButtonComponent } from "../../components/buttons/create-button/cr
 
 @Component({
   selector: 'app-challenges-list-page',
-  imports: [
-    RouterLink,
-    RoleSelectorComponent,
-    CreateButtonComponent
-  ],
+  imports: [RouterLink, RoleSelectorComponent, CreateButtonComponent],
   templateUrl: './challenges-list-page.html',
   styleUrl: './challenges-list-page.css',
 })
