@@ -1,16 +1,48 @@
 package com.ita.challenges.account.infrastructure.adapter.web.in;
 
+import com.ita.challenges.account.domain.model.User;
+import com.ita.challenges.account.domain.port.out.UserRepository;
 import com.ita.challenges.account.infrastructure.adapter.web.in.dto.AuthUserDto;
+import com.ita.challenges.account.infrastructure.adapter.web.in.dto.GitHubUserResponse;
+import com.ita.challenges.account.infrastructure.adapter.web.in.dto.UserRequest;
+import com.ita.challenges.account.infrastructure.adapter.web.in.dto.UserResponse;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestClient;
 
 @RestController
 @RequestMapping("/api/account")
 public class AuthController {
+
+    private final UserRepository repository;
+    private final RestClient restClient;
+
+    public AuthController(UserRepository repository, RestClient restClient) {
+        this.repository = repository;
+        this.restClient = restClient;
+    }
+
+    @PostMapping("/auth/register")
+    public ResponseEntity<UserResponse> create(@RequestBody UserRequest request) {
+        GitHubUserResponse gitHubUserResponse = restClient.get()
+                .uri("https://api.github.com/users/{username}", request.username())
+                .retrieve()
+                .body(GitHubUserResponse.class);
+
+        User user = new User(gitHubUserResponse.id(), request.role());
+
+        User saved = repository.save(user);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(
+                new UserResponse(
+                        saved.userName(),
+                        saved.userRole()
+                )
+        );
+    }
 
    @GetMapping("/me")
     public ResponseEntity<AuthUserDto> me(@AuthenticationPrincipal OAuth2User user) {

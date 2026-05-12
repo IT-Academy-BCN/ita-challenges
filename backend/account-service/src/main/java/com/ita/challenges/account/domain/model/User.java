@@ -17,4 +17,8 @@ public class User {
     public Role userRole() {
         return userRole;
     }
+
+    public User withRole(Role newRole) {
+        return new User(this.userName, newRole);
+    }
 }
