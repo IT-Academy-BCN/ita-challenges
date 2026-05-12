@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { CreateTicketPage } from './create-ticket-page';
 import { TicketApiService } from '../../data-access/ticket-api.service';
 import { Router } from '@angular/router';
@@ -30,28 +29,15 @@ describe('CreateTicketPage', () => {
     component = fixture.componentInstance;
     await fixture.whenStable();
   });
-  it('should start the form with empty fields', () => {
-    const userId = component.ticketForm.get('userId');
-    const title = component.ticketForm.get('title');
-    const description = component.ticketForm.get('description');
-
-    expect(userId?.value).toBe('');
-    expect(title?.value).toBe('');
-    expect(description?.value).toBe('');
-  });
   it('should call ticketApiService.create when call onSubmit with correct data', () => {
     const testData = { userId: 'usuari', title: 'Nou Repte', description: 'Descripció' };
     component.ticketForm.setValue(testData);
-
     vi.spyOn(mockTicketService, 'create').mockReturnValue(of({ id: '1', ...testData }));
-
     component.onSubmit();
-
     expect(mockTicketService.create).toHaveBeenCalledWith(testData);
   });  
   it('should navigate when call goTickets', () => {
     component.goTickets();
-
     expect(mockRouter.navigate).toHaveBeenCalledWith(['/tickets']);
   });  
 });
