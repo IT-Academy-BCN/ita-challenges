@@ -34,7 +34,7 @@ class SubmissionControllerTest {
         FinalizeSubmissionRequest request = new FinalizeSubmissionRequest(
                 "00000000-0000-0000-0000-000000000001",
                 "00000000-0000-0000-0000-000000000002",
-                List.of("line 1", "line 2")
+                "line 1"
         );
 
         when(submissionRepository.existsFinalSubmission(any(), any())).thenReturn(false);
@@ -66,7 +66,7 @@ class SubmissionControllerTest {
         FinalizeSubmissionRequest request = new FinalizeSubmissionRequest(
                 "00000000-0000-0000-0000-000000000001",
                 "00000000-0000-0000-0000-000000000002",
-                List.of("my solution")
+                "my solution"
         );
 
         when(submissionRepository.existsFinalSubmission(any(), any())).thenReturn(true);

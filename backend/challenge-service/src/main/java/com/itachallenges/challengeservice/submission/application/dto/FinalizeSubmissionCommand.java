@@ -5,5 +5,5 @@ import java.util.List;
 public record FinalizeSubmissionCommand(
         String challengeId,
         String userId,
-        List<String> content
+        String code
 ) {}

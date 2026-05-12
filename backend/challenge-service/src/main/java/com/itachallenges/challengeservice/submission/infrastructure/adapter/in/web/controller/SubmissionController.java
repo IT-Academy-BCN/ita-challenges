@@ -25,7 +25,7 @@ public class SubmissionController {
 
     @PostMapping("/finalize")
     public ResponseEntity<Void> finalize(@RequestBody FinalizeSubmissionRequest request) {
-        List<String> content = request.content() == null ? List.of() : request.content();
+        String code = request.code() == null ? "code" : request.code();
 
         UserId userId = UserId.of(request.userId());
         ChallengeId challengeId = ChallengeId.of(request.challengeId());
