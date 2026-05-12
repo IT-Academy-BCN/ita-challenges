@@ -3,7 +3,6 @@ import {
   HttpTestingController,
   provideHttpClientTesting,
 } from '@angular/common/http/testing';
-
 import { provideHttpClient } from '@angular/common/http';
 import { TicketApiService } from './ticket-api.service';
 import { TICKETS_MOCK } from '../models/tickets.mock';
@@ -15,7 +14,6 @@ describe('TicketApiService', () => {
   const API_URL = '/api/accounts/tickets';
 
   beforeEach(() => {
-
     TestBed.configureTestingModule({
       providers: [
         provideHttpClient(),
@@ -35,7 +33,6 @@ describe('TicketApiService', () => {
   });
 
   it('should return tickets from API', () => {
-
     service.loadAll().subscribe((tickets) => {
       expect(tickets).toEqual(TICKETS_MOCK);
     });
@@ -46,10 +43,10 @@ describe('TicketApiService', () => {
   });
 
   it('should return mock tickets on API error', () => {
-
     service.loadAll().subscribe((tickets) => {
       expect(tickets).toEqual(TICKETS_MOCK);
     });
+
     const req = httpMock.expectOne(API_URL);
     req.flush('Error', {
       status: 500,
