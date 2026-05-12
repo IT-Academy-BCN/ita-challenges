@@ -1,11 +1,9 @@
 <h1>Assignar Rol</h1>
-
 <form [formGroup]="roleForm" (ngSubmit)="onSubmit()">
   <div>
     <label for="username">Nom d'usuari</label>
     <input type="text" id="username" formControlName="username">
   </div>
-
   <div>
     <label for="role">Rol</label>
     <select id="role" formControlName="role">
@@ -15,7 +13,5 @@
         }
     </select>
   </div>
-
   <button type="submit">Assignar</button>
-
 </form>
