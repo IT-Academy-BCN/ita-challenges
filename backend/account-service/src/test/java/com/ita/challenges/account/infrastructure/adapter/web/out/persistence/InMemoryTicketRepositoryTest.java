@@ -4,10 +4,10 @@ import com.ita.challenges.account.domain.model.Ticket;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 class InMemoryTicketRepositoryTest {
 
@@ -31,5 +31,17 @@ class InMemoryTicketRepositoryTest {
                         () -> repository.updateTicket(ticket));
 
         assertEquals("updateTicket not implemented yet", exception.getMessage());
+    }
+
+    @Test
+    void should_find_ticket_by_id_successfully() {
+        Ticket ticket = Ticket.create("user-456", "Test Title", "Test Desc");
+        repository.save(ticket);
+
+        Optional<Ticket> found = repository.findById(ticket.getId());
+
+        assertTrue(found.isPresent(), "Ticket existing");
+        assertEquals(ticket.getId(), found.get().getId());
+        assertEquals("user-456", found.get().getUserId());
     }
 }
