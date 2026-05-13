@@ -3,9 +3,9 @@ package com.ita.challenges.account.infrastructure.adapter.web.in;
 import com.ita.challenges.account.domain.model.User;
 import com.ita.challenges.account.domain.port.out.UserRepository;
 import com.ita.challenges.account.infrastructure.adapter.web.in.dto.AuthUserDto;
-import com.ita.challenges.account.infrastructure.adapter.web.in.dto.GitHubUserResponse;
 import com.ita.challenges.account.infrastructure.adapter.web.in.dto.UserRequest;
 import com.ita.challenges.account.infrastructure.adapter.web.in.dto.UserResponse;
+import com.ita.challenges.account.infrastructure.adapter.web.out.dto.GitHubUserResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -44,11 +44,14 @@ public class AuthController {
         );
     }
 
-   @GetMapping("/me")
-    public ResponseEntity<AuthUserDto> me(@AuthenticationPrincipal OAuth2User user) {
+    @GetMapping("/auth/me")
+    public ResponseEntity<AuthUserDto> authMe(@AuthenticationPrincipal OAuth2User user) {
+        return ResponseEntity.ok(mapUser(user));
+    }
 
+    private AuthUserDto mapUser(OAuth2User user) {
         if (user == null) {
-            return ResponseEntity.ok(new AuthUserDto("anonymous", null));
+            return new AuthUserDto("anonymous", null);
         }
 
         String login = user.getAttribute("login");
@@ -58,7 +61,6 @@ public class AuthController {
             login = "unknown";
         }
 
-        AuthUserDto dto = new AuthUserDto(login, avatarUrl);
-        return ResponseEntity.ok(dto);
+        return new AuthUserDto(login, avatarUrl);
     }
 }
