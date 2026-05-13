@@ -13,3 +13,4 @@
 - Jordi Casas - https://github.com/JordiCasas87
 - Andrés Rojo Cabrera - https://github.com/andyrouge81
 - Albert Medina - https://github.com/AlbertMedina
+- Jordi Espinosa - https://github.com/JEspinosa1770
