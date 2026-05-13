@@ -13,4 +13,4 @@
 - Jordi Casas - https://github.com/JordiCasas87
 - Andrés Rojo Cabrera - https://github.com/andyrouge81
 - Albert Medina - https://github.com/AlbertMedina
-- Joseo J. Roca - https://github.com/Urian1983
+- Josep J. Roca - https://github.com/Urian1983
