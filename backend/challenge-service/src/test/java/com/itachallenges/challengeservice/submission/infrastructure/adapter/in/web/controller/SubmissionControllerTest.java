@@ -37,8 +37,6 @@ class SubmissionControllerTest {
     @MockBean
     private FinalizeSubmissionUseCase finalizeSubmissionUseCase;
 
-    // --- SaveDraft tests (your colleague's, untouched) ---
-
     @Test
     void shouldSubmitWithEmptyCodeWhenCodeIsMissing() throws Exception {
         SaveDraftSubmissionRequest request = new SaveDraftSubmissionRequest(
@@ -61,8 +59,6 @@ class SubmissionControllerTest {
         assertThat(captor.getValue().userId()).isEqualTo("student-1");
         assertThat(captor.getValue().code()).isEmpty();
     }
-
-    // --- Finalize tests (yours) ---
 
     @Test
     void shouldFinalizeSubmissionSuccessfully() throws Exception {
