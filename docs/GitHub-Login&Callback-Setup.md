@@ -14,7 +14,7 @@ Defines where GitHub should send the user after they log in.
 | Field | Value                                                  |
 |---|--------------------------------------------------------|
 | App URL | `http://localhost:8080`                                |
-| Return URL | `http://localhost:8080/api/account/auth/github/github` |
+| Return URL | `http://localhost:8080/api/account/login/oauth2/code/github` |
 
 ## What success looks like
 - [ ] Clicking login sends the user to GitHub
