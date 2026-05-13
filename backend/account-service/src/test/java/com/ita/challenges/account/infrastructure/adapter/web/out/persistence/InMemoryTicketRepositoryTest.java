@@ -2,6 +2,7 @@ package com.ita.challenges.account.infrastructure.adapter.web.out.persistence;
 
 import com.ita.challenges.account.domain.model.Ticket;
 import org.junit.jupiter.api.Test;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -9,6 +10,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+@Repository
 class InMemoryTicketRepositoryTest {
 
     private final InMemoryTicketRepository repository = new InMemoryTicketRepository();

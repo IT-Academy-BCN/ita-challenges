@@ -1,11 +1,13 @@
 package com.ita.challenges.account.infrastructure.config;
 
+import com.ita.challenges.account.domain.port.out.TicketRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.web.SecurityFilterChain;
@@ -30,6 +32,9 @@ class SecurityConfigTest {
  void contextLoads() {
   assertThat(securityFilterChain).isNotNull();
  }
+
+ @MockBean
+ private TicketRepository ticketRepository;
 
  @ParameterizedTest
  @ValueSource(strings = {

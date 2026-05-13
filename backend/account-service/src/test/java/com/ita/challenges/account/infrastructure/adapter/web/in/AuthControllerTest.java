@@ -1,9 +1,11 @@
 package com.ita.challenges.account.infrastructure.adapter.web.in;
 
+import com.ita.challenges.account.infrastructure.config.SecurityConfig;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -13,6 +15,7 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 @WebMvcTest(AuthController.class)
 @AutoConfigureMockMvc
+@Import(SecurityConfig.class)
 class AuthControllerTest {
 
     @Autowired

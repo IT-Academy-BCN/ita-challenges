@@ -43,7 +43,7 @@ class TicketControllerTest {
         when(ticketRepository.findAllByUserId("testuser")).thenReturn(List.of(ticket));
 
         mockMvc.perform(get("/api/account/tickets")
-                        .with(oauth2Login().attributes(attrs -> attrs.put("login", "testuser"))))
+                        .with(oauth2Login().attributes(attrs -> attrs.put("id", "testuser"))))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].userId").value("testuser"))
                 .andExpect(jsonPath("$[0].title").value("Login issue"))
