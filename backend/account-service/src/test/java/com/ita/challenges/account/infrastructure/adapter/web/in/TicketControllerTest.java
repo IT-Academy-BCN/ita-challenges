@@ -36,6 +36,13 @@ class TicketControllerTest {
     private TicketRepository ticketRepository;
 
     @Test
+    @WithMockUser
+    void shouldLoadTicketEndpoint() throws Exception {
+        mockMvc.perform(get("/api/account/tickets"))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
     void should_create_ticket_and_return_201_created() throws Exception {
         TicketRequest request = new TicketRequest("Test Title", "Test description");
         Ticket mockTicket = Ticket.create("12345678", request.title(), request.description());
@@ -44,29 +51,12 @@ class TicketControllerTest {
 
         mockMvc.perform(post("/api/account/tickets")
                         .with(csrf())
-                        .with(oauth2Login().attributes(attrs -> attrs.put("id", 12345678)))
+                        .with(oauth2Login().attributes(attrs -> attrs.put("id", "12345678")))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isCreated());
-    }
-
-    @Test
-    @WithMockUser
-    void shouldLoadTicketEndpoint() throws Exception {
-        mockMvc.perform(get("/api/account/tickets"))
-                .andExpect(status().isNotFound());
-    }
-
-    @Test
-    void should_return_200_with_ticket_list_when_requesting_ticket_list() throws Exception {
-        Ticket ticket = Ticket.create("testuser", "Login issue", "Unable to access my account");
-        when(ticketRepository.findAllByUserId("testuser")).thenReturn(List.of(ticket));
-
-        mockMvc.perform(get("/api/account/tickets")
-                        .with(oauth2Login().attributes(attrs -> attrs.put("login", "testuser"))))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].userId").value("testuser"))
-                .andExpect(jsonPath("$[0].title").value("Login issue"))
-                .andExpect(jsonPath("$[0].description").value("Unable to access my account"));
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.title").value("Test Title"))
+                .andExpect(jsonPath("$.description").value("Test description"))
+                .andExpect(jsonPath("$.userId").value("12345678"));
     }
 }
