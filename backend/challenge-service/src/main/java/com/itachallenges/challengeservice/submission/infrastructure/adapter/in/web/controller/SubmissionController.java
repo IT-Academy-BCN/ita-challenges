@@ -1,8 +1,7 @@
 package com.itachallenges.challengeservice.submission.infrastructure.adapter.in.web.controller;
 
-import com.itachallenges.challengeservice.catalog.domain.valueobject.ChallengeId;
-import com.itachallenges.challengeservice.shared.domain.valueobject.UserId;
-import com.itachallenges.challengeservice.submission.domain.port.out.SubmissionRepository;
+import com.itachallenges.challengeservice.submission.application.dto.FinalizeSubmissionCommand;
+import com.itachallenges.challengeservice.submission.domain.port.in.FinalizeSubmissionUseCase;
 import com.itachallenges.challengeservice.submission.infrastructure.adapter.in.web.dto.FinalizeSubmissionRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,22 +14,25 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/challenge/submissions")
 public class SubmissionController {
 
-    private final SubmissionRepository submissionRepository;
+    private final FinalizeSubmissionUseCase finalizeSubmissionUseCase;
 
-    public SubmissionController(SubmissionRepository submissionRepository) {
-        this.submissionRepository = submissionRepository;
+    public SubmissionController(FinalizeSubmissionUseCase finalizeSubmissionUseCase) {
+        this.finalizeSubmissionUseCase = finalizeSubmissionUseCase;
     }
 
     @PostMapping("/finalize")
     public ResponseEntity<Void> finalize(@RequestBody FinalizeSubmissionRequest request) {
-        String code = request.code() == null ? "code" : request.code();
-
-        UserId userId = UserId.of(request.userId());
-        ChallengeId challengeId = ChallengeId.of(request.challengeId());
-
-        if (submissionRepository.existsFinalSubmission(userId, challengeId)) {
+        try {
+            finalizeSubmissionUseCase.execute(new FinalizeSubmissionCommand(
+                    request.userId(),
+                    request.challengeId(),
+                    request.code()
+            ));
+            return ResponseEntity.status(HttpStatus.CREATED).build();
+        } catch (IllegalStateException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }
