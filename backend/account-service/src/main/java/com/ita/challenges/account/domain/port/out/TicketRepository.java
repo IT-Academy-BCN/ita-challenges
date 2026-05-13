@@ -8,4 +8,6 @@ public interface TicketRepository {
     List<Ticket> findAllByUserId(String userId);
 
     Ticket updateTicket(Ticket ticket);
+
+    Ticket save(Ticket newTicket);
 }
