@@ -27,7 +27,7 @@ public class SecurityConfig {
                         .redirectionEndpoint(redirection -> redirection
                                 .baseUri("/api/account/login/oauth2/code/**")
                         )
-                        .defaultSuccessUrl("/api/account/profile", true)
+                        .defaultSuccessUrl("/profile", true)
                 );
         return http.build();
     }
