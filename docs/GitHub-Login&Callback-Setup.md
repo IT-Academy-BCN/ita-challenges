@@ -11,10 +11,10 @@ Defines where GitHub should send the user after they log in.
 
 ## Configuration used
 
-| Field | Value |
-|---|---|
-| App URL | `http://localhost:8080` |
-| Return URL | `http://localhost:8080/api/account/auth/github/callback` |
+| Field | Value                                                  |
+|---|--------------------------------------------------------|
+| App URL | `http://localhost:8080`                                |
+| Return URL | `http://localhost:8080/api/account/auth/github/github` |
 
 ## What success looks like
 - [ ] Clicking login sends the user to GitHub
