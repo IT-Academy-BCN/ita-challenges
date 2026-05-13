@@ -6,6 +6,7 @@ import com.itachallenges.challengeservice.submission.domain.Submission;
 import com.itachallenges.challengeservice.submission.domain.port.out.SubmissionRepository;
 import com.itachallenges.challengeservice.submission.domain.valueobject.SubmissionId;
 import com.itachallenges.challengeservice.submission.domain.valueobject.SubmissionStatus;
+import org.springframework.stereotype.Repository;
 
 import java.util.Map;
 import java.util.Optional;
