@@ -4,4 +4,10 @@ import com.ita.challenges.account.domain.model.Ticket;
 
 public interface TicketRepository {
     Ticket save(Ticket newTicket);
+import java.util.List;
+
+public interface TicketRepository {
+    List<Ticket> findAllByUserId(String userId);
+
+    Ticket updateTicket(Ticket ticket);
 }

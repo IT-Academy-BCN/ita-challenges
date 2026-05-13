@@ -15,5 +15,25 @@ public class InMemoryTicketRepository implements TicketRepository {
     public Ticket save(Ticket newTicket) {
         database.put(newTicket.getId(), newTicket);
         return newTicket;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
+@Repository
+public class InMemoryTicketRepository implements TicketRepository {
+
+    private final Map<String, Ticket> storage = new ConcurrentHashMap<>();
+
+    @Override
+    public List<Ticket> findAllByUserId(String userId) {
+        return new ArrayList<>(storage.values().stream()
+                .filter(ticket -> ticket.getUserId().equals(userId))
+                .toList());
+    }
+
+    @Override
+    public Ticket updateTicket(Ticket ticket) {
+        throw new UnsupportedOperationException("updateTicket not implemented yet");
     }
 }
