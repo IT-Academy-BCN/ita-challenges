@@ -22,6 +22,11 @@ public class InMemoryTicketRepository implements TicketRepository {
     }
 
     @Override
+    public Ticket save(Ticket newTicket) {
+        return null;
+    }
+
+    @Override
     public Ticket updateTicket(Ticket ticket) {
         throw new UnsupportedOperationException("updateTicket not implemented yet");
     }
