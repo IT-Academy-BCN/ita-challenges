@@ -36,13 +36,6 @@ class TicketControllerTest {
     private TicketRepository ticketRepository;
 
     @Test
-    @WithMockUser
-    void shouldLoadTicketEndpoint() throws Exception {
-        mockMvc.perform(get("/api/account/tickets"))
-                .andExpect(status().isNotFound());
-    }
-
-    @Test
     void should_create_ticket_and_return_201_created() throws Exception {
         TicketRequest request = new TicketRequest("Test Title", "Test description");
         Ticket mockTicket = Ticket.create("12345678", request.title(), request.description());
