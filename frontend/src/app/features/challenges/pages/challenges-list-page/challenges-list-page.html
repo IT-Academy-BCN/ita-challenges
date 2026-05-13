@@ -1,4 +1,14 @@
-<h1>Llistat de Reptes</h1>
+<div class="challenges-list__header">
+    <h1>Llistat de Reptes</h1>
+
+    <app-role-selector
+        (roleChange)="onRoleChange($event)"
+    ></app-role-selector>
+</div>
+
+@if(isMentor()) {
+    <app-create-button></app-create-button>
+}
 
 @if (challenges().length > 0) {
 <ul>
@@ -6,6 +16,7 @@
     <li>
         <h2>{{ challenge.title }}</h2>
         <p>{{ challenge.description }}</p>
+         <button [routerLink]="['/challenges', challenge.id]">Accedir al repte</button>
     </li>
     }
 </ul>
