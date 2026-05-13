@@ -44,25 +44,26 @@ public class TicketController {
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public TicketResponse createTicket(
+    public ResponseEntity<TicketResponse> createTicket(
             @RequestBody TicketRequest request,
             @AuthenticationPrincipal OAuth2User user) {
 
-        String userId = "anonymous";
-        if (user != null && user.getAttribute("id") != null) {
-            userId = user.getAttribute("id").toString();
+        if (user == null || user.getAttribute("id") == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
-        Ticket newTicket = Ticket.create(userId, request.title(), request.description());
+        String userId = user.getAttribute("id").toString();
 
+        Ticket newTicket = Ticket.create(userId, request.title(), request.description());
         Ticket savedTicket = ticketRepository.save(newTicket);
 
-        return new TicketResponse(
+        TicketResponse response = new TicketResponse(
                 savedTicket.getId(),
                 savedTicket.getUserId(),
                 savedTicket.getTitle(),
                 savedTicket.getDescription()
         );
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 }
