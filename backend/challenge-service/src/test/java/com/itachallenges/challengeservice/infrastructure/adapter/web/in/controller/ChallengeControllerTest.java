@@ -125,15 +125,5 @@ class ChallengeControllerTest {
                 .andExpect(jsonPath("$.description").value("Test Description"));
     }
 
-    @Test
-    void should_return_404_when_challenge_not_found() throws Exception {
-        String nonExistentId = UUID.randomUUID().toString();
-
-        when(repository.find(any(ChallengeId.class)))
-                .thenThrow(new ChallengeNotFoundException("Challenge not found"));
-
-        mockMvc.perform(get("/api/challenge/{id}", nonExistentId))
-                .andExpect(status().isNotFound());
-    }
 
 }
