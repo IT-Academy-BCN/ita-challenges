@@ -34,4 +34,20 @@ describe('AssignRolePage', () => {
       expect(component.roleOptions.length).toBeGreaterThan(0);
     });
   });
+
+  describe('onSubmit() — happy path', () => {
+    beforeEach(() => {
+      component.roleForm.controls.username.setValue('user123');
+      component.roleForm.controls.role.setValue(Role.MENTOR);
+      adminApiServiceMock.setUserRole.mockReturnValue(of(void 0));
+    });
+    it('should call setUserRole with the correct username and role', () => {
+      component.onSubmit();
+      expect(adminApiServiceMock.setUserRole).toHaveBeenCalledWith('user123', Role.MENTOR);
+    });
+    it('should reset the form after success', () => {
+      component.onSubmit();
+      expect(component.roleForm.value).toEqual({ username: null, role: null });
+    });
+  });  
 });
