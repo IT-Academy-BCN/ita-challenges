@@ -8,15 +8,20 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.net.URI;
+
 @RestController
 @RequestMapping("/api/account")
 public class AuthController {
 
-   @GetMapping("/me")
-    public ResponseEntity<AuthUserDto> me(@AuthenticationPrincipal OAuth2User user) {
+    @GetMapping("/auth/me")
+    public ResponseEntity<AuthUserDto> authMe(@AuthenticationPrincipal OAuth2User user) {
+        return ResponseEntity.ok(mapUser(user));
+    }
 
+    private AuthUserDto mapUser(OAuth2User user) {
         if (user == null) {
-            return ResponseEntity.ok(new AuthUserDto("anonymous", null));
+            return new AuthUserDto("anonymous", null);
         }
 
         String login = user.getAttribute("login");
@@ -26,7 +31,6 @@ public class AuthController {
             login = "unknown";
         }
 
-        AuthUserDto dto = new AuthUserDto(login, avatarUrl);
-        return ResponseEntity.ok(dto);
-    }
+        return new AuthUserDto(login, avatarUrl);
+    }   
 }

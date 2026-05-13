@@ -77,4 +77,14 @@ describe('AuthService', () => {
     const result = await promise;
     expect(result).toEqual(MOCK_USER);
   });
+
+  it('should clear current user on logout', () => {
+
+    service.setUser(MOCK_USER);
+
+    service.logout();
+
+    expect(service.user()).toBeNull();
+
+  });
 });
