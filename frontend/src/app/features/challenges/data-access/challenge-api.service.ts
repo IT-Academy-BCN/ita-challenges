@@ -4,6 +4,7 @@ import { IChallenge } from '../models/ichallenge.interface';
 import { catchError, Observable, of } from 'rxjs';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { CHALLENGES_MOCK } from '../models/challenges.mock';
+import { IChallengeSubmission } from '../models/ichallenge-submission.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -53,5 +54,9 @@ export class ChallengeApiService {
         return of(undefined);
       })
     )
+  }
+
+  postSolution(payload: IChallengeSubmission): Observable<void> {
+    return this.http.post<void>(`${this.apiUrl}/submissions/finalize`, payload)
   }
 }
