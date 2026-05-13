@@ -10,7 +10,7 @@ import com.itachallenges.challengeservice.submission.domain.valueobject.Submissi
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
-
+@Repository
 public class InMemorySubmissionRepository implements SubmissionRepository {
 
     private final Map<SubmissionId, Submission> storage = new ConcurrentHashMap<>();
