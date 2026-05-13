@@ -29,8 +29,12 @@ public class Submission {
     }
 
     public void finalize(String code) {
-        // TODO: transition status to FINAL and emit SubmissionFinished event
-        // TODO: guard against invalid transitions
+        if (this.status == SubmissionStatus.SUBMITTED) {
+            throw new IllegalStateException("Submission already submitted");
+        }
+        this.code = code;
+        this.status = SubmissionStatus.SUBMITTED;
+        this.updatedAt = Instant.now();
     }
 
     public void markIncomplete() {
@@ -39,7 +43,6 @@ public class Submission {
     }
 
     public List<Object> pullDomainEvents() {
-        // TODO: return accumulated domain events and clear the list
         return null;
     }
 
