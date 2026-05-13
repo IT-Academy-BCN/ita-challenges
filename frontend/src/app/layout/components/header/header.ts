@@ -1,9 +1,8 @@
 import { Component } from '@angular/core';
-import { LogoutButton } from '../../../shared/components/logout-button/logout-button';
 
 @Component({
   selector: 'app-header',
-  imports: [LogoutButton],
+  imports: [],
   templateUrl: './header.html',
   styleUrl: './header.css',
 })

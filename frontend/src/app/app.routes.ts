@@ -38,10 +38,6 @@ export const appRoutes: Routes = [
           import('./features/admin/admin.routes').then(m => m.ADMIN_ROUTES),
       },
       {
-        path: 'tickets',
-        loadChildren: () =>
-          import('./features/tickets/tickets.routes').then(m => m.TICKETS_ROUTES),
-      },      {
         path: '**',
         component: NotFoundPage,
       },

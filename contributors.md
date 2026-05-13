@@ -1,10 +1,7 @@
 # List of developers contributors
 
-- Rafael di Candia
-- Yvan Gabrieli - https://github.com/yvangabrieli
-- Youssef El Gmoudi - https://github.com/YoussefEG09
 - Rafael di Candia - https://github.com/Rafadicandia
-- Esther Herrero - https://github.com/EstherBlacksmith
+- Pedro Navarro - https://github.com/Spook242
 - Nerea Medina - https://github.com/nereame96
 - Rong Jiang - https://github.com/jrffruit518-enrich
 - Juan Delgado - https://github.com/soyjuandelgado

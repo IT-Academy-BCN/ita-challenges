@@ -54,7 +54,7 @@ class ChallengeControllerTest {
     }
 
     @Test
-    void should_create_challenge_with_title_and_description_and_return_201() throws Exception {
+    void should_return_201_with_challenge_when_valid_request() throws Exception {
         Challenge saved = Challenge.create(request.title(), request.description());
         when(repository.save(any(Challenge.class))).thenReturn(saved);
 
@@ -67,6 +67,7 @@ class ChallengeControllerTest {
                 .andExpect(jsonPath("$.description").value("A challenge about writing clean and maintainable code"));
     }
 
+
     @Test  void should_return_204_when_delete_challenge_by_id() throws Exception {
         String challengeIdStr = UUID.randomUUID().toString();
 
@@ -75,6 +76,7 @@ class ChallengeControllerTest {
 
         verify(repository).delete(any(ChallengeId.class));
     }
+
 
     @Test
     void should_update_challenge_and_return_200() throws Exception {
