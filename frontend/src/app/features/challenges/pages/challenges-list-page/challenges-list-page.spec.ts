@@ -6,6 +6,7 @@ import { provideRouter, RouterLink } from '@angular/router';
 import { ChallengesListPage } from './challenges-list-page';
 import { ChallengeService } from '../../services/challenge.service';
 import { CreateButtonComponent } from '../../components/buttons/create-button/create-button';
+import { RoleSelectorComponent } from '../../components/role-selector/role-selector';
 import { CHALLENGES_MOCK } from '../../models/challenges.mock';
 
 describe('ChallengesListPage', () => {
@@ -40,14 +41,27 @@ describe('ChallengesListPage', () => {
   });
 
   it('should render challenges in the template', () => {
-    const compiled = fixture.nativeElement as HTMLElement;
-    const listItems = compiled.querySelectorAll('li');
+    const listItems = fixture.nativeElement.querySelectorAll('li');
 
     expect(listItems.length).toBe(CHALLENGES_MOCK.length);
     expect(listItems[0].textContent).toContain(CHALLENGES_MOCK[0].title);
   });
 
-  it('should render create button component', () => {
+  it('should render role selector component', () => {
+    const roleSelector = fixture.debugElement.query(By.directive(RoleSelectorComponent));
+    expect(roleSelector).toBeTruthy();
+  });
+
+  it('should not render create button when student', () => {
+    component.isMentor.set(false);
+    fixture.detectChanges();
+    const button = fixture.debugElement.query(By.directive(CreateButtonComponent));
+    expect(button).toBeNull();
+  });
+
+  it('should render create button when mentor', () => {
+    component.isMentor.set(true);
+    fixture.detectChanges();
     const button = fixture.debugElement.query(By.directive(CreateButtonComponent));
     expect(button).toBeTruthy();
   });
@@ -55,5 +69,13 @@ describe('ChallengesListPage', () => {
   it('should have routerLink buttons for each challenge', () => {
     const links = fixture.debugElement.queryAll(By.directive(RouterLink));
     expect(links.length).toBeGreaterThan(0);
+  });
+
+  it('should update isMentor when onRoleChange is called', () => {
+    component.onRoleChange(true);
+    expect(component.isMentor()).toBe(true);
+
+    component.onRoleChange(false);
+    expect(component.isMentor()).toBe(false);
   });
 });

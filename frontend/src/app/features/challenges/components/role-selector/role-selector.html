@@ -3,7 +3,7 @@
 
     <button
         class="role-selector__switch"
-        [class.role-selector__switch--active]="currentRole() === 'mentor'"
+        [class.role-selector__switch--active]="isMentor()"
         (click)="toggle()"
     >
         <span class="role-selector__thumb"></span>
