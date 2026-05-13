@@ -1,6 +1,4 @@
-import { Component, signal } from '@angular/core';
-
-type Role = 'mentor' | 'student';
+import { Component, output, signal } from '@angular/core';
 
 @Component({
   selector: 'app-role-selector',
@@ -10,15 +8,13 @@ type Role = 'mentor' | 'student';
   styleUrl: './role-selector.css',
 })
 export class RoleSelectorComponent {
-  private readonly _role = signal<Role>('student');
 
-  currentRole = this._role.asReadonly();
+  isMentor = signal(false);
+
+  roleChange = output<boolean>();
 
   toggle(): void {
-    this._role.set(
-      this._role() === 'mentor'
-        ? 'student'
-        : 'mentor'
-    );
+    this.isMentor.update( currentRole => !currentRole);
+    this.roleChange.emit(this.isMentor());
   }
 }

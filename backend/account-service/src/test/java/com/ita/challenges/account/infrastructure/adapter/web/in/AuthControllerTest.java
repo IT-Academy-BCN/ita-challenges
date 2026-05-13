@@ -9,6 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.client.AutoConfigureMockRestServiceServer;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
@@ -34,6 +35,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 
 
 @WebMvcTest(AuthController.class)
+@AutoConfigureMockMvc
 @AutoConfigureMockRestServiceServer
 class AuthControllerTest {
 
@@ -106,7 +108,6 @@ class AuthControllerTest {
     }
 
     @Test
-
     void create_shouldReturn404WhenGitHubUserNotFound() throws Exception {
         this.mockServer.expect(requestTo("https://api.github.com/users/username12345"))
                 .andRespond(withStatus(HttpStatus.NOT_FOUND));
@@ -122,8 +123,8 @@ class AuthControllerTest {
     }
 
     @Test
-    void me_whenAuthenticated_returnsUsernameAndAvatarUrl() throws Exception {
-        mockMvc.perform(get("/api/account/me")
+    void authMe_whenAuthenticated_returnsUsernameAndAvatarUrl() throws Exception {
+        mockMvc.perform(get("/api/account/auth/me")
                         .with(oauth2Login()
                                 .attributes(attrs -> {
                                     attrs.put("login", "testuser");
@@ -135,8 +136,9 @@ class AuthControllerTest {
     }
 
     @Test
-    void me_whenNotAuthenticated_redirectsToGitHub() throws Exception {
-        mockMvc.perform(get("/api/account/me"))
-                .andExpect(status().isFound()); // 302
+    void authMe_whenNotAuthenticated_returnsAnonymous() throws Exception {
+        mockMvc.perform(get("/api/account/auth/me"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.username").value("anonymous"));
     }
 }
