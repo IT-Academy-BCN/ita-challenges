@@ -5,6 +5,7 @@ import com.itachallenges.challengeservice.shared.domain.valueobject.UserId;
 import com.itachallenges.challengeservice.submission.domain.Submission;
 import com.itachallenges.challengeservice.submission.domain.port.out.SubmissionRepository;
 import com.itachallenges.challengeservice.submission.domain.valueobject.SubmissionId;
+import com.itachallenges.challengeservice.submission.domain.valueobject.SubmissionStatus;
 
 import java.util.Map;
 import java.util.Optional;
@@ -27,13 +28,16 @@ public class InMemorySubmissionRepository implements SubmissionRepository {
 
     @Override
     public Optional<Submission> findByUserAndChallenge(UserId userId, ChallengeId challengeId) {
-        // TODO: find submission by userId and challengeId
-        return Optional.empty();
+        return storage.values().stream()
+                .filter(s -> s.getUserId().equals(userId) && s.getChallengeId().equals(challengeId))
+                .findFirst();
     }
 
     @Override
     public boolean existsFinalSubmission(UserId userId, ChallengeId challengeId) {
-        // TODO: check if a FINAL submission exists for this userId and challengeId
-        return false;
+        return storage.values().stream()
+                .anyMatch(s -> s.getUserId().equals(userId)
+                        && s.getChallengeId().equals(challengeId)
+                        && s.getStatus() == SubmissionStatus.SUBMITTED);
     }
 }
