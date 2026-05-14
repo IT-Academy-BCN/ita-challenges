@@ -17,7 +17,7 @@ export class TicketApiService {
   private readonly ticketsUrl = '/api/accounts/tickets';
 
   create(ticket: ITicketRequest): Observable<ITicket> {
-    return of({ id: '1', ...ticket });
+    return of( { id: '1', userId:'one', ...ticket} );
   }
 
   loadAll(): Observable<ITicket[]> {
