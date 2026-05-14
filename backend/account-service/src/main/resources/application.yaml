@@ -6,6 +6,7 @@ spring:
       client:
         registration:
           github:
+            redirect-uri: "{baseUrl}/api/account/login/oauth2/code/{registrationId}"
             client-id: ${GITHUB_CLIENT_ID}
             client-secret: ${GITHUB_CLIENT_SECRET}
             scope: user:email
@@ -20,3 +21,4 @@ management:
         enabled: true
 server:
   port: ${SERVER_PORT:8080}
+  forward-headers-strategy: framework

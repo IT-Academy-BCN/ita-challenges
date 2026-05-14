@@ -15,12 +15,20 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/account/auth/**").permitAll()
+                        .requestMatchers("/api/account/oauth2/**").permitAll()
+                        .requestMatchers("/api/account/login/oauth2/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .oauth2Login(oauth2 -> oauth2
-                        .defaultSuccessUrl("/api/account/success", true)
+                        .loginPage("/auth")
+                        .authorizationEndpoint(authorization -> authorization
+                                .baseUri("/api/account/oauth2/authorization")
+                        )
+                        .redirectionEndpoint(redirection -> redirection
+                                .baseUri("/api/account/login/oauth2/code/**")
+                        )
+                        .defaultSuccessUrl("/profile", true)
                 );
         return http.build();
     }
 }
-
