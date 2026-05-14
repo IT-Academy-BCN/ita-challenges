@@ -12,6 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -19,6 +20,8 @@ import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.oauth2Login;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -35,11 +38,16 @@ class TicketControllerTest {
     private TicketRepository ticketRepository;
 
     @Test
-    @WithMockUser
-    void should_return_200_with_empty_list_when_requesting_ticket_list() throws Exception {
-        mockMvc.perform(get("/api/account/tickets"))
+    void should_return_200_with_ticket_list_when_requesting_ticket_list() throws Exception {
+        Ticket ticket = Ticket.create("testuser", "Login issue", "Unable to access my account");
+        when(ticketRepository.findAllByUserId("testuser")).thenReturn(List.of(ticket));
+
+        mockMvc.perform(get("/api/account/tickets")
+                        .with(oauth2Login().attributes(attrs -> attrs.put("login", "testuser"))))
                 .andExpect(status().isOk())
-                .andExpect(content().json("[]"));
+                .andExpect(jsonPath("$[0].userId").value("testuser"))
+                .andExpect(jsonPath("$[0].title").value("Login issue"))
+                .andExpect(jsonPath("$[0].description").value("Unable to access my account"));
     }
 
     @Test

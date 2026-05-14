@@ -30,4 +30,11 @@ describe('CreateButtonComponent', () => {
     const button = fixture.nativeElement.querySelector('button');
     expect(button.textContent.trim()).toBe('Create Challenge');
   });
+
+  it('should have routerLink to /challenges/create', () => {
+    const button = fixture.nativeElement.querySelector('button');
+    
+    expect(button).toBeTruthy();
+    expect(button.getAttribute('routerLink')).toBe('/challenges/create');
+  });
 });
