@@ -37,7 +37,12 @@ public class JsonFileChallengeRepository implements ChallengeRepository {
         persistToFile();
         return challenge;
     }
-
+    
+    @Override
+    public Challenge find(ChallengeId id) {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+    
     @Override
     public Challenge update(Challenge challenge) {
         throw new UnsupportedOperationException("Not implemented yet");
