@@ -10,7 +10,7 @@ describe('CreateTicketPage', () => {
 
   beforeEach(async () => {
     mockTicketService = {
-      create: () => of({ id:'1', userId: '', title: '', description: '' })
+      create: () => of({ id:'1', userId: 'one', title: '', description: '' })
     };
 
     await TestBed.configureTestingModule({
@@ -27,9 +27,9 @@ describe('CreateTicketPage', () => {
   });
 
   it('should call ticketApiService.create when call onSubmit with correct data', () => {
-    const testData = { userId: 'usuari', title: 'Nou Repte', description: 'Descripció' };
+    const testData = { title: 'Nou Repte', description: 'Descripció' };
     component.ticketForm.setValue(testData);
-    vi.spyOn(mockTicketService, 'create').mockReturnValue(of({ id: '1', ...testData }));
+    vi.spyOn(mockTicketService, 'create').mockReturnValue(of({ id: '1', userId: 'usuari', ...testData }));
     component.onSubmit();
     expect(mockTicketService.create).toHaveBeenCalledWith(testData);
   });  
