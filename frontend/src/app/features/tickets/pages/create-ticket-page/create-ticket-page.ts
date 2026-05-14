@@ -25,11 +25,7 @@ export class CreateTicketPage {
     const newTicket = this.ticketForm.value as ITicketRequest
 
     this.ticketService.create(newTicket).subscribe({
-    next: () => {this.goTickets();}
-  });
-}
-
-  goTickets() {
-    this.router.navigate(['/tickets']);
-  }  
+      next: () => {this.ticketForm.reset();}
+    });
+  }
 }
