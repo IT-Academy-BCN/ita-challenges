@@ -11,6 +11,14 @@ describe('TicketApiService', () => {
   let service: TicketApiService;
   let httpMock: HttpTestingController;
 
+  const mockTicket = {
+    userId: 'u-1',
+    title: 'Issue title',
+    description: 'Issue description',
+  };
+
+  const mockTicketResponse = { id: '1', ...mockTicket}
+
   const API_URL = '/api/accounts/tickets';
 
   beforeEach(() => {
@@ -55,48 +63,31 @@ describe('TicketApiService', () => {
   });
 
   it('should POST to the correct URL', () => {
-    const ticket = {
-      userId: 'u-1',
-      title: 'Issue title',
-      description: 'Issue description',
-    };
 
-    service.create(ticket).subscribe();
+    service.create(mockTicket).subscribe();
 
     const req = httpMock.expectOne(API_URL);
     expect(req.request.method).toBe('POST');
+    req.flush(mockTicketResponse);
   });
 
   it('should send the correct payload', () => {
-    const ticket = {
-      userId: 'u-1',
-      title: 'Issue title',
-      description: 'Issue description',
-    };
-
-    service.create(ticket).subscribe();
+    service.create(mockTicket).subscribe();
 
     const req = httpMock.expectOne(API_URL);
-    expect(req.request.body).toEqual(ticket);
-    req.flush({ id: '1', ...ticket });
+    expect(req.request.body).toEqual(mockTicket);
+    req.flush(mockTicketResponse);
   });
 
   it('should return backend data on success', () => {
-    const ticket = {
-      userId: 'u-1',
-      title: 'Issue title',
-      description: 'Issue description',
-    };
+    let result;
 
-    const response = { id: '1', ...ticket };
-    let result: any;
-
-    service.create(ticket).subscribe((value) => {
+    service.create(mockTicket).subscribe((value) => {
       result = value;
     });
 
-    httpMock.expectOne(API_URL).flush(response);
+    httpMock.expectOne(API_URL).flush(mockTicketResponse);
 
-    expect(result).toEqual(response);
+    expect(result).toEqual(mockTicketResponse);
   });
 });
