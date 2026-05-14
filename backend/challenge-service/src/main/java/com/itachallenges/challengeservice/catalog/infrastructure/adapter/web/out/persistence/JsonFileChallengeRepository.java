@@ -10,7 +10,6 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -54,37 +53,29 @@ public class JsonFileChallengeRepository implements ChallengeRepository {
         return new ArrayList<>(storage.values());
     }
 
-    private void persistToFile() {
-        try {
-            List<ChallengeRecord> records = storage.values().stream()
-                    .map(c -> new ChallengeRecord(
-                            c.getId().toString(),
-                            c.getTitle().toString(),
-                            c.getDescription().toString()
-                    ))
-                    .toList();
-            objectMapper.writeValue(storageFile, records);
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to persist challenges to file", e);
-        }
+    private void persistToFile() throws Exception {
+        List<ChallengeRecord> records = storage.values().stream()
+                .map(c -> new ChallengeRecord(
+                        c.getId().toString(),
+                        c.getTitle().toString(),
+                        c.getDescription().toString()
+                ))
+                .toList();
+        objectMapper.writeValue(storageFile, records);
     }
 
-    private void loadFromFile() {
+    private void loadFromFile() throws Exception {
         if (!storageFile.exists()) return;
-        try {
-            List<ChallengeRecord> records = objectMapper.readValue(
-                    storageFile, new TypeReference<>() {});
-            records.forEach(r -> {
-                Challenge challenge = Challenge.restore(
-                        ChallengeId.of(r.id()),
-                        r.title(),
-                        r.description()
-                );
-                storage.put(challenge.getId(), challenge);
-            });
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to load challenges from file", e);
-        }
+        List<ChallengeRecord> records = objectMapper.readValue(
+                storageFile, new TypeReference<>() {});
+        records.forEach(r -> {
+            Challenge challenge = Challenge.restore(
+                    ChallengeId.of(r.id()),
+                    r.title(),
+                    r.description()
+            );
+            storage.put(challenge.getId(), challenge);
+        });
     }
 
     record ChallengeRecord(String id, String title, String description) {}
