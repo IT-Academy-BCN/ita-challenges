@@ -18,6 +18,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.oauth2Login;
@@ -51,7 +52,12 @@ class TicketControllerTest {
                         .with(oauth2Login().attributes(attrs -> attrs.put("id", 12345678)))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isCreated());
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.title").value("Test Title"))
+                .andExpect(jsonPath("$.description").value("Test description"))
+                .andExpect(jsonPath("$.userId").value("12345678"));
+
+        verify(ticketRepository).save(any(Ticket.class));
     }
 
     @Test
