@@ -1,6 +1,5 @@
 package com.itachallenges.challengeservice.catalog.infrastructure.adapter.web.in.controller;
 
-import com.itachallenges.challengeservice.catalog.domain.exception.ChallengeNotFoundException;
 import com.itachallenges.challengeservice.catalog.domain.model.Challenge;
 import com.itachallenges.challengeservice.catalog.domain.port.out.ChallengeRepository;
 import com.itachallenges.challengeservice.catalog.domain.valueobject.ChallengeId;
@@ -49,7 +48,6 @@ public class ChallengeController {
 
     @GetMapping("/{id}")
     public ResponseEntity<ChallengeResponse> find(@PathVariable String id){
-        try {
             Challenge challenge = repository.find(ChallengeId.of(id));
 
             ChallengeResponse challengeResponse =
@@ -57,10 +55,6 @@ public class ChallengeController {
                             challenge.getTitle().toString(),
                             challenge.getDescription().toString());
             return ResponseEntity.ok(challengeResponse);
-
-        }catch (ChallengeNotFoundException e){
-            return ResponseEntity.notFound().build();
-        }
     }
 
     @DeleteMapping("/{id}")

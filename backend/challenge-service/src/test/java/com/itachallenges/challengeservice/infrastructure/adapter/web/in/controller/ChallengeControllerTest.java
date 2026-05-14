@@ -1,7 +1,6 @@
 package com.itachallenges.challengeservice.infrastructure.adapter.web.in.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.itachallenges.challengeservice.catalog.domain.exception.ChallengeNotFoundException;
 import com.itachallenges.challengeservice.catalog.domain.port.out.ChallengeRepository;
 import com.itachallenges.challengeservice.catalog.domain.model.Challenge;
 import com.itachallenges.challengeservice.catalog.domain.valueobject.ChallengeDescription;

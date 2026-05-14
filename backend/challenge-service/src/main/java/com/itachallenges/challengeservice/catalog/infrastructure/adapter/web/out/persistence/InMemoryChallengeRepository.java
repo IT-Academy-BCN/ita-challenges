@@ -1,6 +1,5 @@
 package com.itachallenges.challengeservice.catalog.infrastructure.adapter.web.out.persistence;
 
-import com.itachallenges.challengeservice.catalog.domain.exception.ChallengeNotFoundException;
 import com.itachallenges.challengeservice.catalog.domain.model.Challenge;
 import com.itachallenges.challengeservice.catalog.domain.port.out.ChallengeRepository;
 import com.itachallenges.challengeservice.catalog.domain.valueobject.ChallengeId;
@@ -43,7 +42,7 @@ public class InMemoryChallengeRepository implements ChallengeRepository {
     public Challenge find(ChallengeId id) {
         Challenge challenge = storage.get(id);
         if (challenge == null) {
-            throw new ChallengeNotFoundException("Challenge not found with id: " + id);
+            throw new RuntimeException("Challenge not found with id: " + id);
         }
         return challenge;
     }
