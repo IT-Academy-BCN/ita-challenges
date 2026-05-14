@@ -11,9 +11,6 @@ public interface TicketRepository {
     Ticket save(Ticket newTicket);
 
     Ticket updateTicket(Ticket ticket);
-}
 
     Optional<Ticket> findById(String id);
-
-    Ticket save(Ticket newTicket);
 }

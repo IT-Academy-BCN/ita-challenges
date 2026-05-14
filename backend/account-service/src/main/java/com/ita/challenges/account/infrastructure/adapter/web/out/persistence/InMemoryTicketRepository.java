@@ -22,11 +22,6 @@ public class InMemoryTicketRepository implements TicketRepository {
                 .toList());
     }
 
-    @Override
-    public Ticket save(Ticket newTicket) {
-        storage.put(newTicket.getId(), newTicket);
-        return newTicket;
-    }
 
     @Override
     public Ticket updateTicket(Ticket ticket) {
