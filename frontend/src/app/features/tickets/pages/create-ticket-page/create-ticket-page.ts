@@ -1,7 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { TicketApiService } from '../../data-access/ticket-api.service';
-import { Router } from '@angular/router';
 import { ITicketRequest } from '../../models/iticket-request.interface';
 
 @Component({
@@ -12,7 +11,6 @@ import { ITicketRequest } from '../../models/iticket-request.interface';
 })
 export class CreateTicketPage {
   readonly ticketService = inject(TicketApiService)
-  readonly router = inject(Router)
   readonly fb = inject(FormBuilder)
 
   ticketForm = this.fb.group({
