@@ -10,7 +10,7 @@ import { ITicketRequest } from '../models/iticket-request.interface';
 export class TicketApiService {
 
   create(ticket: ITicketRequest): Observable<ITicket> {
-    return of( { id: '1', ...ticket} );
+    return of( { id: '1', userId:'one', ...ticket} );
   }
 
   loadAll(): Observable<ITicket[]> {
