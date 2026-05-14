@@ -7,17 +7,22 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
+import java.io.IOException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 class JsonFileChallengeRepositoryTest {
 
     private static final String TEST_FILE = "challenges-test.json";
+
     private JsonFileChallengeRepository repository;
 
     @BeforeEach
-    void setUp() {
-        repository = new JsonFileChallengeRepository(TEST_FILE, new ObjectMapper());
+    void setUp() throws IOException {
+        repository = new JsonFileChallengeRepository(
+                TEST_FILE,
+                new ObjectMapper()
+        );
     }
 
     @AfterEach
@@ -26,13 +31,18 @@ class JsonFileChallengeRepositoryTest {
     }
 
     @Test
-    void save_should_store_challenge_in_json_file() {
-        Challenge challenge = Challenge.create("Clean Code", "Write readable code");
+    void save_should_store_challenge_in_json_file() throws IOException {
+
+        Challenge challenge = Challenge.create(
+                "Clean Code",
+                "Write readable code"
+        );
 
         repository.save(challenge);
 
         assertThat(new File(TEST_FILE)).exists();
         assertThat(repository.findAll()).hasSize(1);
-        assertThat(repository.findAll().get(0).getTitle().toString()).isEqualTo("Clean Code");
+        assertThat(repository.findAll().get(0).getTitle().toString())
+                .isEqualTo("Clean Code");
     }
 }
