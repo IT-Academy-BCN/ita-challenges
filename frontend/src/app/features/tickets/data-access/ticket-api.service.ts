@@ -1,10 +1,10 @@
-import { inject, Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { catchError, Observable, of } from 'rxjs';
+import {inject, Injectable} from '@angular/core';
+import {HttpClient, HttpErrorResponse} from '@angular/common/http';
+import {catchError, Observable, of} from 'rxjs';
 
-import { ITicket } from '../models/iticket.interface';
-import { ITicketRequest } from '../models/iticket-request.interface';
-import { TICKETS_MOCK } from '../models/tickets.mock';
+import {ITicket} from '../models/iticket.interface';
+import {ITicketRequest} from '../models/iticket-request.interface';
+import {TICKETS_MOCK} from '../models/tickets.mock';
 
 @Injectable({
   providedIn: 'root',
@@ -15,7 +15,7 @@ export class TicketApiService {
 
   create(ticket: ITicketRequest): Observable<ITicket> {
     return this.http.post<ITicket>(this.ticketsUrl, ticket).pipe(
-      catchError(() => of({ id: '1', ...ticket } as ITicket))
+      catchError(() => of({id: '1', ...ticket} as ITicket))
     );
   }
 
