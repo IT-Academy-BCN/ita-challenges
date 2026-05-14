@@ -23,7 +23,8 @@ public class InMemoryTicketRepository implements TicketRepository {
 
     @Override
     public Ticket save(Ticket newTicket) {
-        return null;
+        storage.put(newTicket.getId(), newTicket);
+        return newTicket;
     }
 
     @Override
