@@ -37,5 +37,4 @@ public class InMemoryTicketRepository implements TicketRepository {
     @Override
     public Optional<Ticket> findById(String id) {
         return Optional.ofNullable(storage.get(id));
-    }
 }
