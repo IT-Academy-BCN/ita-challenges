@@ -4,25 +4,16 @@ import com.ita.challenges.account.domain.model.Ticket;
 import com.ita.challenges.account.domain.port.out.TicketRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.HashMap;
-import java.util.Map;
-
-@Repository
-public class InMemoryTicketRepository implements TicketRepository {
-    private final Map<String, Ticket> database = new HashMap<>();
-
-    @Override
-    public Ticket save(Ticket newTicket) {
-        database.put(newTicket.getId(), newTicket);
-        return newTicket;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Repository
 public class InMemoryTicketRepository implements TicketRepository {
 
+    // Usamos ConcurrentHashMap que es más seguro para aplicaciones web
     private final Map<String, Ticket> storage = new ConcurrentHashMap<>();
 
     @Override
@@ -33,7 +24,18 @@ public class InMemoryTicketRepository implements TicketRepository {
     }
 
     @Override
+    public Ticket save(Ticket newTicket) {
+        storage.put(newTicket.getId(), newTicket);
+        return newTicket;
+    }
+
+    @Override
     public Ticket updateTicket(Ticket ticket) {
         throw new UnsupportedOperationException("updateTicket not implemented yet");
+    }
+
+    @Override
+    public Optional<Ticket> findById(String id) {
+        return Optional.ofNullable(storage.get(id));
     }
 }
