@@ -3,26 +3,31 @@ import {
   HttpTestingController,
   provideHttpClientTesting,
 } from '@angular/common/http/testing';
-
 import { provideHttpClient } from '@angular/common/http';
 import { TicketApiService } from './ticket-api.service';
 import { TICKETS_MOCK } from '../models/tickets.mock';
 
 describe('TicketApiService', () => {
-
   let service: TicketApiService;
   let httpMock: HttpTestingController;
 
-  const API_URL = '/api/accounts/tickets';
-  beforeEach(() => {
+  const mockTicket = {
+    userId: 'u-1',
+    title: 'Issue title',
+    description: 'Issue description',
+  };
 
+  const mockTicketResponse = { id: '1', ...mockTicket}
+
+  const API_URL = '/api/accounts/tickets';
+
+  beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),
       ],
     });
-
     service = TestBed.inject(TicketApiService);
     httpMock = TestBed.inject(HttpTestingController);
   });
@@ -36,7 +41,6 @@ describe('TicketApiService', () => {
   });
 
   it('should return tickets from API', () => {
-
     service.loadAll().subscribe((tickets) => {
       expect(tickets).toEqual(TICKETS_MOCK);
     });
@@ -47,7 +51,6 @@ describe('TicketApiService', () => {
   });
 
   it('should return mock tickets on API error', () => {
-
     service.loadAll().subscribe((tickets) => {
       expect(tickets).toEqual(TICKETS_MOCK);
     });
@@ -57,5 +60,50 @@ describe('TicketApiService', () => {
       status: 500,
       statusText: 'Server Error',
     });
+  });
+
+  it('should POST to the correct URL', () => {
+
+    service.create(mockTicket).subscribe();
+
+    const req = httpMock.expectOne(API_URL);
+    expect(req.request.method).toBe('POST');
+    req.flush(mockTicketResponse);
+  });
+
+  it('should send the correct payload', () => {
+    service.create(mockTicket).subscribe();
+
+    const req = httpMock.expectOne(API_URL);
+    expect(req.request.body).toEqual(mockTicket);
+    req.flush(mockTicketResponse);
+  });
+
+  it('should return backend data on success', () => {
+    let result;
+
+    service.create(mockTicket).subscribe((value) => {
+      result = value;
+    });
+
+    httpMock.expectOne(API_URL).flush(mockTicketResponse);
+
+    expect(result).toEqual(mockTicketResponse);
+  });
+
+  it('should return fallback ticket on create error', () => {
+    let result: any;
+
+    service.create(mockTicket).subscribe((value) => {
+      result = value;
+    });
+
+    const req = httpMock.expectOne(API_URL);
+    req.flush('Error', {
+      status: 500,
+      statusText: 'Server Error',
+    });
+
+    expect(result).toEqual({ id: '1', ...mockTicket });
   });
 });

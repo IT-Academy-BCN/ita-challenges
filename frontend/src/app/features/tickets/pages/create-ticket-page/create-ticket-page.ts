@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { TicketApiService } from '../../data-access/ticket-api.service';
 import { ITicketRequest } from '../../models/iticket-request.interface';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-create-ticket-page',
@@ -12,6 +13,7 @@ import { ITicketRequest } from '../../models/iticket-request.interface';
 export class CreateTicketPage {
   readonly ticketService = inject(TicketApiService)
   readonly fb = inject(FormBuilder)
+  readonly router = inject(Router)
 
   ticketForm = this.fb.group({
     title: [''],
@@ -22,7 +24,11 @@ export class CreateTicketPage {
     const newTicket = this.ticketForm.value as ITicketRequest
 
     this.ticketService.create(newTicket).subscribe({
-      next: () => {this.ticketForm.reset();}
+      next: () => {this.goTickets();}
     });
   }
+
+  goTickets() {
+    this.router.navigate(['/tickets']);
+  }    
 }
