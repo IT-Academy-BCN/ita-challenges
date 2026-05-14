@@ -25,6 +25,10 @@ public class Ticket {
         );
     }
 
+    public static Ticket restore(String id, String userId, String title, String description) {
+        return new Ticket(id, userId, title, description);
+    }
+
     public String getId() {
         return id;
     }
