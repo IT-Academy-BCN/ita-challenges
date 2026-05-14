@@ -1,11 +1,11 @@
-import { TestBed } from '@angular/core/testing';
+import {TestBed} from '@angular/core/testing';
 import {
   HttpTestingController,
   provideHttpClientTesting,
 } from '@angular/common/http/testing';
-import { provideHttpClient } from '@angular/common/http';
-import { TicketApiService } from './ticket-api.service';
-import { TICKETS_MOCK } from '../models/tickets.mock';
+import {provideHttpClient} from '@angular/common/http';
+import {TicketApiService} from './ticket-api.service';
+import {TICKETS_MOCK} from '../models/tickets.mock';
 
 describe('TicketApiService', () => {
   let service: TicketApiService;
@@ -17,7 +17,7 @@ describe('TicketApiService', () => {
     description: 'Issue description',
   };
 
-  const mockTicketResponse = { id: '1', ...mockTicket}
+  const mockTicketResponse = {id: '1', ...mockTicket}
 
   const API_URL = '/api/accounts/tickets';
 
@@ -89,5 +89,21 @@ describe('TicketApiService', () => {
     httpMock.expectOne(API_URL).flush(mockTicketResponse);
 
     expect(result).toEqual(mockTicketResponse);
+  });
+
+  it('should return fallback ticket on create error', () => {
+    let result: any;
+
+    service.create(mockTicket).subscribe((value) => {
+      result = value;
+    });
+
+    const req = httpMock.expectOne(API_URL);
+    req.flush('Error', {
+      status: 500,
+      statusText: 'Server Error',
+    });
+
+    expect(result).toEqual({id: '1', ...mockTicket});
   });
 });
