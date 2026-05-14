@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -25,24 +26,24 @@ public class JsonFileChallengeRepository implements ChallengeRepository {
 
     public JsonFileChallengeRepository(
             @Value("${challenge.storage.file-path:challenges.json}") String filePath,
-            ObjectMapper objectMapper) {
+            ObjectMapper objectMapper) throws IOException {
         this.storageFile = new File(filePath);
         this.objectMapper = objectMapper;
         loadFromFile();
     }
 
     @Override
-    public Challenge save(Challenge challenge) {
+    public Challenge save(Challenge challenge) throws IOException {
         storage.put(challenge.getId(), challenge);
         persistToFile();
         return challenge;
     }
-    
+
     @Override
     public Challenge find(ChallengeId id) {
-        throw new UnsupportedOperationException("Not implemented yet");
+        return storage.get(id);
     }
-    
+
     @Override
     public Challenge update(Challenge challenge) {
         throw new UnsupportedOperationException("Not implemented yet");
@@ -58,29 +59,25 @@ public class JsonFileChallengeRepository implements ChallengeRepository {
         return new ArrayList<>(storage.values());
     }
 
-    private void persistToFile() throws Exception {
-        List<ChallengeRecord> records = storage.values().stream()
+    private void persistToFile() throws IOException {
+        objectMapper.writeValue(storageFile, storage.values().stream()
                 .map(c -> new ChallengeRecord(
                         c.getId().toString(),
                         c.getTitle().toString(),
-                        c.getDescription().toString()
-                ))
-                .toList();
-        objectMapper.writeValue(storageFile, records);
+                        c.getDescription().toString()))
+                .toList());
     }
 
-    private void loadFromFile() throws Exception {
+    private void loadFromFile() throws IOException {
         if (!storageFile.exists()) return;
-        List<ChallengeRecord> records = objectMapper.readValue(
-                storageFile, new TypeReference<>() {});
-        records.forEach(r -> {
-            Challenge challenge = Challenge.restore(
-                    ChallengeId.of(r.id()),
-                    r.title(),
-                    r.description()
-            );
-            storage.put(challenge.getId(), challenge);
-        });
+
+        objectMapper.readValue(storageFile, new TypeReference<List<ChallengeRecord>>() {})
+                .forEach(r -> storage.put(
+                        ChallengeId.of(r.id()),
+                        Challenge.restore(
+                                ChallengeId.of(r.id()),
+                                r.title(),
+                                r.description())));
     }
 
     record ChallengeRecord(String id, String title, String description) {}
