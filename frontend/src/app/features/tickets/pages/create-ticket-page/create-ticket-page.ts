@@ -13,6 +13,7 @@ import { Router } from '@angular/router';
 export class CreateTicketPage {
   readonly ticketService = inject(TicketApiService)
   readonly fb = inject(FormBuilder)
+  readonly router = inject(Router)
 
   ticketForm = this.fb.group({
     title: [''],
