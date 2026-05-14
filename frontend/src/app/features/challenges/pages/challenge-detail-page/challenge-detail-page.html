@@ -1,7 +1,7 @@
-@if (challenge) {
+@if (challenge()) {
 
-  <h1>{{ challenge.title }}</h1>
-  <p>{{ challenge.description}}</p>
+  <h1>{{ challenge()?.title }}</h1>
+  <p>{{ challenge()?.description}}</p>
   <textarea
       id="challengeAnswer"
       rows="10"
