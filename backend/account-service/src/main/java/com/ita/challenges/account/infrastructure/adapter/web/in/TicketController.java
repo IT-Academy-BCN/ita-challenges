@@ -37,7 +37,12 @@ public class TicketController {
                 request.description()
         ));
 
-        return TicketResponse.fromEntity(savedTicket);
+        return new TicketResponse(
+                savedTicket.getId(),
+                savedTicket.getUserId(),
+                savedTicket.getTitle(),
+                savedTicket.getDescription()
+        );
     }
 
     @GetMapping
@@ -50,7 +55,12 @@ public class TicketController {
 
         List<TicketResponse> tickets = ticketRepository.findAllByUserId(userId)
                 .stream()
-                .map(TicketResponse::fromEntity)
+                .map(ticket -> new TicketResponse(
+                        ticket.getId(),
+                        ticket.getUserId(),
+                        ticket.getTitle(),
+                        ticket.getDescription()
+                ))
                 .toList();
 
         return ResponseEntity.ok(tickets);
