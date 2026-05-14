@@ -11,11 +11,11 @@ import {TICKETS_MOCK} from '../models/tickets.mock';
 })
 export class TicketApiService {
   private readonly http = inject(HttpClient);
-  private readonly ticketsUrl = '/api/accounts/tickets';
+  private readonly ticketsUrl = '/api/account/tickets';
 
   create(ticket: ITicketRequest): Observable<ITicket> {
     return this.http.post<ITicket>(this.ticketsUrl, ticket).pipe(
-      catchError(() => of({id: '1', ...ticket} as ITicket))
+      catchError(() => of({id: '1', userId: 'u-1', ...ticket} as ITicket))
     );
   }
 
