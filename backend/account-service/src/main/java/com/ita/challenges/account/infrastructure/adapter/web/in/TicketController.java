@@ -47,17 +47,11 @@ public class TicketController {
             @PathVariable String id,
             @RequestBody TicketRequest ticketRequest,
             @AuthenticationPrincipal OAuth2User user) {
-        if (user == null || user.getAttribute("login") == null) {
-            return ResponseEntity.status(401).build();
-        }
 
         String currentUserId = user.getAttribute("login");
 
         return ticketRepository.findById(id)
                 .map(existingTicket -> {
-                    if (!existingTicket.getUserId().equals(currentUserId)) {
-                        return ResponseEntity.status(403).<TicketResponse>build();
-                    }
                     Ticket updatedTicket = Ticket.restore(
                             id,
                             existingTicket.getUserId(),
@@ -65,13 +59,12 @@ public class TicketController {
                             ticketRequest.description()
                     );
                     Ticket savedTicket = ticketRepository.updateTicket(updatedTicket);
-                    TicketResponse ticketResponse = new TicketResponse(
+                    return ResponseEntity.ok(new TicketResponse(
                             savedTicket.getId(),
                             savedTicket.getUserId(),
                             savedTicket.getTitle(),
                             savedTicket.getDescription()
-                    );
-                    return ResponseEntity.ok(ticketResponse);
+                    ));
                 })
                 .orElse(ResponseEntity.notFound().build());
     }
