@@ -2,25 +2,32 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CreateTicketPage } from './create-ticket-page';
 import { TicketApiService } from '../../data-access/ticket-api.service';
 import { of } from 'rxjs';
+import { Router } from '@angular/router';
 
 describe('CreateTicketPage', () => {
   let component: CreateTicketPage;
   let fixture: ComponentFixture<CreateTicketPage>;
   let mockTicketService: Partial<TicketApiService>;
+  let mockRouter: Partial<Router>;
 
   beforeEach(async () => {
     mockTicketService = {
       create: () => of({ id:'1', userId: '', title: '', description: '' })
     };
 
+    mockRouter = {
+      navigate: vi.fn() as any
+    };
+    
     await TestBed.configureTestingModule({
       imports: [CreateTicketPage],
       providers: [
         { provide: TicketApiService, useValue: mockTicketService },
+        { provide: Router, useValue: mockRouter }        
       ]
     })
     .compileComponents();
-    
+
     fixture = TestBed.createComponent(CreateTicketPage);
     component = fixture.componentInstance;
     await fixture.whenStable();
@@ -32,5 +39,10 @@ describe('CreateTicketPage', () => {
     vi.spyOn(mockTicketService, 'create').mockReturnValue(of({ id: '1', ...testData }));
     component.onSubmit();
     expect(mockTicketService.create).toHaveBeenCalledWith(testData);
+  });
+
+  it('should navigate when call goTickets', () => {
+    component.goTickets();
+    expect(mockRouter.navigate).toHaveBeenCalledWith(['/tickets']);
   });  
 });
