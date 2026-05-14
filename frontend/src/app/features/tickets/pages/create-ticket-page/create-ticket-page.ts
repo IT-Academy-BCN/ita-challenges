@@ -14,7 +14,6 @@ export class CreateTicketPage {
   readonly fb = inject(FormBuilder)
 
   ticketForm = this.fb.group({
-    userId: [''],
     title: [''],
     description: ['']
   })
