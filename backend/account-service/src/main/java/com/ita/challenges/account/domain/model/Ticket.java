@@ -9,7 +9,7 @@ public class Ticket {
     private final String title;
     private final String description;
 
-    public Ticket(String id, String userId, String title, String description) {
+    private Ticket(String id, String userId, String title, String description) {
         this.id = id;
         this.userId = userId;
         this.title = title;

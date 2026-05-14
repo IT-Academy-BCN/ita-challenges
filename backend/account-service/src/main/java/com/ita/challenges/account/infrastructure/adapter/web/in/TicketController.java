@@ -11,7 +11,6 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/account/tickets")
@@ -32,8 +31,7 @@ public class TicketController {
 
         String userId = user.getAttribute("id");
 
-        Ticket savedTicket = ticketRepository.save(new Ticket(
-                UUID.randomUUID().toString(),
+        Ticket savedTicket = ticketRepository.save(Ticket.create(
                 userId,
                 request.title(),
                 request.description()
