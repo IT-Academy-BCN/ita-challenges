@@ -1,5 +1,6 @@
 package com.ita.challenges.account.infrastructure.adapter.web.in;
 
+import com.ita.challenges.account.domain.model.Ticket;
 import com.ita.challenges.account.domain.port.out.TicketRepository;
 import com.ita.challenges.account.infrastructure.adapter.web.in.dto.TicketRequest;
 import com.ita.challenges.account.infrastructure.adapter.web.in.dto.TicketResponse;
@@ -7,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
@@ -41,12 +41,31 @@ public class TicketController {
 
         return ResponseEntity.ok(tickets);
     }
-  
+
     @PutMapping("/{id}")
     public ResponseEntity<TicketResponse> update(
             @PathVariable String id,
-            @RequestBody TicketRequest ticketRequest) {
-        throw new UnsupportedOperationException("Update endpoint not implemented yet for ID: " + id);
-    }
+            @RequestBody TicketRequest ticketRequest,
+            @AuthenticationPrincipal OAuth2User user) {
 
+        String currentUserId = user.getAttribute("login");
+
+        return ticketRepository.findById(id)
+                .map(existingTicket -> {
+                    Ticket updatedTicket = Ticket.restore(
+                            id,
+                            existingTicket.getUserId(),
+                            ticketRequest.title(),
+                            ticketRequest.description()
+                    );
+                    Ticket savedTicket = ticketRepository.updateTicket(updatedTicket);
+                    return ResponseEntity.ok(new TicketResponse(
+                            savedTicket.getId(),
+                            savedTicket.getUserId(),
+                            savedTicket.getTitle(),
+                            savedTicket.getDescription()
+                    ));
+                })
+                .orElse(ResponseEntity.notFound().build());
+    }
 }

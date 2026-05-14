@@ -11,4 +11,5 @@ public interface ChallengeRepository {
     Challenge update(Challenge challenge);
     Challenge save(Challenge challenge);
     void delete(ChallengeId id);
+    Challenge find(ChallengeId id);
 }

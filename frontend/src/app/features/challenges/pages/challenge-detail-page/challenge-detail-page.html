@@ -1,7 +1,14 @@
+<<<<<<< style/challenge-html-formatting
 @if (challenge) {
   <h1>{{ challenge.title }}</h1>
   <p>{{ challenge.description}}</p>
 
+=======
+@if (challenge()) {
+
+  <h1>{{ challenge()?.title }}</h1>
+  <p>{{ challenge()?.description}}</p>
+>>>>>>> develop
   <textarea
       id="challengeAnswer"
       rows="10"
