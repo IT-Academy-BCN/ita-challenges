@@ -50,7 +50,6 @@ public class TicketController {
         if (user == null || user.getAttribute("login") == null) {
             return ResponseEntity.status(401).build();
         }
-
         String currentUserId = user.getAttribute("login");
 
         return ticketRepository.findById(id)
