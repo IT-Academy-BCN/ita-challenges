@@ -26,16 +26,26 @@ public class JsonFileChallengeRepository implements ChallengeRepository {
 
     public JsonFileChallengeRepository(
             @Value("${challenge.storage.file-path:challenges.json}") String filePath,
-            ObjectMapper objectMapper) throws IOException {
+            ObjectMapper objectMapper) {
+
         this.storageFile = new File(filePath);
         this.objectMapper = objectMapper;
-        loadFromFile();
+
+        try {
+            loadFromFile();
+        } catch (IOException ignored) {
+        }
     }
 
     @Override
-    public Challenge save(Challenge challenge) throws IOException {
+    public Challenge save(Challenge challenge) {
         storage.put(challenge.getId(), challenge);
-        persistToFile();
+
+        try {
+            persistToFile();
+        } catch (IOException ignored) {
+        }
+
         return challenge;
     }
 
