@@ -106,7 +106,6 @@ class ChallengeControllerTest {
 
     @Test
     void should_return_200_with_challenge_when_finding_by_id() throws Exception {
-        // Given
         UUID uuid = UUID.randomUUID();
         ChallengeId challengeId = new ChallengeId(uuid);
 
@@ -117,13 +116,10 @@ class ChallengeControllerTest {
 
         when(repository.find(challengeId)).thenReturn(challenge);
 
-        // When & Then
         mockMvc.perform(get("/api/challenge/{id}", uuid.toString()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(uuid.toString()))
                 .andExpect(jsonPath("$.title").value("Test Title"))
                 .andExpect(jsonPath("$.description").value("Test Description"));
     }
-
-
 }
