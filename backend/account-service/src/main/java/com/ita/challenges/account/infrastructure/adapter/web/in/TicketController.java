@@ -50,6 +50,7 @@ public class TicketController {
         if (user == null || user.getAttribute("login") == null) {
             return ResponseEntity.status(401).build();
         }
+
         String currentUserId = user.getAttribute("login");
 
         return ticketRepository.findById(id)
@@ -64,13 +65,12 @@ public class TicketController {
                             ticketRequest.description()
                     );
                     Ticket savedTicket = ticketRepository.updateTicket(updatedTicket);
-                    TicketResponse ticketResponse = new TicketResponse(
+                    return ResponseEntity.ok(new TicketResponse(
                             savedTicket.getId(),
                             savedTicket.getUserId(),
                             savedTicket.getTitle(),
                             savedTicket.getDescription()
-                    );
-                    return ResponseEntity.ok(ticketResponse);
+                    ));
                 })
                 .orElse(ResponseEntity.notFound().build());
     }
