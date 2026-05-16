@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -13,6 +14,7 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 @WebMvcTest(AuthController.class)
 @AutoConfigureMockMvc
+@TestPropertySource(properties = "server.servlet.context-path=/api/account")
 class AuthControllerTest {
 
     @Autowired
@@ -21,6 +23,7 @@ class AuthControllerTest {
     @Test
     void authMe_whenAuthenticated_returnsUsernameAndAvatarUrl() throws Exception {
         mockMvc.perform(get("/api/account/auth/me")
+                        .contextPath("/api/account")
                         .with(oauth2Login()
                                 .attributes(attrs -> {
                                     attrs.put("login", "testuser");
@@ -33,7 +36,8 @@ class AuthControllerTest {
 
     @Test
     void authMe_whenNotAuthenticated_returnsAnonymous() throws Exception {
-        mockMvc.perform(get("/api/account/auth/me"))
+        mockMvc.perform(get("/api/account/auth/me")
+                        .contextPath("/api/account"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.username").value("anonymous"));
     }

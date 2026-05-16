@@ -20,12 +20,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 import java.util.UUID;
 
 @WebMvcTest(ChallengeController.class)
+@TestPropertySource(properties = "server.servlet.context-path=/api/challenge")
 class ChallengeControllerTest {
 
     @Autowired
@@ -46,7 +48,8 @@ class ChallengeControllerTest {
     void should_return_200_with_empty_list_when_requesting_all_challenges() throws Exception {
         when(repository.findAll()).thenReturn(List.of());
 
-        mockMvc.perform(get("/api/challenge"))
+        mockMvc.perform(get("/api/challenge/")
+                        .contextPath("/api/challenge"))
                 .andExpect(status().isOk())
                 .andExpect(content().json("[]"));
     }
@@ -56,7 +59,8 @@ class ChallengeControllerTest {
         Challenge saved = Challenge.create(request.title(), request.description());
         when(repository.save(any(Challenge.class))).thenReturn(saved);
 
-        mockMvc.perform(post("/api/challenge")
+        mockMvc.perform(post("/api/challenge/")
+                        .contextPath("/api/challenge")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
@@ -68,7 +72,8 @@ class ChallengeControllerTest {
     @Test  void should_return_204_when_delete_challenge_by_id() throws Exception {
         String challengeIdStr = UUID.randomUUID().toString();
 
-        mockMvc.perform(delete("/api/challenge/{id}", challengeIdStr))
+        mockMvc.perform(delete("/api/challenge/{id}", challengeIdStr)
+                        .contextPath("/api/challenge"))
                 .andExpect(status().isNoContent());
 
         verify(repository).delete(any(ChallengeId.class));
@@ -92,6 +97,7 @@ class ChallengeControllerTest {
                 .thenReturn(updatedChallenge);
 
         mockMvc.perform(put("/api/challenge/" + id)
+                        .contextPath("/api/challenge")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
@@ -113,7 +119,8 @@ class ChallengeControllerTest {
 
         when(repository.find(challengeId)).thenReturn(challenge);
 
-        mockMvc.perform(get("/api/challenge/{id}", uuid.toString()))
+        mockMvc.perform(get("/api/challenge/{id}", uuid.toString())
+                        .contextPath("/api/challenge"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(uuid.toString()))
                 .andExpect(jsonPath("$.title").value("Test Title"))

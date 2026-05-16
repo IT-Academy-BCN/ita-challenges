@@ -10,6 +10,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
@@ -26,6 +27,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(TicketController.class)
+@TestPropertySource(properties = "server.servlet.context-path=/api/account")
 class TicketControllerTest {
 
     @Autowired
@@ -43,6 +45,7 @@ class TicketControllerTest {
         when(ticketRepository.findAllByUserId("testuser")).thenReturn(List.of(ticket));
 
         mockMvc.perform(get("/api/account/tickets")
+                        .contextPath("/api/account")
                         .with(oauth2Login().attributes(attrs -> attrs.put("login", "testuser"))))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].userId").value("testuser"))
@@ -62,6 +65,7 @@ class TicketControllerTest {
         when(ticketRepository.updateTicket(any(Ticket.class))).thenAnswer(i -> i.getArguments()[0]);
 
         mockMvc.perform(put("/api/account/tickets/{id}", ticketId)
+                        .contextPath("/api/account")
                         .with(csrf())
                         .with(oauth2Login().attributes(attrs -> attrs.put("login", currentUserId)))
                         .contentType(MediaType.APPLICATION_JSON)
