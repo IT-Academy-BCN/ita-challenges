@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
-@RequestMapping("/api/challenge/submissions")
+@RequestMapping("/submissions")
 public class SubmissionController {
 
     private final SaveDraftSubmissionUseCase saveDraftSubmissionUseCase;

@@ -8,13 +8,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.net.URI;
-
 @RestController
-@RequestMapping("/api/account")
+@RequestMapping("/auth")
 public class AuthController {
 
-    @GetMapping("/auth/me")
+    @GetMapping("/me")
     public ResponseEntity<AuthUserDto> authMe(@AuthenticationPrincipal OAuth2User user) {
         return ResponseEntity.ok(mapUser(user));
     }
