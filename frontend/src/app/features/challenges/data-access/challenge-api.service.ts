@@ -54,6 +54,6 @@ export class ChallengeApiService {
   }
 
   postSolution(payload: IChallengeSubmission): Observable<void> {
-    return this.http.post<void>(`${this.apiUrl}/submissions/finalize`, payload);
+    return this.http.post<void>(`${this.apiUrl}/submissions`, payload);
   }
 }
