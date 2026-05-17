@@ -1,28 +1,41 @@
 package com.itachallenges.challengeservice.submission.infrastructure.adapter.in.web.controller;
 
+import com.itachallenges.challengeservice.catalog.domain.valueobject.ChallengeId;
+import com.itachallenges.challengeservice.shared.domain.valueobject.UserId;
+import com.itachallenges.challengeservice.submission.domain.Submission;
 import com.itachallenges.challengeservice.submission.domain.port.in.FinalizeSubmissionUseCase;
 import com.itachallenges.challengeservice.submission.domain.port.in.MarkIncompleteUseCase;
-import com.itachallenges.challengeservice.submission.domain.port.in.SaveDraftSubmissionUseCase;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.itachallenges.challengeservice.submission.domain.port.out.SubmissionRepository;
+import com.itachallenges.challengeservice.submission.domain.valueobject.SubmissionId;
+import com.itachallenges.challengeservice.submission.infrastructure.adapter.in.web.dto.SaveDraftSubmissionRequest;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/submissions")
 public class SubmissionController {
 
-    private final FinalizeSubmissionUseCase finalizeSubmissionUseCase;
-    private final MarkIncompleteUseCase markIncompleteUseCase;
-    private final SaveDraftSubmissionUseCase saveDraftSubmissionUseCase;
+    private final SubmissionRepository submissionRepository;
 
-    public SubmissionController(FinalizeSubmissionUseCase finalizeSubmissionUseCase,
-                                MarkIncompleteUseCase markIncompleteUseCase,
-                                SaveDraftSubmissionUseCase saveDraftSubmissionUseCase) {
-        this.finalizeSubmissionUseCase = finalizeSubmissionUseCase;
-        this.markIncompleteUseCase = markIncompleteUseCase;
-        this.saveDraftSubmissionUseCase = saveDraftSubmissionUseCase;
+    public SubmissionController(SubmissionRepository submissionRepository) {
+        this.submissionRepository = submissionRepository;
     }
 
-    // TODO: POST /draft       -> save draft submission
+    @PostMapping("/draft")
+    public ResponseEntity<Void> saveDraft(
+            @RequestParam String userId,
+            @RequestParam String challengeId,
+            @RequestBody SaveDraftSubmissionRequest request) {
+
+        Submission submission = Submission.createInProgress(
+                SubmissionId.generate(),
+                ChallengeId.of(challengeId),
+                UserId.of(userId),
+                request.code()
+        );
+        submissionRepository.save(submission);
+        return ResponseEntity.status(201).build();
+    }
     // TODO: POST /finalize    -> finalize submission
     // TODO: POST /incomplete  -> mark submission as incomplete
 }
