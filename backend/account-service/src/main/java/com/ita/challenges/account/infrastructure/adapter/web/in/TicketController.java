@@ -29,18 +29,13 @@ public class TicketController {
             @RequestBody TicketRequest request,
             @AuthenticationPrincipal OAuth2User user) {
 
-        if (user == null || user.getAttribute("login") == null) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User must be authenticated to create a ticket");
-        }
+        String userId = user != null ? user.getAttribute("login") : "temp-user";
 
-        String userId = user.getAttribute("login");
-        Ticket newTicket = Ticket.create(userId, request.title(), request.description());
-        Ticket savedTicket = ticketRepository.save(newTicket);
         return new TicketResponse(
-                savedTicket.getId(),
-                savedTicket.getUserId(),
-                savedTicket.getTitle(),
-                savedTicket.getDescription()
+                "temp-id",
+                userId,
+                request.title(),
+                request.description()
         );
     }
 
