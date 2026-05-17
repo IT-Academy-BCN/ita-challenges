@@ -42,33 +42,6 @@ public class TicketController {
         return ResponseEntity.ok(tickets);
     }
 
-    @PostMapping
-    public ResponseEntity<TicketResponse> create(
-            @RequestBody TicketRequest ticketRequest,
-            @AuthenticationPrincipal OAuth2User user) {
-
-        if (user == null || user.getAttribute("login") == null) {
-            return ResponseEntity.status(401).build();
-        }
-
-        String currentUserId = user.getAttribute("login");
-        Ticket newTicket = Ticket.create(
-                currentUserId,
-                ticketRequest.title(),
-                ticketRequest.description()
-        );
-
-        Ticket savedTicket = ticketRepository.save(newTicket);
-        TicketResponse response = new TicketResponse(
-                savedTicket.getId(),
-                savedTicket.getUserId(),
-                savedTicket.getTitle(),
-                savedTicket.getDescription()
-        );
-
-        return ResponseEntity.status(201).body(response);
-    }
-
     @PutMapping("/{id}")
     public ResponseEntity<TicketResponse> update(
             @PathVariable String id,
