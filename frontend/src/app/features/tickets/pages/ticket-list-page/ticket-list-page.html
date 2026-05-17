@@ -1,0 +1,10 @@
+<h1>Tiquets</h1>
+
+<ul>
+    @for (ticket of tickets(); track ticket.id) {
+        <li>
+            <h3>{{ ticket.title }}</h3>
+            <p>{{ ticket.description }}</p>
+        </li>
+    }
+</ul>

@@ -1,0 +1,13 @@
+
+@if (challenge()) {
+
+  <h1>{{ challenge()?.title }}</h1>
+  <p>{{ challenge()?.description}}</p>
+  <textarea
+      id="challengeAnswer"
+      rows="10"
+      placeholder="Escriu aquí la resposta del repte..."
+  ></textarea>
+
+  <button>Enviar</button>
+}

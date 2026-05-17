@@ -29,4 +29,8 @@ export class AuthService {
   getUser(): AuthUser | null {
     return this.user();
   }
+
+  logout(): void {
+    this.user.set(null);
+  }
 }

@@ -3,7 +3,7 @@ import { ChallengesListPage } from './pages/challenges-list-page/challenges-list
 import { EditChallengePage } from './pages/edit-challenge-page/edit-challenge-page';
 import { CreateChallengePage } from './pages/create-challenge-page/create-challenge-page';
 import { DeleteChallengePage } from './pages/delete-challenge-page/delete-challenge-page';
-import { ChallengeDetailPage } from './pages/challenge-detail-page.component';
+import { ChallengeDetailPage } from './pages/challenge-detail-page/challenge-detail-page';
 
 
 export const CHALLENGES_ROUTES: Routes = [
