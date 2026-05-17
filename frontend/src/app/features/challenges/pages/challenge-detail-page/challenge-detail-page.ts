@@ -1,7 +1,6 @@
-import { Component, inject, signal } from '@angular/core';
-import { ChallengeService } from '../../services/challenge.service';
-import { ActivatedRoute } from '@angular/router';
+import { Component } from '@angular/core';
 import { IChallenge } from '../../models/ichallenge.interface';
+import { CHALLENGES_MOCK } from '../../models/challenges.mock';
 
 @Component({
   selector: 'app-challenge-detail-page',
@@ -10,16 +9,7 @@ import { IChallenge } from '../../models/ichallenge.interface';
   styleUrl: './challenge-detail-page.css',
 })
 export class ChallengeDetailPage {
-  private readonly challengesService = inject(ChallengeService);
-  private readonly route = inject(ActivatedRoute);
 
-  challenge = signal<IChallenge | undefined>(undefined);
+  challenge: IChallenge = CHALLENGES_MOCK[0];
 
-  ngOnInit() {
-    const id = this.route.snapshot.paramMap.get('id')!;
-
-    this.challengesService.getById(id).subscribe((selectedChallenge) => {
-      this.challenge.set(selectedChallenge);
-    });
-  }
 }
