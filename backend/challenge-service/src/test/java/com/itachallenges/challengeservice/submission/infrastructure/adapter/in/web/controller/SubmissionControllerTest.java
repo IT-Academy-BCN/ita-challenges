@@ -43,13 +43,13 @@ class SubmissionControllerTest {
 
     @Test
     void shouldSaveDraftSubmission() {
-        SaveDraftSubmissionRequest request = new SaveDraftSubmissionRequest("public class Solution {}");
-
-        ResponseEntity<Void> response = controller.saveDraft(
+        SaveDraftSubmissionRequest request = new SaveDraftSubmissionRequest(
                 "550e8400-e29b-41d4-a716-446655440000",
                 "660e8400-e29b-41d4-a716-446655440000",
-                request
+                "public class Solution {}"
         );
+
+        ResponseEntity<Void> response = controller.saveDraft(request);
 
         assertThat(response.getStatusCode().value()).isEqualTo(201);
     }
@@ -57,13 +57,13 @@ class SubmissionControllerTest {
 
     @Test
     void shouldSaveDraftWithInProgressStatus() {
-        SaveDraftSubmissionRequest request = new SaveDraftSubmissionRequest("public class Solution {}");
-
-        controller.saveDraft(
+        SaveDraftSubmissionRequest request = new SaveDraftSubmissionRequest(
                 "550e8400-e29b-41d4-a716-446655440000",
                 "660e8400-e29b-41d4-a716-446655440000",
-                request
+                "public class Solution {}"
         );
+
+        controller.saveDraft(request);
 
         verify(repository).save(argThat(submission ->
                 submission.getStatus() == SubmissionStatus.IN_PROGRESS

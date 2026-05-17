@@ -22,15 +22,13 @@ public class SubmissionController {
     }
 
     @PostMapping("/draft")
-    public ResponseEntity<Void> saveDraft(
-            @RequestParam String userId,
-            @RequestParam String challengeId,
-            @RequestBody SaveDraftSubmissionRequest request) {
+    public ResponseEntity<Void> saveDraft(@RequestBody SaveDraftSubmissionRequest request)
+    {
 
         Submission submission = Submission.createInProgress(
                 SubmissionId.generate(),
-                ChallengeId.of(challengeId),
-                UserId.of(userId),
+                ChallengeId.of(request.challengeId()),
+                UserId.of(request.userId()),
                 request.code()
         );
         submissionRepository.save(submission);
