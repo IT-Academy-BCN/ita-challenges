@@ -1,14 +1,14 @@
 import { Routes } from '@angular/router';
-import { TicketsPage } from './pages/tickets-page.component';
+import { TicketListPage } from './pages/ticket-list-page/ticket-list-page';
 import { CreateTicketPage } from './pages/create-ticket-page/create-ticket-page';
 
 export const TICKETS_ROUTES: Routes = [
   {
     path: '',
-    component: TicketsPage,
+    component: TicketListPage,
   },
   {
     path: 'create-ticket',
     component: CreateTicketPage,
-  },  
+  },
 ];
