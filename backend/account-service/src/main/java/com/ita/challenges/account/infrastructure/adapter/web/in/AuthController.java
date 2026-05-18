@@ -7,11 +7,13 @@ import com.ita.challenges.account.infrastructure.adapter.web.in.dto.UserRequest;
 import com.ita.challenges.account.infrastructure.adapter.web.in.dto.UserResponse;
 import com.ita.challenges.account.infrastructure.adapter.web.out.dto.GitHubUserResponse;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestClient;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
 
@@ -32,6 +34,9 @@ public class AuthController {
         GitHubUserResponse gitHubUserResponse = restClient.get()
                 .uri("https://api.github.com/users/{username}", request.username())
                 .retrieve()
+                .onStatus(HttpStatusCode::is4xxClientError, (req, res) -> {
+                    throw new ResponseStatusException(HttpStatus.NOT_FOUND, "GitHub user not found");
+                })
                 .body(GitHubUserResponse.class);
 
         Optional<User> userOptional = repository.findByUsername(gitHubUserResponse.id());
