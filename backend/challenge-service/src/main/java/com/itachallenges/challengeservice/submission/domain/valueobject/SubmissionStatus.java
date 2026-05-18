@@ -1,5 +1,9 @@
 package com.itachallenges.challengeservice.submission.domain.valueobject;
 
 public enum SubmissionStatus {
-    IN_PROGRESS, FINAL, INCOMPLETE
+    NOT_STARTED,
+    IN_PROGRESS,
+    SUBMITTED,
+    APPROVED,
+    FAILED_REVIEW
 }
