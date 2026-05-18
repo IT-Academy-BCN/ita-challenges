@@ -22,6 +22,20 @@ class InMemoryTicketRepositoryTest {
     }
 
     @Test
+    void should_save_ticket_successfully() {
+        Ticket newTicket = Ticket.create("user-999", "New Ticket", "Probe Description");
+
+        Ticket savedTicket = repository.save(newTicket);
+
+        assertNotNull(savedTicket);
+        assertEquals(newTicket.getId(), savedTicket.getId());
+        assertEquals("user-999", savedTicket.getUserId());
+
+        Optional<Ticket> found = repository.findById(savedTicket.getId());
+        assertTrue(found.isPresent());
+    }
+
+    @Test
     void should_update_ticket_data_successfully() {
         Ticket original = Ticket.create("user-1", "Old Title", "Old Desc");
         repository.save(original);
