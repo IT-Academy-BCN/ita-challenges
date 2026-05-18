@@ -3,8 +3,6 @@ package com.itachallenges.challengeservice.submission.infrastructure.adapter.in.
 import com.itachallenges.challengeservice.catalog.domain.valueobject.ChallengeId;
 import com.itachallenges.challengeservice.shared.domain.valueobject.UserId;
 import com.itachallenges.challengeservice.submission.domain.Submission;
-import com.itachallenges.challengeservice.submission.domain.port.in.FinalizeSubmissionUseCase;
-import com.itachallenges.challengeservice.submission.domain.port.in.MarkIncompleteUseCase;
 import com.itachallenges.challengeservice.submission.domain.port.out.SubmissionRepository;
 import com.itachallenges.challengeservice.submission.domain.valueobject.SubmissionId;
 import com.itachallenges.challengeservice.submission.infrastructure.adapter.in.web.dto.SaveDraftSubmissionRequest;
