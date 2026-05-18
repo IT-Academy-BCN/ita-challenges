@@ -4,6 +4,6 @@ public enum SubmissionStatus {
     NOT_STARTED,
     IN_PROGRESS,
     SUBMITTED,
-    APPROVED ,
+    APPROVED,
     FAILED_REVIEW
 }
