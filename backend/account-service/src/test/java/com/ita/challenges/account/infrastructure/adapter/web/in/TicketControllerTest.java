@@ -71,4 +71,37 @@ class TicketControllerTest {
                 .andExpect(jsonPath("$.title").value("New Title"))
                 .andExpect(jsonPath("$.userId").value(currentUserId));
     }
+    @Test
+    void should_return_404_when_updating_non_existing_ticket() throws Exception {
+        String ticketId = "non-existent";
+        TicketRequest updateRequest = new TicketRequest("Title", "Desc");
+
+        when(ticketRepository.findById(ticketId)).thenReturn(Optional.empty());
+
+        mockMvc.perform(put("/api/account/tickets/{id}", ticketId)
+                        .with(csrf())
+                        .with(oauth2Login().attributes(attrs -> attrs.put("login", "any-user")))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(updateRequest)))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void should_return_403_when_user_is_not_the_owner() throws Exception {
+        String ticketId = "ticket-123";
+        String ownerId = "user-1";
+        String hackerId = "hacker-99";
+
+        Ticket existingTicket = Ticket.restore(ticketId, ownerId, "Title", "Desc");
+        TicketRequest updateRequest = new TicketRequest("New Title", "New Desc");
+
+        when(ticketRepository.findById(ticketId)).thenReturn(Optional.of(existingTicket));
+
+        mockMvc.perform(put("/api/account/tickets/{id}", ticketId)
+                        .with(csrf())
+                        .with(oauth2Login().attributes(attrs -> attrs.put("login", hackerId)))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(updateRequest)))
+                .andExpect(status().isForbidden());
+    }
 }

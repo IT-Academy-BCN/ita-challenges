@@ -12,14 +12,14 @@ describe('TicketApiService', () => {
   let httpMock: HttpTestingController;
 
   const mockTicket = {
-    userId: 'u-1',
     title: 'Issue title',
     description: 'Issue description',
   };
 
-  const mockTicketResponse = { id: '1', ...mockTicket}
+  const mockTicketResponse = { id: '1', userId: 'u-1', ...mockTicket };
 
-  const API_URL = '/api/accounts/tickets';
+
+  const API_URL = '/api/account/tickets';
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -104,6 +104,6 @@ describe('TicketApiService', () => {
       statusText: 'Server Error',
     });
 
-    expect(result).toEqual({ id: '1', ...mockTicket });
+    expect(result).toEqual({ id: '1', userId: 'u-1', ...mockTicket });
   });
 });
