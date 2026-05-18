@@ -11,14 +11,15 @@
 }
 
 @if (challenges().length > 0) {
-<ul>
-    @for (challenge of challenges(); track $index) {
-    <li>
-        <h2>{{ challenge.title }}</h2>
-        <p>{{ challenge.description }}</p>
-    </li>
-    }
-</ul>
+    <ul>
+        @for (challenge of challenges(); track $index) {
+        <li>
+            <h2>{{ challenge.title }}</h2>
+            <p>{{ challenge.description }}</p>
+            <button [routerLink]="['/challenges', challenge.id]">Accedir al repte</button>
+        </li>
+        }
+    </ul>
 } @else {
-<p>No hi ha reptes disponibles en aquest moment.</p>
+    <p>No hi ha reptes disponibles en aquest moment.</p>
 }
