@@ -24,6 +24,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.mockito.Mockito.verify;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 @WebMvcTest(TicketController.class)
 class TicketControllerTest {
@@ -36,6 +38,23 @@ class TicketControllerTest {
 
     @MockBean
     private TicketRepository ticketRepository;
+
+    @Test
+    void should_create_ticket_and_return_201_created() throws Exception {
+        TicketRequest request = new TicketRequest("Test Title", "Test description");
+        Ticket mockTicket = Ticket.create("testuser", request.title(), request.description());
+        when(ticketRepository.save(any(Ticket.class))).thenReturn(mockTicket);
+
+        mockMvc.perform(post("/api/account/tickets")
+                        .with(csrf())
+                        .with(oauth2Login().attributes(attrs -> attrs.put("login", "testuser")))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.title").value("Test Title"))
+                .andExpect(jsonPath("$.userId").value("testuser"));
+        verify(ticketRepository).save(any(Ticket.class));
+    }
 
     @Test
     void should_return_200_with_ticket_list_when_requesting_ticket_list() throws Exception {

@@ -9,6 +9,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/api/account/tickets")
@@ -19,6 +21,22 @@ public class TicketController {
 
     public TicketController(TicketRepository ticketRepository) {
         this.ticketRepository = ticketRepository;
+    }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public TicketResponse createTicket(
+            @RequestBody TicketRequest request,
+            @AuthenticationPrincipal OAuth2User user) {
+
+        String userId = user != null ? user.getAttribute("login") : "temp-user";
+
+        return new TicketResponse(
+                "temp-id",
+                userId,
+                request.title(),
+                request.description()
+        );
     }
 
     @GetMapping
