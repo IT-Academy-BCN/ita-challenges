@@ -6,4 +6,4 @@ public enum SubmissionStatus {
     SUBMITTED,
     APPROVED,
     FAILED_REVIEW
-    }
+}

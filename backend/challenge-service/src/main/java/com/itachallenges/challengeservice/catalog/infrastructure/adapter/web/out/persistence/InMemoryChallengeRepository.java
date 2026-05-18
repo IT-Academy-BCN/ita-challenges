@@ -39,6 +39,15 @@ public class InMemoryChallengeRepository implements ChallengeRepository {
     }
 
     @Override
+    public Challenge find(ChallengeId id) {
+        Challenge challenge = storage.get(id);
+        if (challenge == null) {
+            throw new RuntimeException("Challenge not found with id: " + id);
+        }
+        return challenge;
+    }
+
+    @Override
     public List<Challenge> findAll() {
         return new ArrayList<>(storage.values());
     }
