@@ -8,22 +8,16 @@ import lombok.Getter;
 
 import java.time.Instant;
 
-
+@Getter
 public class Submission {
 
-    @Getter
     private SubmissionId id;
-    @Getter
     private ChallengeId challengeId;
-    @Getter
     private UserId userId;
-    @Getter
     private SubmissionStatus status;
-    @Getter
     private String code;
     private Instant createdAt;
     private Instant updatedAt;
-
 
     private Submission() {}
 
