@@ -46,6 +46,17 @@ public class ChallengeController {
     }
 
 
+    @GetMapping("/{id}")
+    public ResponseEntity<ChallengeResponse> find(@PathVariable String id){
+            Challenge challenge = repository.find(ChallengeId.of(id));
+
+            ChallengeResponse challengeResponse =
+                    new ChallengeResponse(challenge.getId().toString(),
+                            challenge.getTitle().toString(),
+                            challenge.getDescription().toString());
+            return ResponseEntity.ok(challengeResponse);
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable String id) {
         repository.delete(ChallengeId.of(id));

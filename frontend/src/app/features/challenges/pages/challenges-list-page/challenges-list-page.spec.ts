@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { of } from 'rxjs';
 import { By } from '@angular/platform-browser';
-import { provideRouter } from '@angular/router';
+import { provideRouter, RouterLink } from '@angular/router';
 
 import { ChallengesListPage } from './challenges-list-page';
 import { ChallengeService } from '../../services/challenge.service';
@@ -28,7 +28,7 @@ describe('ChallengesListPage', () => {
 
     fixture = TestBed.createComponent(ChallengesListPage);
     component = fixture.componentInstance;
-    fixture.detectChanges(); 
+    fixture.detectChanges();
   });
 
   it('should create', () => {
@@ -64,6 +64,11 @@ describe('ChallengesListPage', () => {
     fixture.detectChanges();
     const button = fixture.debugElement.query(By.directive(CreateButtonComponent));
     expect(button).toBeTruthy();
+  });
+
+  it('should have routerLink buttons for each challenge', () => {
+    const links = fixture.debugElement.queryAll(By.directive(RouterLink));
+    expect(links.length).toBeGreaterThan(0);
   });
 
   it('should update isMentor when onRoleChange is called', () => {
