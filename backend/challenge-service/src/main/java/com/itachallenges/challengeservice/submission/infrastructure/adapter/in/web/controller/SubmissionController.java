@@ -32,6 +32,5 @@ public class SubmissionController {
         submissionRepository.save(submission);
         return ResponseEntity.status(201).build();
     }
-    // TODO: POST /finalize    -> finalize submission
-    // TODO: POST /incomplete  -> mark submission as incomplete
+    
 }
