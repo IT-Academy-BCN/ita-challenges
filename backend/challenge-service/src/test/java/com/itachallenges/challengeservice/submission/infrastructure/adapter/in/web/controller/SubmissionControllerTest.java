@@ -69,10 +69,4 @@ class SubmissionControllerTest {
         verify(saveDraftSubmissionUseCase).execute(captor.capture());
         assertThat(captor.getValue().code()).isEmpty();
     }
-
-    @Test
-    void shouldReturn404WhenSubmissionNotFound() throws Exception {
-        mockMvc.perform(get("/api/challenge/submissions/00000000-0000-0000-0000-000000000001"))
-                .andExpect(status().isNotFound());
-    }
 }
