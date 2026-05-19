@@ -12,19 +12,22 @@ import org.springframework.stereotype.Service;
 @Service
 public class SaveDraftSubmissionUseCaseHandler implements SaveDraftSubmissionUseCase {
 
-    private final SubmissionRepository submissionRepository;
+    private final SubmissionRepository repository;
 
-    public SaveDraftSubmissionUseCaseHandler(SubmissionRepository submissionRepository) {
-        this.submissionRepository = submissionRepository;
+    public SaveDraftSubmissionUseCaseHandler(SubmissionRepository repository) {
+        this.repository = repository;
     }
 
     @Override
     public void execute(SaveDraftSubmissionCommand command) {
-        UserId userId = UserId.of(command.userId());
-        ChallengeId challengeId = ChallengeId.of(command.challengeId());
 
-        Submission submission = Submission.createSubmitted(SubmissionId.generate(), challengeId, userId, command.code());
+        Submission submission = Submission.createInProgress(
+                SubmissionId.generate(),
+                ChallengeId.of(command.challengeId()),
+                UserId.of(command.userId()),
+                command.code()
+        );
 
-        submissionRepository.save(submission);
+        repository.save(submission);
     }
 }
