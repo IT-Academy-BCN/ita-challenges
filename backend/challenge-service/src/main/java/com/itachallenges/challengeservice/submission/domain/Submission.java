@@ -21,17 +21,26 @@ public class Submission {
 
     private final List<Object> domainEvents = new ArrayList<>();
 
-    private Submission() {}
+    private Submission() {
+    }
+
+    public static Submission createSubmitted(SubmissionId id, ChallengeId challengeId, UserId userId, String code) {
+        Submission s = new Submission();
+        s.id = id;
+        s.challengeId = challengeId;
+        s.userId = userId;
+        s.code = code;
+        s.status = SubmissionStatus.SUBMITTED;
+        s.createdAt = Instant.now();
+        s.updatedAt = Instant.now();
+        return s;
+    }
 
     public static Submission createInProgress(SubmissionId id, ChallengeId challengeId, UserId userId, String code) {
         // TODO: create and return a new Submission with IN_PROGRESS status
         return null;
     }
 
-    public void finalize(String code) {
-        // TODO: transition status to FINAL and emit SubmissionFinished event
-        // TODO: guard against invalid transitions
-    }
 
     public void markIncomplete() {
         // TODO: transition status to INCOMPLETE and emit SubmissionMarkedIncomplete event
@@ -39,13 +48,26 @@ public class Submission {
     }
 
     public List<Object> pullDomainEvents() {
-        // TODO: return accumulated domain events and clear the list
         return null;
     }
 
-    public SubmissionId getId() { return id; }
-    public ChallengeId getChallengeId() { return challengeId; }
-    public UserId getUserId() { return userId; }
-    public SubmissionStatus getStatus() { return status; }
-    public String getCode() { return code; }
+    public SubmissionId getId() {
+        return id;
+    }
+
+    public ChallengeId getChallengeId() {
+        return challengeId;
+    }
+
+    public UserId getUserId() {
+        return userId;
+    }
+
+    public SubmissionStatus getStatus() {
+        return status;
+    }
+
+    public String getCode() {
+        return code;
+    }
 }
