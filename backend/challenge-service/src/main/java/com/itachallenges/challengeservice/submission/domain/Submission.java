@@ -4,11 +4,11 @@ import com.itachallenges.challengeservice.catalog.domain.valueobject.ChallengeId
 import com.itachallenges.challengeservice.shared.domain.valueobject.UserId;
 import com.itachallenges.challengeservice.submission.domain.valueobject.SubmissionId;
 import com.itachallenges.challengeservice.submission.domain.valueobject.SubmissionStatus;
+import lombok.Getter;
 
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
 
+@Getter
 public class Submission {
 
     private SubmissionId id;
@@ -19,55 +19,18 @@ public class Submission {
     private Instant createdAt;
     private Instant updatedAt;
 
-    private final List<Object> domainEvents = new ArrayList<>();
-
-    private Submission() {
-    }
-
-    public static Submission createSubmitted(SubmissionId id, ChallengeId challengeId, UserId userId, String code) {
-        Submission s = new Submission();
-        s.id = id;
-        s.challengeId = challengeId;
-        s.userId = userId;
-        s.code = code;
-        s.status = SubmissionStatus.SUBMITTED;
-        s.createdAt = Instant.now();
-        s.updatedAt = Instant.now();
-        return s;
-    }
+    private Submission() {}
 
     public static Submission createInProgress(SubmissionId id, ChallengeId challengeId, UserId userId, String code) {
-        // TODO: create and return a new Submission with IN_PROGRESS status
-        return null;
+        Submission submission = new Submission();
+        submission.id = id;
+        submission.challengeId = challengeId;
+        submission.userId = userId;
+        submission.code = code;
+        submission.status = SubmissionStatus.IN_PROGRESS;
+        submission.createdAt = Instant.now();
+        submission.updatedAt = Instant.now();
+        return submission;
     }
 
-
-    public void markIncomplete() {
-        // TODO: transition status to INCOMPLETE and emit SubmissionMarkedIncomplete event
-        // TODO: guard against invalid transitions
-    }
-
-    public List<Object> pullDomainEvents() {
-        return null;
-    }
-
-    public SubmissionId getId() {
-        return id;
-    }
-
-    public ChallengeId getChallengeId() {
-        return challengeId;
-    }
-
-    public UserId getUserId() {
-        return userId;
-    }
-
-    public SubmissionStatus getStatus() {
-        return status;
-    }
-
-    public String getCode() {
-        return code;
-    }
 }
