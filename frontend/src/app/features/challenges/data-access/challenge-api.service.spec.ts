@@ -5,6 +5,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { IChallengeRequest } from '../models/ichallenge-request.interface';
 import { IChallenge } from '../models/ichallenge.interface';
 import { CHALLENGES_MOCK } from '../models/challenges.mock';
+import { IChallengeSubmission } from '../models/ichallenge-submission.interface';
 
 describe('ChallengeApiService', () => {
   let service: ChallengeApiService;
@@ -140,4 +141,21 @@ describe('ChallengeApiService', () => {
       expect(responseResult).toBeUndefined();
     });
   });
+
+  describe('postSolution', () => {
+  it('should call POST with correct URL and payload', () => {
+    const payload: IChallengeSubmission = {
+      challengeId: 'abc-123',
+      userId: 'abc-345',
+      code: 'code'
+    };
+
+    service.postSolution(payload).subscribe();
+
+    const req = httpTestingController.expectOne(`${apiUrl}/submissions/finalize`);
+    expect(req.request.method).toBe('POST');
+    expect(req.request.body).toEqual(payload);
+    req.flush(null);
+  });
+});
 });
