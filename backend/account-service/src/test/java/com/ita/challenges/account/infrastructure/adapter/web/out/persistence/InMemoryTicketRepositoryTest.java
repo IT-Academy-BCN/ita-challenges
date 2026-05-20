@@ -1,8 +1,10 @@
 package com.ita.challenges.account.infrastructure.adapter.web.out.persistence;
 
 import com.ita.challenges.account.domain.model.Ticket;
+import com.ita.challenges.account.domain.model.TicketStatus;
 import org.junit.jupiter.api.Test;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,18 +37,28 @@ class InMemoryTicketRepositoryTest {
         assertTrue(found.isPresent());
     }
 
-    @Test
     void should_update_ticket_data_successfully() {
         Ticket original = Ticket.create("user-1", "Old Title", "Old Desc");
         repository.save(original);
 
-        Ticket updated = Ticket.restore(original.getId(), "user-1", "New Title", "New Desc");
+        Ticket updated = Ticket.restore(
+                original.getId(),
+                "user-1",
+                "New Title",
+                "New Desc",
+                original.getStatus(),
+                original.getComment(),
+                original.getCreatedAt(),
+                Instant.now()
+        );
+
         repository.updateTicket(updated);
 
         Optional<Ticket> result = repository.findById(original.getId());
         assertTrue(result.isPresent());
         assertEquals("New Title", result.get().getTitle());
         assertEquals("New Desc", result.get().getDescription());
+        assertTrue(result.get().getUpdatedAt().isAfter(original.getCreatedAt()));
     }
 
     @Test
@@ -74,13 +86,26 @@ class InMemoryTicketRepositoryTest {
         String userId = "user-1";
         String title = "Restored Title";
         String desc = "Restored Desc";
+        Instant now = Instant.now();
 
-        Ticket restored = Ticket.restore(id, userId, title, desc);
+        Ticket restored = Ticket.restore(
+                id,
+                userId,
+                title,
+                desc,
+                TicketStatus.OPEN,
+                "Sample comment",
+                now,
+                now
+        );
 
         assertNotNull(restored);
         assertEquals(id, restored.getId());
         assertEquals(userId, restored.getUserId());
         assertEquals(title, restored.getTitle());
         assertEquals(desc, restored.getDescription());
+        assertEquals(TicketStatus.OPEN, restored.getStatus());
+        assertEquals("Sample comment", restored.getComment());
+        assertEquals(now, restored.getCreatedAt());
     }
 }

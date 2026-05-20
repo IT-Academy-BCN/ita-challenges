@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.Instant;
 import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
@@ -77,10 +79,14 @@ public class TicketController {
                         return ResponseEntity.status(403).<TicketResponse>build();
                     }
                     Ticket updatedTicket = Ticket.restore(
-                            id,
+                            existingTicket.getId(),
                             existingTicket.getUserId(),
                             ticketRequest.title(),
-                            ticketRequest.description()
+                            ticketRequest.description(),
+                            existingTicket.getStatus(),
+                            existingTicket.getComment(),
+                            existingTicket.getCreatedAt(),
+                            Instant.now()
                     );
                     Ticket savedTicket = ticketRepository.updateTicket(updatedTicket);
                     return ResponseEntity.ok(new TicketResponse(
