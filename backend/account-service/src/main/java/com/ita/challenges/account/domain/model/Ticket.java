@@ -40,11 +40,6 @@ public class Ticket {
         );
     }
 
-
-    /**
-     * @deprecated Use {@link #restore(String, String, String, String, TicketStatus, String, Instant, Instant)} instead.
-     * This method is kept for backward compatibility with existing controllers and tests.
-     */
     @Deprecated
     public static Ticket restore(String id, String userId, String title, String description) {
         return new Ticket(
