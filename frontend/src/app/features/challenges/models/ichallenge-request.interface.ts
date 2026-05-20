@@ -3,9 +3,9 @@ import { ChallengeLanguage } from "./challenge-language.type";
 
 
 export interface IChallengeRequest {
-  title: string;
-  description: string;
-  solution?: string;
-  language?: ChallengeLanguage;
-  difficulty?: ChallengeDifficulty;
+    title: string;
+    description: string;
+    solution?: string;
+    language?: ChallengeLanguage;
+    difficulty?: ChallengeDifficulty;
 }
