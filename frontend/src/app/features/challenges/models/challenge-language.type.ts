@@ -1,0 +1,1 @@
+export type ChallengeLanguage = 'java' | 'php' | 'javascript' | 'typescript' | 'python' | 'sql';
