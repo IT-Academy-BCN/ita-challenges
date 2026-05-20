@@ -1,38 +1,78 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { ChallengeDetailPage } from './challenge-detail-page';
+import { ChallengeService } from '../../services/challenge.service';
+import { ActivatedRoute } from '@angular/router';
+import { of } from 'rxjs';
+import { ChallengeApiService } from '../../data-access/challenge-api.service';
+import { AuthService } from '../../../auth/data-access/auth-service';
 
 describe('ChallengeDetailPage', () => {
   let component: ChallengeDetailPage;
   let fixture: ComponentFixture<ChallengeDetailPage>;
+  let mockChallengeService: any;
+  let mockActivatedRoute: any;
+  let mockChallengeApiService: any;
+  let mockAuthService: any;
+
+  const mockChallenge = {
+    id: 'test-123',
+    title: 'Test Challenge',
+    description: 'Test Description',
+  };
 
   beforeEach(async () => {
+    mockChallengeService = { getById: vi.fn().mockReturnValue(of(mockChallenge)) };
+    mockActivatedRoute = { snapshot: { paramMap: { get: vi.fn().mockReturnValue('test-123') } } };
+    mockChallengeApiService = {postSolution: vi.fn().mockReturnValue(of({}))};
+    mockAuthService = {user: vi.fn().mockReturnValue({ id: 'user-456' })};
+
     await TestBed.configureTestingModule({
-      imports: [ChallengeDetailPage]
-    })
-    .compileComponents();
+      imports: [ChallengeDetailPage],
+      providers: [
+        { provide: ChallengeService, useValue: mockChallengeService },
+        { provide: ActivatedRoute, useValue: mockActivatedRoute },
+        { provide: ChallengeApiService, useValue: mockChallengeApiService },
+        { provide: AuthService, useValue: mockAuthService },
+      ],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(ChallengeDetailPage);
     component = fixture.componentInstance;
-    await fixture.whenStable();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should render challenge data from mock', () => {
-    const mockChallenge = {
-      id: '1',
-      title: 'primer',
-      description: 'descripció 1',
-    };
-
-    component.challenge = mockChallenge;
+  it('should load challenge on init', async () => {
     fixture.detectChanges();
-    
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain(mockChallenge.title);
-    expect(compiled.querySelector('p')?.textContent).toContain(mockChallenge.description);
+    await fixture.whenStable();
+    expect(component.challenge()).toEqual(mockChallenge);
+  });
+
+  it('should keep challenge undefined when not found', async () => {
+    mockChallengeService.getById.mockReturnValue(of(undefined));
+    fixture.detectChanges();
+    await fixture.whenStable();
+    expect(component.challenge()).toBeUndefined();
+  });
+
+  it('should keep challenge undefined when not found', async () => {
+    mockChallengeService.getById.mockReturnValue(of(undefined));
+    fixture.detectChanges();
+    await fixture.whenStable();
+    expect(component.challenge()).toBeUndefined();
+  });
+
+  it('should call postSolution with form data and challengeId', () => {
+    fixture.detectChanges();
+    component.codeSolutionForm.patchValue({ code: 'my-code' });
+    component.onSubmit();
+
+    expect(mockChallengeApiService.postSolution).toHaveBeenCalledWith({
+      challengeId: 'test-123',
+      userId: 'user-456',
+      code: 'my-code'
+    });
   });
 });

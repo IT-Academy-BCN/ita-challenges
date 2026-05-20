@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Repository
@@ -23,6 +24,18 @@ public class InMemoryTicketRepository implements TicketRepository {
 
     @Override
     public Ticket updateTicket(Ticket ticket) {
-        throw new UnsupportedOperationException("updateTicket not implemented yet");
+        storage.put(ticket.getId(), ticket);
+        return ticket;
+    }
+
+    @Override
+    public Optional<Ticket> findById(String id) {
+        return Optional.ofNullable(storage.get(id));
+    }
+
+    @Override
+    public Ticket save(Ticket newTicket) {
+        storage.put(newTicket.getId(), newTicket);
+        return newTicket;
     }
 }

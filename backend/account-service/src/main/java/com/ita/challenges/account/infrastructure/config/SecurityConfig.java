@@ -13,6 +13,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+                .csrf(csrf -> csrf.ignoringRequestMatchers("/api/account/auth/register"))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/account/auth/**").permitAll()
                         .requestMatchers("/api/account/oauth2/**").permitAll()
@@ -20,14 +21,14 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
                 )
                 .oauth2Login(oauth2 -> oauth2
-                        .loginPage("/api/account/oauth2/authorization/github")
+                        .loginPage("/auth")
                         .authorizationEndpoint(authorization -> authorization
                                 .baseUri("/api/account/oauth2/authorization")
                         )
                         .redirectionEndpoint(redirection -> redirection
                                 .baseUri("/api/account/login/oauth2/code/**")
                         )
-                        .defaultSuccessUrl("/api/account/profile", true)
+                        .defaultSuccessUrl("/profile", true)
                 );
         return http.build();
     }
