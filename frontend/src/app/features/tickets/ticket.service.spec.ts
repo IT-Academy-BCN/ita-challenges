@@ -1,12 +1,11 @@
 import { TestBed } from '@angular/core/testing';
-
-import { Ticket } from './ticket.service';
+import { TicketService } from './ticket.service';
 import { TICKETS_MOCK } from './models/tickets.mock';
 import { firstValueFrom, of } from 'rxjs';
 import { TicketApiService } from './data-access/ticket-api.service';
 
 describe('Ticket', () => {
-  let service: Ticket;
+  let service: TicketService;
   let mockTicketApiService: any;
 
   beforeEach(() => {
@@ -19,7 +18,7 @@ describe('Ticket', () => {
         { provide: TicketApiService, useValue: mockTicketApiService }
       ]
     });
-    service = TestBed.inject(Ticket);
+    service = TestBed.inject(TicketService);
   });
 
   it('should be created', () => {
