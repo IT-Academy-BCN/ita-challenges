@@ -15,4 +15,13 @@ class TicketTest {
         assertEquals("Login issue", ticket.getTitle());
         assertEquals("Unable to access my account", ticket.getDescription());
     }
+    @Test
+    void addComment_shouldThrowUnsupportedOperationException() {
+        Ticket ticket = Ticket.create("user123", "Test Title", "Test Description");
+        UnsupportedOperationException exception = assertThrows(
+                UnsupportedOperationException.class,
+                () -> ticket.addComment("My comment")
+        );
+        assertEquals("addComment is not implemented yet.", exception.getMessage());
+    }    
 }
