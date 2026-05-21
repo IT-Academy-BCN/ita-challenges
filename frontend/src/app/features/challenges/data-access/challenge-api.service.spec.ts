@@ -35,7 +35,8 @@ describe('ChallengeApiService', () => {
     const testId = 'abc-123';
     const updateData: IChallengeRequest = {
       title: 'Updated Challenge',
-      description: 'New Description'
+      description: 'New Description',
+      solution: 'solution',
     };
 
     it('should call PUT with correct URL and body', () => {
@@ -67,7 +68,7 @@ describe('ChallengeApiService', () => {
 
   describe('create', () => {
     it('should call POST with the correct URL and body and return the created challenge', () => {
-      const newChallenge: IChallengeRequest = { title: 'Test', description: 'Desc' };
+      const newChallenge: IChallengeRequest = { title: 'Test', description: 'Desc', solution: 'solution' };
       const mockResponse: IChallenge = { id: '1', ...newChallenge };
 
       service.create(newChallenge).subscribe(result => {
@@ -81,7 +82,7 @@ describe('ChallengeApiService', () => {
     });
 
     it('should return default challenge when API fails (Happy Path Fallback)', () => {
-      const newChallenge: IChallengeRequest = { title: 'Test', description: 'Desc' };
+      const newChallenge: IChallengeRequest = { title: 'Test', description: 'Desc', solution: 'solution' };
 
       service.create(newChallenge).subscribe(response => {
         expect(response.id).toBe('1');
@@ -152,7 +153,7 @@ describe('ChallengeApiService', () => {
 
     service.postSolution(payload).subscribe();
 
-    const req = httpTestingController.expectOne(`${apiUrl}/submissions/finalize`);
+    const req = httpTestingController.expectOne(`${apiUrl}/submissions`);
     expect(req.request.method).toBe('POST');
     expect(req.request.body).toEqual(payload);
     req.flush(null);
