@@ -17,7 +17,7 @@ export class CreateChallengePage {
   readonly router = inject(Router)
   readonly fb = inject(FormBuilder)
 
-  difficulties: ChallengeDifficulty[] = ['EASY', 'MEDIUM', 'HARD'];
+  readonly difficulties: ChallengeDifficulty[] = ['EASY', 'MEDIUM', 'HARD'];
 
   challengeForm = this.fb.group({
     title: [''],
