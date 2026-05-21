@@ -13,5 +13,6 @@
 - Jordi Casas - https://github.com/JordiCasas87
 - Andrés Rojo Cabrera - https://github.com/andyrouge81
 - Albert Medina - https://github.com/AlbertMedina
+- Josep J. Roca - https://github.com/Urian1983
 - Jordi Espinosa - https://github.com/JEspinosa1770
 - Isaac Malagón - https://github.com/isaacmg-bit

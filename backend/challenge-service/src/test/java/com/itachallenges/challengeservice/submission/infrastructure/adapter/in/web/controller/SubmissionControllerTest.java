@@ -69,4 +69,29 @@ class SubmissionControllerTest {
         verify(saveDraftSubmissionUseCase).execute(captor.capture());
         assertThat(captor.getValue().code()).isEmpty();
     }
+
+    @Test
+    void shouldSaveDraftWithCodeWhenCodeIsProvided() throws Exception {
+
+        SaveDraftSubmissionRequest request = new SaveDraftSubmissionRequest(
+                "challenge-1",
+                "student-1",
+                "console.log('hello world in a happy path')"
+        );
+
+        mockMvc.perform(post("/api/challenge/submissions")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isCreated());
+
+        ArgumentCaptor<SaveDraftSubmissionCommand> captor =
+                ArgumentCaptor.forClass(SaveDraftSubmissionCommand.class);
+
+        verify(saveDraftSubmissionUseCase).execute(captor.capture());
+
+        assertThat(captor.getValue().challengeId()).isEqualTo("challenge-1");
+        assertThat(captor.getValue().userId()).isEqualTo("student-1");
+        assertThat(captor.getValue().code()).isEqualTo("console.log('hello world in a happy path')");
+    }
+
 }

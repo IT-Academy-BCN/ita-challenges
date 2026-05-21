@@ -14,7 +14,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/api/account/tickets")
-@CrossOrigin(origins = "http://localhost:4200")
 public class TicketController {
 
     private final TicketRepository ticketRepository;
