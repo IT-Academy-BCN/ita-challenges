@@ -5,6 +5,7 @@ import com.itachallenges.challengeservice.catalog.domain.port.out.ChallengeRepos
 import com.itachallenges.challengeservice.catalog.domain.model.Challenge;
 import com.itachallenges.challengeservice.catalog.domain.valueobject.ChallengeDescription;
 import com.itachallenges.challengeservice.catalog.domain.valueobject.ChallengeId;
+import com.itachallenges.challengeservice.catalog.domain.valueobject.ChallengeLanguage;
 import com.itachallenges.challengeservice.catalog.domain.valueobject.ChallengeTitle;
 import com.itachallenges.challengeservice.catalog.infrastructure.adapter.web.in.controller.ChallengeController;
 import com.itachallenges.challengeservice.catalog.infrastructure.adapter.web.in.dto.ChallengeRequest;
@@ -53,7 +54,7 @@ class ChallengeControllerTest {
 
     @Test
     void should_create_challenge_with_title_and_description_and_return_201() throws Exception {
-        Challenge saved = Challenge.create(request.title(), request.description());
+        Challenge saved = Challenge.create(request.title(), request.description(), ChallengeLanguage.JAVA);
         when(repository.save(any(Challenge.class))).thenReturn(saved);
 
         mockMvc.perform(post("/api/challenge")
@@ -85,7 +86,8 @@ class ChallengeControllerTest {
         Challenge updatedChallenge = Challenge.restore(
                 new ChallengeId(UUID.fromString(id)),
                 "Updated title",
-                "Updated description"
+                "Updated description",
+                ChallengeLanguage.JAVA
         );
 
         when(repository.update(any(Challenge.class)))

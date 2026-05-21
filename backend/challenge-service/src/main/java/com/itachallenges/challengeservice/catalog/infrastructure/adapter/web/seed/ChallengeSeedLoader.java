@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.itachallenges.challengeservice.catalog.domain.model.Challenge;
 import com.itachallenges.challengeservice.catalog.domain.port.out.ChallengeRepository;
 import com.itachallenges.challengeservice.catalog.domain.valueobject.ChallengeId;
+import com.itachallenges.challengeservice.catalog.domain.valueobject.ChallengeLanguage;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.core.io.ClassPathResource;
@@ -32,7 +33,8 @@ public class ChallengeSeedLoader implements ApplicationRunner {
                     .map(seed -> Challenge.restore(
                             ChallengeId.of(seed.id()),
                             seed.title(),
-                            seed.description()
+                            seed.description(),
+                            ChallengeLanguage.JAVA
                     ))
                     .forEach(repository::save);
         }
