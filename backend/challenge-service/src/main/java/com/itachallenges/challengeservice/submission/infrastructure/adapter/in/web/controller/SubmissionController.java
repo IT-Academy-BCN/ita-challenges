@@ -1,7 +1,10 @@
 package com.itachallenges.challengeservice.submission.infrastructure.adapter.in.web.controller;
 
+import com.itachallenges.challengeservice.catalog.domain.valueobject.ChallengeId;
+import com.itachallenges.challengeservice.shared.domain.valueobject.UserId;
 import com.itachallenges.challengeservice.submission.application.dto.SaveDraftSubmissionCommand;
 import com.itachallenges.challengeservice.submission.domain.port.in.SaveDraftSubmissionUseCase;
+import com.itachallenges.challengeservice.submission.domain.port.out.SubmissionRepository;
 import com.itachallenges.challengeservice.submission.infrastructure.adapter.in.web.dto.ExistsFinalSubmissionResponse;
 import com.itachallenges.challengeservice.submission.infrastructure.adapter.in.web.dto.SaveDraftSubmissionRequest;
 import org.springframework.http.HttpStatus;
@@ -15,9 +18,11 @@ import org.springframework.web.bind.annotation.*;
 public class SubmissionController {
 
     private final SaveDraftSubmissionUseCase saveDraftSubmissionUseCase;
+    private final SubmissionRepository repository;
 
-    public SubmissionController(SaveDraftSubmissionUseCase saveDraftSubmissionUseCase) {
+    public SubmissionController(SaveDraftSubmissionUseCase saveDraftSubmissionUseCase, SubmissionRepository repository) {
         this.saveDraftSubmissionUseCase = saveDraftSubmissionUseCase;
+        this.repository = repository;
     }
 
     @PostMapping
@@ -36,6 +41,7 @@ public class SubmissionController {
             @RequestParam String userId,
             @RequestParam String challengeId
     ) {
-        return ResponseEntity.status(HttpStatus.OK).body(new ExistsFinalSubmissionResponse(false));
+        boolean exists = repository.existsFinalSubmission(UserId.of(userId), ChallengeId.of(challengeId));
+        return ResponseEntity.status(HttpStatus.OK).body(new ExistsFinalSubmissionResponse(exists));
     }
 }
