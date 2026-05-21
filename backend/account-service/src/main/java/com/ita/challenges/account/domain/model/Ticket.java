@@ -29,6 +29,10 @@ public class Ticket {
         return new Ticket(id, userId, title, description);
     }
 
+    public Ticket addComment(String comment) {
+    return this;
+}
+
     public String getId() {
         return id;
     }
