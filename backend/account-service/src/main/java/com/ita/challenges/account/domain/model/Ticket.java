@@ -29,9 +29,9 @@ public class Ticket {
         return new Ticket(id, userId, title, description);
     }
 
-    public Ticket addComment(String comment) {
-    return this;
-}
+     public Ticket addComment(String comment) {
+        throw new UnsupportedOperationException("addComment is not implemented yet.");
+    }
 
     public String getId() {
         return id;
