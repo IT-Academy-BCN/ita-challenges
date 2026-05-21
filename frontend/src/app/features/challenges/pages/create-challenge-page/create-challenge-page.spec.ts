@@ -3,6 +3,7 @@ import { CreateChallengePage } from './create-challenge-page';
 import { ChallengeService } from '../../services/challenge.service';
 import { Router } from '@angular/router';
 import { of } from 'rxjs';
+import { ChallengeLanguage } from '../../models/challenge-language.type';
 
 describe('CreateChallengePage', () => {
   let component: CreateChallengePage;
@@ -13,7 +14,7 @@ describe('CreateChallengePage', () => {
   beforeEach(async () => {
 
     mockChallengeService = {
-      create: () => of({ id: '1', title: '', description: '' })
+      create: () => of({ id: '1', title: '', description: '', language: 'JAVA' })
     };
 
     mockRouter = {
@@ -41,9 +42,11 @@ describe('CreateChallengePage', () => {
   it('should start the form with empty fields', () => {
     const title = component.challengeForm.get('title');
     const description = component.challengeForm.get('description');
+    const language = component.challengeForm.get('language');
 
     expect(title?.value).toBe('');
     expect(description?.value).toBe('');
+    expect(language?.value).toBe('');
   });
 
   it('should call onSubmit when form is submitted', () => {
@@ -56,7 +59,7 @@ describe('CreateChallengePage', () => {
   });
 
   it('should call challengeService.create when call onSubmit with correct data', () => {
-    const testData = { title: 'Nou Repte', description: 'Descripció' };
+    const testData = { title: 'Nou Repte', description: 'Descripció', language: 'JAVA' as ChallengeLanguage };
     component.challengeForm.setValue(testData);
 
     vi.spyOn(mockChallengeService, 'create').mockReturnValue(of({ id: '1', ...testData }));
