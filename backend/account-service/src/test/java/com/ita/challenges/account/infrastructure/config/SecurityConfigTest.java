@@ -1,6 +1,7 @@
 package com.ita.challenges.account.infrastructure.config;
 
 import com.ita.challenges.account.domain.port.out.TicketRepository;
+import com.ita.challenges.account.domain.port.out.UserRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -13,8 +14,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.client.RestClient;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -22,45 +25,60 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Import(SecurityConfig.class)
 class SecurityConfigTest {
 
- @Autowired
- private MockMvc mockMvc;
+    @Autowired
+    private MockMvc mockMvc;
 
- @Autowired
- private SecurityFilterChain securityFilterChain;
+    @Autowired
+    private SecurityFilterChain securityFilterChain;
 
- @MockBean
- private ClientRegistrationRepository clientRegistrationRepository;
+    @MockBean
+    private ClientRegistrationRepository clientRegistrationRepository;
 
- @MockBean
- private TicketRepository ticketRepository;
+    @MockBean
+    private TicketRepository ticketRepository;
 
- @Test
- @DisplayName("Should assure the SecurityFilterChain is loaded")
- void contextLoads() {
-  assertThat(securityFilterChain).isNotNull();
- }
+    @MockBean
+    private UserRepository userRepository;
 
- @ParameterizedTest
- @ValueSource(strings = {
-  "/api/account/auth/me",
-  "/api/account/oauth2/authorization/github",
-  "/api/account/login/oauth2"
- })
- @DisplayName("Should permit all requests to public endpoints")
- void shouldPermitAllRequestsToPublicEndpoints(String path) throws Exception {
-  mockMvc.perform(get(path))
-   .andExpect(result -> {
-    int status = result.getResponse().getStatus();
-    org.junit.jupiter.api.Assertions.assertNotEquals(HttpStatus.FORBIDDEN.value(), status);
-   });
- }
+    @MockBean
+    private RestClient restClient;
 
- @Test
- @DisplayName("Should require authentication for protected endpoints and redirect to OAuth2")
- void shouldRequireAuthenticationForProtectedEndpoints() throws Exception {
-  mockMvc.perform(get("/api/account/other"))
-   .andExpect(status().is3xxRedirection())
-   .andExpect(redirectedUrlPattern("**/auth"));
- }
+    @Test
+    @DisplayName("Should assure the SecurityFilterChain is loaded")
+    void contextLoads() {
+        assertThat(securityFilterChain).isNotNull();
+    }
 
+    @ParameterizedTest
+    @ValueSource(strings = {
+            "/api/account/auth/me",
+            "/api/account/oauth2/authorization/github",
+            "/api/account/login/oauth2"
+    })
+    @DisplayName("Should permit all requests to public endpoints")
+    void shouldPermitAllRequestsToPublicEndpoints(String path) throws Exception {
+        mockMvc.perform(get(path))
+                .andExpect(result -> {
+                    int status = result.getResponse().getStatus();
+                    org.junit.jupiter.api.Assertions.assertNotEquals(HttpStatus.FORBIDDEN.value(), status);
+                });
+    }
+
+    @Test
+    @DisplayName("Should require authentication for protected endpoints and redirect to OAuth2")
+    void shouldRequireAuthenticationForProtectedEndpoints() throws Exception {
+        mockMvc.perform(get("/api/account/other"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrlPattern("**/auth"));
+    }
+
+    @Test
+    @DisplayName("Should permit POST requests to logout endpoint")
+    void shouldPermitLogoutEndpoint() throws Exception {
+        mockMvc.perform(post("/api/account/auth/logout"))
+                .andExpect(result -> {
+                    int status = result.getResponse().getStatus();
+                    org.junit.jupiter.api.Assertions.assertNotEquals(HttpStatus.FORBIDDEN.value(), status);
+                });
+    }
 }
