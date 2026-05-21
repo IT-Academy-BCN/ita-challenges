@@ -3,6 +3,7 @@ import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { IChallengeRequest } from '../../models/ichallenge-request.interface';
 import { ChallengeService } from '../../services/challenge.service';
 import { Router } from '@angular/router';
+import { ChallengeLanguage } from '../../models/challenge-language.type';
 
 @Component({
   selector: 'app-create-challenge-page',
@@ -15,6 +16,8 @@ export class CreateChallengePage {
   readonly challengeService = inject(ChallengeService)
   readonly router = inject(Router)
   readonly fb = inject(FormBuilder)
+
+  readonly languages: ChallengeLanguage[] = ['JAVA', 'PHP', 'JAVASCRIPT', 'TYPESCRIPT', 'PYTHON', 'SQL'];
 
   challengeForm = this.fb.group({
     title: [''],
