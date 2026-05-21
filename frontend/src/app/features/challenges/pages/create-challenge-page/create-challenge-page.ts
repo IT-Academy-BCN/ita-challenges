@@ -3,6 +3,7 @@ import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { IChallengeRequest } from '../../models/ichallenge-request.interface';
 import { ChallengeService } from '../../services/challenge.service';
 import { Router } from '@angular/router';
+import { ChallengeDifficulty } from '../../models/challenge-difficulty.type';
 
 @Component({
   selector: 'app-create-challenge-page',
@@ -15,6 +16,8 @@ export class CreateChallengePage {
   readonly challengeService = inject(ChallengeService)
   readonly router = inject(Router)
   readonly fb = inject(FormBuilder)
+
+  difficulties: ChallengeDifficulty[] = ['EASY', 'MEDIUM', 'HARD'];
 
   challengeForm = this.fb.group({
     title: [''],

@@ -12,10 +12,12 @@
   <div>
     <label for="difficulty">Dificultat</label>
     <select id="difficulty" formControlName="difficulty">
-      <option value="" selected disabled>Selecciona dificultat</option>
-      <option value="EASY">Easy</option>
-      <option value="MEDIUM">Medium</option>
-      <option value="HARD">Hard</option>
+      <option value="" disabled>Selecciona dificultat</option>
+      @for (difficulty of difficulties; track difficulty) {
+        <option [value]="difficulty">
+          {{ difficulty }}
+        </option>
+      }
     </select>
   </div>
 
