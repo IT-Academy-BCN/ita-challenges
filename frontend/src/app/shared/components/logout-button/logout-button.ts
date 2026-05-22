@@ -12,7 +12,11 @@ export class LogoutButton {
   private authService = inject(AuthService);
 
   logout(): void {
-    this.authService.logout();
+    this.authService.logout().subscribe({
+      next: () => { },
+      error: (error) => {
+        console.error('Error crítico durante el proceso de logout:', error);
+      }
+    });
   }
-
 }
