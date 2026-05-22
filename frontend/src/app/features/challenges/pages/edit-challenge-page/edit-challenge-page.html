@@ -1,13 +1,12 @@
 <form [formGroup]="editForm" (ngSubmit)="onSubmit()">
-
   <div>
     <label for="id">Id Repte</label>
-    <input type="text" id="id" formControlName="id">
+    <input type="text" id="id" formControlName="id" />
   </div>
 
   <div>
     <label for="title">Títol del Repte</label>
-    <input type="text" id="title" formControlName="title">
+    <input type="text" id="title" formControlName="title" />
   </div>
 
   <div>
@@ -18,6 +17,18 @@
       rows="5"
       placeholder="Escriu aquí els detalls del repte..."
     ></textarea>
+  </div>
+
+  <div>
+    <label for="language">Llenguatge</label>
+    <select id="language" formControlName="language">
+      <option value="" selected disabled>Selecciona llenguatge</option>
+      @for (language of languages; track language) {
+        <option [value]="language">
+          {{ language }}
+        </option>
+      }
+    </select>
   </div>
 
   <button type="submit">Editar Repte</button>

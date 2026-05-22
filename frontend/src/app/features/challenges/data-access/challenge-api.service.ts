@@ -20,6 +20,7 @@ export class ChallengeApiService {
           id: '1',
           title: challenge.title,
           description: challenge.description,
+          language: challenge.language,
         });
       }),
     );
@@ -40,6 +41,7 @@ export class ChallengeApiService {
           id: id,
           title: challenge.title,
           description: challenge.description,
+          language: challenge.language,
         }),
       ),
     );
