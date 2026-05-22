@@ -4,6 +4,7 @@ import com.ita.challenges.account.domain.model.Ticket;
 import com.ita.challenges.account.domain.port.out.TicketRepository;
 import com.ita.challenges.account.infrastructure.adapter.web.in.dto.TicketRequest;
 import com.ita.challenges.account.infrastructure.adapter.web.in.dto.TicketResponse;
+import com.ita.challenges.account.infrastructure.adapter.web.in.dto.TicketResponseCommentAndStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -17,6 +18,7 @@ import org.springframework.web.server.ResponseStatusException;
 public class TicketController {
 
     private final TicketRepository ticketRepository;
+    private static final String LOGIN = "login";
 
     public TicketController(TicketRepository ticketRepository) {
         this.ticketRepository = ticketRepository;
@@ -28,7 +30,7 @@ public class TicketController {
             @RequestBody TicketRequest request,
             @AuthenticationPrincipal OAuth2User user) {
 
-        String userId = user != null ? user.getAttribute("login") : "temp-user";
+        String userId = user != null ? user.getAttribute(LOGIN) : "temp-user";
 
         return new TicketResponse(
                 "temp-id",
@@ -40,11 +42,11 @@ public class TicketController {
 
     @GetMapping
     public ResponseEntity<List<TicketResponse>> findAll(@AuthenticationPrincipal OAuth2User user) {
-        if (user == null || user.getAttribute("login") == null) {
+        if (user == null || user.getAttribute(LOGIN) == null) {
             return ResponseEntity.status(401).build();
         }
 
-        String userId = user.getAttribute("login");
+        String userId = user.getAttribute(LOGIN);
 
         List<TicketResponse> tickets = ticketRepository.findAllByUserId(userId)
                 .stream()
@@ -65,7 +67,7 @@ public class TicketController {
             @PathVariable String id,
             @RequestBody TicketRequest ticketRequest,
             @AuthenticationPrincipal OAuth2User user) {
-        if (user == null || user.getAttribute("login") == null) {
+        if (user == null || user.getAttribute(LOGIN) == null) {
             return ResponseEntity.status(401).build();
         }
 
@@ -94,19 +96,18 @@ public class TicketController {
     }
 
     @GetMapping
-    public ResponseEntity<TicketResponse> getCommentandStatusById(@AuthenticationPrincipal OAuth2User user,
+    public ResponseEntity<TicketResponseCommentAndStatus> getCommentandStatusById(@AuthenticationPrincipal OAuth2User user,
                                                                   @PathVariable String id) {
 
         Ticket ticket = ticketRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
 
-        if (!ticket.getUserId().equals(user.getAttribute("login"))) {
+        if (!ticket.getUserId().equals(user.getAttribute(LOGIN))) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
-        
 
-        return ResponseEntity.ok(new TicketResponse(
+        return ResponseEntity.ok(new TicketResponseCommentAndStatus(
                 ticket.getComment(),
                 ticket.getStatus()
         ));
