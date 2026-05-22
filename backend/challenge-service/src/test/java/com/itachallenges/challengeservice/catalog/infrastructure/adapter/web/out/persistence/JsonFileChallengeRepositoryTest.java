@@ -35,7 +35,8 @@ class JsonFileChallengeRepositoryTest {
 
         Challenge challenge = Challenge.create(
                 "Clean Code",
-                "Write readable code"
+                "Write readable code",
+                "Challenge solution"
         );
 
         repository.save(challenge);

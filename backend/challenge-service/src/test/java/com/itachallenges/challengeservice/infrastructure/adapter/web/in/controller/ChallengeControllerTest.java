@@ -40,7 +40,7 @@ class ChallengeControllerTest {
     ChallengeRequest request = new ChallengeRequest(
             "Clean Code Challenge",
             "A challenge about writing clean and maintainable code",
-            null
+            "Challenge solution"
     );
 
     @Test
@@ -54,7 +54,7 @@ class ChallengeControllerTest {
 
     @Test
     void should_create_challenge_with_title_and_description_and_return_201() throws Exception {
-        Challenge saved = Challenge.create(request.title(), request.description());
+        Challenge saved = Challenge.create(request.title(), request.description(), request.solution());
         when(repository.save(any(Challenge.class))).thenReturn(saved);
 
         mockMvc.perform(post("/api/challenge")
@@ -82,13 +82,14 @@ class ChallengeControllerTest {
         ChallengeRequest request = new ChallengeRequest(
                 "Updated title",
                 "Updated description",
-                null
+                "Updated solution"
         );
 
         Challenge updatedChallenge = Challenge.restore(
                 new ChallengeId(UUID.fromString(id)),
                 "Updated title",
-                "Updated description"
+                "Updated description",
+                "Updated solution"
         );
 
         when(repository.update(any(Challenge.class)))
@@ -100,7 +101,8 @@ class ChallengeControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(id))
                 .andExpect(jsonPath("$.title").value("Updated title"))
-                .andExpect(jsonPath("$.description").value("Updated description"));
+                .andExpect(jsonPath("$.description").value("Updated description"))
+                .andExpect(jsonPath("$.solution").value("Updated solution"));
     }
 
 

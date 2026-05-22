@@ -18,7 +18,7 @@ class InMemoryChallengeRepositoryTest {
     @BeforeEach
     void setUp() {
         repository = new InMemoryChallengeRepository();
-        challenge = Challenge.create("Clean Code Challenge", "A challenge about writing clean and maintainable code");
+        challenge = Challenge.create("Clean Code Challenge", "A challenge about writing clean and maintainable code", "Challenge solution");
     }
 
     @Test
@@ -30,34 +30,36 @@ class InMemoryChallengeRepositoryTest {
 
     @Test
     void should_create_new_challenge() {
-        Challenge newChallenge = Challenge.create("New Challenge Title", "New Challenge Description");
+        Challenge newChallenge = Challenge.create("New Challenge Title", "New Challenge Description", "New Challenge Solution");
         Challenge result = repository.save(newChallenge);
 
         assertThat(result.getTitle().toString()).isEqualTo("New Challenge Title");
         assertThat(result.getDescription().toString()).isEqualTo("New Challenge Description");
+        assertThat(result.getSolution().toString()).isEqualTo("New Challenge Solution");
     }
 
     @Test
     void should_update_existing_challenge() {
-        Challenge original = repository.save(Challenge.create("Old title", "Old description"));
+        Challenge original = repository.save(Challenge.create("Old title", "Old description", "Old solution"));
 
         Challenge updated = Challenge.restore(
                 original.getId(),
                 "New title",
-                "New description"
+                "New description",
+                "New solution"
         );
 
         Challenge result = repository.update(updated);
 
         assertThat(result.getTitle().toString()).isEqualTo("New title");
         assertThat(result.getDescription().toString()).isEqualTo("New description");
+        assertThat(result.getSolution().toString()).isEqualTo("New solution");
     }
-   
 
 
     @Test
     void should_delete_existing_challenge() {
-        Challenge challenge = Challenge.create("To be deleted", "Description");
+        Challenge challenge = Challenge.create("To be deleted", "Description", "Solution");
 
         ChallengeId id = challenge.getId();
         repository.save(challenge);
