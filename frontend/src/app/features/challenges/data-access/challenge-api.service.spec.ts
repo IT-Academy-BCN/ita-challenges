@@ -14,10 +14,7 @@ describe('ChallengeApiService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [
-        provideHttpClient(),
-        provideHttpClientTesting(),
-      ]
+      providers: [provideHttpClient(), provideHttpClientTesting()],
     });
     service = TestBed.inject(ChallengeApiService);
     httpTestingController = TestBed.inject(HttpTestingController);
@@ -35,13 +32,14 @@ describe('ChallengeApiService', () => {
     const testId = 'abc-123';
     const updateData: IChallengeRequest = {
       title: 'Updated Challenge',
-      description: 'New Description'
+      description: 'New Description',
+      solution: 'solution',
     };
 
     it('should call PUT with correct URL and body', () => {
       const mockResponse: IChallenge = { id: testId, ...updateData };
 
-      service.update(testId, updateData).subscribe(result => {
+      service.update(testId, updateData).subscribe((result) => {
         expect(result).toEqual(mockResponse);
       });
 
@@ -53,7 +51,7 @@ describe('ChallengeApiService', () => {
     });
 
     it('should return reconstructed challenge when API fails (Happy Path Fallback)', () => {
-      service.update(testId, updateData).subscribe(result => {
+      service.update(testId, updateData).subscribe((result) => {
         expect(result.id).toBe(testId);
         expect(result.title).toBe(updateData.title);
       });
@@ -64,13 +62,16 @@ describe('ChallengeApiService', () => {
     });
   });
 
-
   describe('create', () => {
     it('should call POST with the correct URL and body and return the created challenge', () => {
-      const newChallenge: IChallengeRequest = { title: 'Test', description: 'Desc' };
+      const newChallenge: IChallengeRequest = {
+        title: 'Test',
+        description: 'Desc',
+        solution: 'solution',
+      };
       const mockResponse: IChallenge = { id: '1', ...newChallenge };
 
-      service.create(newChallenge).subscribe(result => {
+      service.create(newChallenge).subscribe((result) => {
         expect(result).toEqual(mockResponse);
       });
 
@@ -81,9 +82,13 @@ describe('ChallengeApiService', () => {
     });
 
     it('should return default challenge when API fails (Happy Path Fallback)', () => {
-      const newChallenge: IChallengeRequest = { title: 'Test', description: 'Desc' };
+      const newChallenge: IChallengeRequest = {
+        title: 'Test',
+        description: 'Desc',
+        solution: 'solution',
+      };
 
-      service.create(newChallenge).subscribe(response => {
+      service.create(newChallenge).subscribe((response) => {
         expect(response.id).toBe('1');
         expect(response.title).toBe(newChallenge.title);
       });
@@ -93,7 +98,6 @@ describe('ChallengeApiService', () => {
       req.flush('Error', { status: 500, statusText: 'Server Error' });
     });
   });
-
 
   describe('loadAll()', () => {
     it('should load all challenges via GET', () => {
@@ -133,7 +137,7 @@ describe('ChallengeApiService', () => {
       const mockId = '456';
       let responseResult: any = 'initial_value';
 
-      service.delete(mockId).subscribe(result => responseResult = result);
+      service.delete(mockId).subscribe((result) => (responseResult = result));
 
       const req = httpTestingController.expectOne(`${apiUrl}/${mockId}`);
       req.flush('Not Found', { status: 404, statusText: 'Not Found' });
@@ -143,19 +147,19 @@ describe('ChallengeApiService', () => {
   });
 
   describe('postSolution', () => {
-  it('should call POST with correct URL and payload', () => {
-    const payload: IChallengeSubmission = {
-      challengeId: 'abc-123',
-      userId: 'abc-345',
-      code: 'code'
-    };
+    it('should call POST with correct URL and payload', () => {
+      const payload: IChallengeSubmission = {
+        challengeId: 'abc-123',
+        userId: 'abc-345',
+        code: 'code',
+      };
 
-    service.postSolution(payload).subscribe();
+      service.postSolution(payload).subscribe();
 
-    const req = httpTestingController.expectOne(`${apiUrl}/submissions/finalize`);
-    expect(req.request.method).toBe('POST');
-    expect(req.request.body).toEqual(payload);
-    req.flush(null);
+      const req = httpTestingController.expectOne(`${apiUrl}/submissions/finalize`);
+      expect(req.request.method).toBe('POST');
+      expect(req.request.body).toEqual(payload);
+      req.flush(null);
+    });
   });
-});
 });
