@@ -10,7 +10,6 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/api/account/tickets")
@@ -91,4 +90,25 @@ public class TicketController {
                 })
                 .orElse(ResponseEntity.notFound().build());
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity <TicketResponse> findById( @PathVariable String id,
+                                                     @AuthenticationPrincipal OAuth2User user) {
+
+        if (user == null || user.getAttribute("login") == null) {
+            return ResponseEntity.status(401).build();
+        }
+
+        return ticketRepository.findById(id)
+                .map(ticket -> {
+                    return ResponseEntity.ok(new TicketResponse(
+                            ticket.getId(),
+                            ticket.getUserId(),
+                            ticket.getTitle(),
+                            ticket.getDescription()
+                    ));
+                })
+                .orElse(ResponseEntity.notFound().build());
+    }
+
 }
