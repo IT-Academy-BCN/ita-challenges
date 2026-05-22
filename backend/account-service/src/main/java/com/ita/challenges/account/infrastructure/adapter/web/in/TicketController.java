@@ -104,6 +104,7 @@ public class TicketController {
         if (!ticket.getUserId().equals(user.getAttribute("login"))) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
+        
 
         return ResponseEntity.ok(new TicketResponse(
                 ticket.getComment(),
