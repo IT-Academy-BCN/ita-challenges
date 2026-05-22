@@ -30,12 +30,13 @@ public class TicketController {
             @AuthenticationPrincipal OAuth2User user) {
 
         String userId = user != null ? user.getAttribute("login") : "temp-user";
-
+        Ticket newTicket = Ticket.create(userId, request.title(), request.description());
+        Ticket savedTicket = ticketRepository.save(newTicket);
         return new TicketResponse(
-                "temp-id",
-                userId,
-                request.title(),
-                request.description()
+                savedTicket.getId(),
+                savedTicket.getUserId(),
+                savedTicket.getTitle(),
+                savedTicket.getDescription()
         );
     }
 
