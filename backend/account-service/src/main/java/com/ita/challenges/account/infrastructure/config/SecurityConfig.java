@@ -33,7 +33,7 @@ public class SecurityConfig {
                 .logout(logout -> logout
                 .logoutUrl("/api/account/auth/logout")
                 .invalidateHttpSession(true)
-                .deleteCookies("JSESSIONID")
+                .deleteCookies("JSESSIONID", "remember-me")
                 .logoutSuccessHandler((request, response, authentication) ->
                         response.setStatus(200))
                 );

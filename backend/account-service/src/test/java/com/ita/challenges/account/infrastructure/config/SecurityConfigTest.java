@@ -76,9 +76,7 @@ class SecurityConfigTest {
     @DisplayName("Should permit POST requests to logout endpoint")
     void shouldPermitLogoutEndpoint() throws Exception {
         mockMvc.perform(post("/api/account/auth/logout"))
-                .andExpect(result -> {
-                    int status = result.getResponse().getStatus();
-                    org.junit.jupiter.api.Assertions.assertNotEquals(HttpStatus.FORBIDDEN.value(), status);
-                });
+                .andExpect(status().isOk());
     }
 }
+
