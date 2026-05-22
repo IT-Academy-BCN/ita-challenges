@@ -5,6 +5,7 @@ import com.itachallenges.challengeservice.catalog.domain.port.out.ChallengeRepos
 import com.itachallenges.challengeservice.catalog.domain.model.Challenge;
 import com.itachallenges.challengeservice.catalog.domain.valueobject.ChallengeDescription;
 import com.itachallenges.challengeservice.catalog.domain.valueobject.ChallengeId;
+import com.itachallenges.challengeservice.catalog.domain.valueobject.ChallengeSolution;
 import com.itachallenges.challengeservice.catalog.domain.valueobject.ChallengeTitle;
 import com.itachallenges.challengeservice.catalog.infrastructure.adapter.web.in.controller.ChallengeController;
 import com.itachallenges.challengeservice.catalog.infrastructure.adapter.web.in.dto.ChallengeRequest;
@@ -115,6 +116,7 @@ class ChallengeControllerTest {
         when(challenge.getId()).thenReturn(challengeId);
         when(challenge.getTitle()).thenReturn(new ChallengeTitle("Test Title"));
         when(challenge.getDescription()).thenReturn(new ChallengeDescription("Test Description"));
+        when(challenge.getSolution()).thenReturn(new ChallengeSolution("Test Solution"));
 
         when(repository.find(challengeId)).thenReturn(challenge);
 
@@ -122,6 +124,7 @@ class ChallengeControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(uuid.toString()))
                 .andExpect(jsonPath("$.title").value("Test Title"))
-                .andExpect(jsonPath("$.description").value("Test Description"));
+                .andExpect(jsonPath("$.description").value("Test Description"))
+                .andExpect(jsonPath("$.solution").value("Test Solution"));
     }
 }
