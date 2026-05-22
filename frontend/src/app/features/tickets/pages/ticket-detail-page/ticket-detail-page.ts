@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { ITicket } from '../../models/iticket.interface';
+import { TICKETS_MOCK } from '../../models/tickets.mock';
 
 @Component({
   selector: 'app-ticket-detail-page',
@@ -7,5 +9,7 @@ import { Component } from '@angular/core';
   styleUrl: './ticket-detail-page.css',
 })
 export class TicketDetailPage {
+
+  ticket: ITicket = TICKETS_MOCK[0];
 
 }
