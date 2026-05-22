@@ -33,7 +33,7 @@ describe('ChallengeApiService', () => {
     const updateData: IChallengeRequest = {
       title: 'Updated Challenge',
       description: 'New Description',
-      solution: 'solution',
+      difficulty: 'EASY',
     };
 
     it('should call PUT with correct URL and body', () => {
@@ -64,11 +64,7 @@ describe('ChallengeApiService', () => {
 
   describe('create', () => {
     it('should call POST with the correct URL and body and return the created challenge', () => {
-      const newChallenge: IChallengeRequest = {
-        title: 'Test',
-        description: 'Desc',
-        solution: 'solution',
-      };
+      const newChallenge: IChallengeRequest = { title: 'Test', description: 'Desc' };
       const mockResponse: IChallenge = { id: '1', ...newChallenge };
 
       service.create(newChallenge).subscribe((result) => {
@@ -85,7 +81,7 @@ describe('ChallengeApiService', () => {
       const newChallenge: IChallengeRequest = {
         title: 'Test',
         description: 'Desc',
-        solution: 'solution',
+        difficulty: 'EASY',
       };
 
       service.create(newChallenge).subscribe((response) => {

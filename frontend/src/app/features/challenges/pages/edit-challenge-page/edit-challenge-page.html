@@ -1,13 +1,12 @@
 <form [formGroup]="editForm" (ngSubmit)="onSubmit()">
-
   <div>
     <label for="id">Id Repte</label>
-    <input type="text" id="id" formControlName="id">
+    <input type="text" id="id" formControlName="id" />
   </div>
 
   <div>
     <label for="title">Títol del Repte</label>
-    <input type="text" id="title" formControlName="title">
+    <input type="text" id="title" formControlName="title" />
   </div>
 
   <div>
@@ -21,13 +20,15 @@
   </div>
 
   <div>
-    <label for="solution">Solució</label>
-    <textarea
-      id="solution"
-      formControlName="solution"
-      rows="50"
-      placeholder="Escriu aquí la solució del repte..."
-    ></textarea>
+    <label for="difficulty">Dificultat</label>
+    <select id="difficulty" formControlName="difficulty">
+      <option value="" disabled>Selecciona dificultat</option>
+      @for (difficulty of difficulties; track difficulty) {
+        <option [value]="difficulty">
+          {{ difficulty }}
+        </option>
+      }
+    </select>
   </div>
 
   <button type="submit">Editar Repte</button>

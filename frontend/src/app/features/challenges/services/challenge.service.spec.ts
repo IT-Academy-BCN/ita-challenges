@@ -35,7 +35,7 @@ describe('ChallengeService', () => {
       const testChallenge: IChallengeRequest = {
         title: 'New Title',
         description: 'New description',
-        solution: `New solution`,
+        difficulty: `EASY`,
       };
 
       mockChallengeApiService.update = vi.fn((id, data) => of({ id, ...data } as IChallenge));
@@ -56,7 +56,7 @@ describe('ChallengeService', () => {
       const newChallenge: IChallengeRequest = {
         title: 'New',
         description: 'Desc',
-        solution: 'this',
+        difficulty: 'EASY',
       };
 
       mockChallengeApiService.create = vi.fn((data) => of({ id: '1', ...data } as IChallenge));

@@ -3,6 +3,7 @@ import { ChallengeService } from '../../services/challenge.service';
 import { Router } from '@angular/router';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { IChallengeRequest } from '../../models/ichallenge-request.interface';
+import { ChallengeDifficulty } from '../../models/challenge-difficulty.type';
 
 @Component({
   selector: 'app-edit-challenge-page',
@@ -15,21 +16,23 @@ export class EditChallengePage {
   private readonly router = inject(Router);
   private readonly fb = inject(FormBuilder);
 
+  readonly difficulties: ChallengeDifficulty[] = ['EASY', 'MEDIUM', 'HARD'];
+
   editForm = this.fb.group({
     id: [''],
     title: [''],
     description: [''],
-    solution: [''],
+    difficulty: ['EASY'],
   });
 
   onSubmit() {
     if (this.editForm.valid) {
-      const { id, title, description, solution } = this.editForm.getRawValue();
+      const { id, title, description, difficulty } = this.editForm.getRawValue();
 
       const challengePayload: IChallengeRequest = {
         title: title ?? '',
         description: description ?? '',
-        solution: solution ?? '',
+        difficulty: difficulty as ChallengeDifficulty,
       };
 
       this.challengeService.update(id ?? '', challengePayload).subscribe({
