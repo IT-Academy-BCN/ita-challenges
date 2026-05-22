@@ -30,7 +30,8 @@ public class ChallengeController {
                 new ChallengeResponse(
                         saved.getId().toString(),
                         saved.getTitle().toString(),
-                        saved.getDescription().toString()
+                        saved.getDescription().toString(),
+                        null
                 )
         );
     }
@@ -39,21 +40,22 @@ public class ChallengeController {
     public ResponseEntity<List<ChallengeResponse>> findAll() {
         List<ChallengeResponse> challenges = repository.findAll()
                 .stream()
-                .map(c -> new ChallengeResponse(c.getId().toString(), c.getTitle().toString(), c.getDescription().toString()))
+                .map(c -> new ChallengeResponse(c.getId().toString(), c.getTitle().toString(), c.getDescription().toString(), null))
                 .toList();
         return ResponseEntity.ok(challenges);
     }
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<ChallengeResponse> find(@PathVariable String id){
-            Challenge challenge = repository.find(ChallengeId.of(id));
+    public ResponseEntity<ChallengeResponse> find(@PathVariable String id) {
+        Challenge challenge = repository.find(ChallengeId.of(id));
 
-            ChallengeResponse challengeResponse =
-                    new ChallengeResponse(challenge.getId().toString(),
-                            challenge.getTitle().toString(),
-                            challenge.getDescription().toString());
-            return ResponseEntity.ok(challengeResponse);
+        ChallengeResponse challengeResponse =
+                new ChallengeResponse(challenge.getId().toString(),
+                        challenge.getTitle().toString(),
+                        challenge.getDescription().toString(),
+                        null);
+        return ResponseEntity.ok(challengeResponse);
     }
 
     @DeleteMapping("/{id}")
@@ -61,7 +63,6 @@ public class ChallengeController {
         repository.delete(ChallengeId.of(id));
         return ResponseEntity.noContent().build();
     }
-
 
 
     @PutMapping("/{id}")
@@ -80,7 +81,8 @@ public class ChallengeController {
         ChallengeResponse response = new ChallengeResponse(
                 updated.getId().toString(),
                 updated.getTitle().toString(),
-                updated.getDescription().toString()
+                updated.getDescription().toString(),
+                null
         );
 
         return ResponseEntity.ok(response);
