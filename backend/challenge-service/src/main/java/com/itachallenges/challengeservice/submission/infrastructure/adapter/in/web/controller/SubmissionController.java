@@ -35,7 +35,7 @@ public class SubmissionController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @GetMapping("/exists-final-submission")
+    @GetMapping("/finalized")
     public ResponseEntity<ExistsFinalSubmissionResponse> existsFinalSubmission(
             @RequestParam String userId,
             @RequestParam String challengeId
