@@ -59,6 +59,7 @@ public class TicketController {
         return ResponseEntity.ok(tickets);
     }
 
+
     @PutMapping("/{id}")
     public ResponseEntity<TicketResponse> update(
             @PathVariable String id,
@@ -91,4 +92,24 @@ public class TicketController {
                 })
                 .orElse(ResponseEntity.notFound().build());
     }
-}
+
+    @GetMapping
+    public ResponseEntity<TicketResponse> getCommentandStatusById(@AuthenticationPrincipal OAuth2User user,
+                                                                  @PathVariable String id) {
+
+        Ticket ticket = ticketRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+
+        if (!ticket.getUserId().equals(user.getAttribute("login"))) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        }
+
+        return ResponseEntity.ok(new TicketResponse(
+                ticket.getComment(),
+                ticket.getStatus()
+        ));
+        }
+    }
+
+
