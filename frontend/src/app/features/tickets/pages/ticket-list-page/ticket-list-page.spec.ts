@@ -11,6 +11,7 @@ describe('TicketListPage', () => {
   let mockTicketApiService: Partial<TicketApiService>;
 
   beforeEach(async () => {
+    TestBed.resetTestingModule();
     mockTicketApiService = { loadAll: vi.fn().mockReturnValue(of(TICKETS_MOCK)) };
 
     await TestBed.configureTestingModule({

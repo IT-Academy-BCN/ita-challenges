@@ -11,5 +11,10 @@ import { TICKETS_MOCK } from '../../models/tickets.mock';
 export class TicketDetailPage {
 
   ticket: ITicket = TICKETS_MOCK[0];
+  statusOptions = [
+    { value: 'OPEN', label: 'Obert' },
+    { value: 'IN_PROGRESS', label: 'En progrés' },
+    { value: 'RESOLVED', label: 'Resolt' }
+  ];
 
 }
