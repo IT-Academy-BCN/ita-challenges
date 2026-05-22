@@ -24,14 +24,15 @@ public class ChallengeController {
     @PostMapping
     public ResponseEntity<ChallengeResponse> create(@RequestBody ChallengeRequest request) {
         Challenge saved = repository.save(
-                Challenge.create(request.title(), request.description(), ChallengeLanguage.JAVA)
+                Challenge.create(request.title(), request.description(), request.language())
         );
 
         return ResponseEntity.status(HttpStatus.CREATED).body(
                 new ChallengeResponse(
                         saved.getId().toString(),
                         saved.getTitle().toString(),
-                        saved.getDescription().toString()
+                        saved.getDescription().toString(),
+                        saved.getLanguage()
                 )
         );
     }
@@ -40,7 +41,7 @@ public class ChallengeController {
     public ResponseEntity<List<ChallengeResponse>> findAll() {
         List<ChallengeResponse> challenges = repository.findAll()
                 .stream()
-                .map(c -> new ChallengeResponse(c.getId().toString(), c.getTitle().toString(), c.getDescription().toString()))
+                .map(c -> new ChallengeResponse(c.getId().toString(), c.getTitle().toString(), c.getDescription().toString(), c.getLanguage()))
                 .toList();
         return ResponseEntity.ok(challenges);
     }
@@ -53,7 +54,9 @@ public class ChallengeController {
             ChallengeResponse challengeResponse =
                     new ChallengeResponse(challenge.getId().toString(),
                             challenge.getTitle().toString(),
-                            challenge.getDescription().toString());
+                            challenge.getDescription().toString(),
+                            challenge.getLanguage()
+                    );
             return ResponseEntity.ok(challengeResponse);
     }
 
@@ -82,7 +85,8 @@ public class ChallengeController {
         ChallengeResponse response = new ChallengeResponse(
                 updated.getId().toString(),
                 updated.getTitle().toString(),
-                updated.getDescription().toString()
+                updated.getDescription().toString(),
+                challenge.getLanguage()
         );
 
         return ResponseEntity.ok(response);
