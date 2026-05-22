@@ -9,6 +9,7 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
+
 import java.io.InputStream;
 import java.util.List;
 
@@ -27,16 +28,19 @@ public class ChallengeSeedLoader implements ApplicationRunner {
     public void run(ApplicationArguments args) throws Exception {
         ClassPathResource resource = new ClassPathResource(SEED_FILE);
         try (InputStream inputStream = resource.getInputStream()) {
-            List<ChallengeSeed> seeds = objectMapper.readValue(inputStream, new TypeReference<>() {});
+            List<ChallengeSeed> seeds = objectMapper.readValue(inputStream, new TypeReference<>() {
+            });
             seeds.stream()
                     .map(seed -> Challenge.restore(
                             ChallengeId.of(seed.id()),
                             seed.title(),
-                            seed.description()
+                            seed.description(),
+                            seed.solution()
                     ))
                     .forEach(repository::save);
         }
     }
 
-    private record ChallengeSeed(String id, String title, String description) {}
+    private record ChallengeSeed(String id, String title, String description, String solution) {
+    }
 }

@@ -74,21 +74,25 @@ public class JsonFileChallengeRepository implements ChallengeRepository {
                 .map(c -> new ChallengeRecord(
                         c.getId().toString(),
                         c.getTitle().toString(),
-                        c.getDescription().toString()))
+                        c.getDescription().toString(),
+                        c.getSolution().toString()))
                 .toList());
     }
 
     private void loadFromFile() throws IOException {
         if (!storageFile.exists()) return;
 
-        objectMapper.readValue(storageFile, new TypeReference<List<ChallengeRecord>>() {})
+        objectMapper.readValue(storageFile, new TypeReference<List<ChallengeRecord>>() {
+                })
                 .forEach(r -> storage.put(
                         ChallengeId.of(r.id()),
                         Challenge.restore(
                                 ChallengeId.of(r.id()),
                                 r.title(),
-                                r.description())));
+                                r.description(),
+                                r.solution())));
     }
 
-    record ChallengeRecord(String id, String title, String description) {}
+    record ChallengeRecord(String id, String title, String description, String solution) {
+    }
 }

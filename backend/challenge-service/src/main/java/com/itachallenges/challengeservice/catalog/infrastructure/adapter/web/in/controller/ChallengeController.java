@@ -23,7 +23,7 @@ public class ChallengeController {
     @PostMapping
     public ResponseEntity<ChallengeResponse> create(@RequestBody ChallengeRequest request) {
         Challenge saved = repository.save(
-                Challenge.create(request.title(), request.description())
+                Challenge.create(request.title(), request.description(), request.solution())
         );
 
         return ResponseEntity.status(HttpStatus.CREATED).body(
@@ -74,7 +74,8 @@ public class ChallengeController {
         Challenge challenge = Challenge.restore(
                 new ChallengeId(UUID.fromString(id)),
                 request.title(),
-                request.description()
+                request.description(),
+                request.solution()
         );
 
         Challenge updated = repository.update(challenge);
