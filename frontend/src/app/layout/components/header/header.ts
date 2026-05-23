@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { LogoutButton } from '../../../shared/components/logout-button/logout-button';
+import { AuthService } from '../../../features/auth/data-access/auth-service';
 
 @Component({
   selector: 'app-header',
@@ -8,5 +9,7 @@ import { LogoutButton } from '../../../shared/components/logout-button/logout-bu
   styleUrl: './header.css',
 })
 export class Header {
+  private readonly authService = inject(AuthService);
 
+  public user = this.authService.user;
 }
