@@ -9,13 +9,12 @@ import { AuthService } from '../../../features/auth/data-access/auth-service';
 })
 export class LogoutButton {
 
-  private authService = inject(AuthService);
+  private readonly authService = inject(AuthService);
 
   logout(): void {
     this.authService.logout().subscribe({
-      next: () => { },
       error: (error) => {
-        console.error('Error crítico durante el proceso de logout:', error);
+        console.error('Error durante el proceso de logout:', error);
       }
     });
   }
