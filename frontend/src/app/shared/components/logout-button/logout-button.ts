@@ -14,7 +14,7 @@ export class LogoutButton {
   logout(): void {
     this.authService.logout().subscribe({
       error: (error) => {
-        console.error('Error durante el proceso de logout:', error);
+        console.error('Error durant el procés de logout:', error);
       }
     });
   }
