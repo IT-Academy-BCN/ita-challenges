@@ -1,6 +1,7 @@
 package com.ita.challenges.account.infrastructure.adapter.web.in;
 
 import com.ita.challenges.account.domain.model.Ticket;
+import com.ita.challenges.account.domain.model.TicketStatus;
 import com.ita.challenges.account.domain.port.out.TicketRepository;
 import com.ita.challenges.account.infrastructure.adapter.web.in.dto.TicketRequest;
 import com.ita.challenges.account.infrastructure.adapter.web.in.dto.TicketResponse;
@@ -9,6 +10,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import java.util.UUID;
+
 import org.springframework.http.HttpStatus;
 
 @RestController
@@ -30,10 +33,12 @@ public class TicketController {
         String userId = user != null ? user.getAttribute("login") : "temp-user";
 
         return new TicketResponse(
-                "temp-id",
+                UUID.randomUUID().toString(),
                 userId,
                 request.title(),
-                request.description()
+                request.description(),
+                null,
+                TicketStatus.OPEN
         );
     }
 
@@ -51,7 +56,9 @@ public class TicketController {
                         ticket.getId(),
                         ticket.getUserId(),
                         ticket.getTitle(),
-                        ticket.getDescription()
+                        ticket.getDescription(),
+                        ticket.getComment(),
+                        ticket.getStatus()
                 ))
                 .toList();
 
@@ -85,7 +92,9 @@ public class TicketController {
                             savedTicket.getId(),
                             savedTicket.getUserId(),
                             savedTicket.getTitle(),
-                            savedTicket.getDescription()
+                            savedTicket.getDescription(),
+                            savedTicket.getComment(),
+                            savedTicket.getStatus()
                     ));
                 })
                 .orElse(ResponseEntity.notFound().build());
@@ -105,7 +114,9 @@ public class TicketController {
                             ticket.getId(),
                             ticket.getUserId(),
                             ticket.getTitle(),
-                            ticket.getDescription()
+                            ticket.getDescription(),
+                            ticket.getComment(),
+                            ticket.getStatus()
                     ));
                 })
                 .orElse(ResponseEntity.notFound().build());
