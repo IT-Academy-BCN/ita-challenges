@@ -59,6 +59,19 @@ public class Ticket {
         return new Ticket(id, userId, title, description, status, comment, createdAt, updatedAt);
     }
 
+    public Ticket withUpdates(String title, String description, TicketStatus status, String comment) {
+        return new Ticket(
+                this.id,
+                this.userId,
+                title != null ? title : this.title,
+                description != null ? description : this.description,
+                status != null ? status : this.status,
+                comment != null ? comment : this.comment,
+                this.createdAt,
+                Instant.now()
+        );
+    }
+
     public String getId() {
         return id;
     }
