@@ -97,7 +97,7 @@ class SubmissionControllerTest {
 
     @Test
     void existsFinalSubmission_ShouldReturnOkWithFalseStatus() throws Exception {
-        mockMvc.perform(get("/api/challenge/submissions/exists-final-submission")
+        mockMvc.perform(get("/api/challenge/submissions/finalized")
                         .param("userId", "1")
                         .param("challengeId", "1"))
                 .andExpect(status().isOk())
