@@ -2,12 +2,15 @@ package com.ita.challenges.account.infrastructure.adapter.web.in;
 
 import com.ita.challenges.account.domain.model.Ticket;
 import com.ita.challenges.account.domain.port.out.TicketRepository;
+import com.ita.challenges.account.infrastructure.adapter.web.in.dto.TicketPatchRequest;
+import com.ita.challenges.account.infrastructure.adapter.web.in.dto.TicketPatchResponse;
 import com.ita.challenges.account.infrastructure.adapter.web.in.dto.TicketRequest;
 import com.ita.challenges.account.infrastructure.adapter.web.in.dto.TicketResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 import org.springframework.http.HttpStatus;
 
@@ -106,6 +109,42 @@ public class TicketController {
                             ticket.getUserId(),
                             ticket.getTitle(),
                             ticket.getDescription()
+                    ));
+                })
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<TicketPatchResponse> patchTicket( @PathVariable String id,
+                                                       @RequestBody TicketPatchRequest patchRequest,
+                                                       @AuthenticationPrincipal OAuth2User user){
+        if (user == null || user.getAttribute("login") == null) {
+            return ResponseEntity.status(401).build();
+        }
+
+        String currentUserId = user.getAttribute("login");
+
+        return ticketRepository.findById(id)
+                .map(existingTicket -> {
+                    if (!existingTicket.getUserId().equals(currentUserId)) {
+                        return ResponseEntity.status(403).<TicketPatchResponse>build();
+                    }
+
+                    Ticket updatedTicket = existingTicket.withUpdates(
+                            patchRequest.title(),
+                            patchRequest.description(),
+                            patchRequest.ticketStatus(),
+                            patchRequest.ticketComment()
+                    );
+
+                    Ticket savedTicket = ticketRepository.updateTicket(updatedTicket);
+                    return ResponseEntity.ok(new TicketPatchResponse(
+                            savedTicket.getId(),
+                            savedTicket.getUserId(),
+                            savedTicket.getTitle(),
+                            savedTicket.getDescription(),
+                            savedTicket.getStatus(),
+                            savedTicket.getComment()
                     ));
                 })
                 .orElse(ResponseEntity.notFound().build());
