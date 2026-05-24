@@ -101,19 +101,15 @@ public class Ticket {
     public String getDescription() {
         return description;
     }
-
     public TicketStatus getStatus() {
         return status;
     }
-
     public String getComment() {
         return comment;
     }
-
     public Instant getCreatedAt() {
         return createdAt;
     }
-
     public Instant getUpdatedAt() {
         return updatedAt;
     }
