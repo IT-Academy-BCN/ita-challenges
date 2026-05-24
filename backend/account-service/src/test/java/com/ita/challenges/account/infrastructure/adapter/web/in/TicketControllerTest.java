@@ -2,7 +2,9 @@ package com.ita.challenges.account.infrastructure.adapter.web.in;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ita.challenges.account.domain.model.Ticket;
+import com.ita.challenges.account.domain.model.TicketStatus;
 import com.ita.challenges.account.domain.port.out.TicketRepository;
+import com.ita.challenges.account.infrastructure.adapter.web.in.dto.TicketPatchRequest;
 import com.ita.challenges.account.infrastructure.adapter.web.in.dto.TicketRequest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.mockito.Mockito.verify;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 @WebMvcTest(TicketController.class)
@@ -138,5 +141,29 @@ class TicketControllerTest {
                 .andExpect(jsonPath("$.userId").value(ownerId))
                 .andExpect(jsonPath("$.title").value("Title for test"))
                 .andExpect(jsonPath("$.description").value("Description for tests"));
+    }
+
+    @Test
+    void should_patch_ticket_successfully_with_partial_new_fields() throws Exception {
+        String ticketId = "ticket-123";
+        String currentUserId = "user-1";
+
+        Ticket existingTicket = Ticket.restore(ticketId, currentUserId, "Old Title", "Old Desc");
+        TicketPatchRequest patchRequest = new TicketPatchRequest(null, null, TicketStatus.IN_PROGRESS, "Working on it");
+
+        when(ticketRepository.findById(ticketId)).thenReturn(Optional.of(existingTicket));
+        when(ticketRepository.updateTicket(any(Ticket.class))).thenAnswer(i -> i.getArguments()[0]);
+
+        mockMvc.perform(patch("/api/account/tickets/{id}", ticketId)
+                        .with(csrf())
+                        .with(oauth2Login().attributes(attrs -> attrs.put("login", currentUserId)))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(patchRequest)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(ticketId))
+                .andExpect(jsonPath("$.title").value("Old Title"))
+                .andExpect(jsonPath("$.description").value("Old Desc"))
+                .andExpect(jsonPath("$.ticketStatus").value("IN_PROGRESS"))
+                .andExpect(jsonPath("$.ticketComment").value("Working on it"));
     }
 }
