@@ -39,7 +39,7 @@ export class ChallengeDetailPage {
       code: ['']
     })
 
-    onSubmit() {
+    saveSolution(): void {
       const currentChallenge = this.challenge();
       const currentUser = this.authService.user() as AuthUserWithId;
 
@@ -52,7 +52,7 @@ export class ChallengeDetailPage {
 
         this.challengeApiService.postSolution(challengeSolution).subscribe({
         next: () => {
-          alert('Solució al repte enviada!');
+          alert('Solució guardada!');
         }
       });
       }

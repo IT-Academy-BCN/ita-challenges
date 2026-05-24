@@ -57,17 +57,10 @@ describe('ChallengeDetailPage', () => {
     expect(component.challenge()).toBeUndefined();
   });
 
-  it('should keep challenge undefined when not found', async () => {
-    mockChallengeService.getById.mockReturnValue(of(undefined));
-    fixture.detectChanges();
-    await fixture.whenStable();
-    expect(component.challenge()).toBeUndefined();
-  });
-
   it('should call postSolution with form data and challengeId', () => {
     fixture.detectChanges();
     component.codeSolutionForm.patchValue({ code: 'my-code' });
-    component.onSubmit();
+    component.saveSolution();
 
     expect(mockChallengeApiService.postSolution).toHaveBeenCalledWith({
       challengeId: 'test-123',
