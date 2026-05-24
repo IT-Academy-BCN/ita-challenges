@@ -101,7 +101,7 @@ class SubmissionControllerTest {
     void existsFinalSubmission_ShouldReturnOkWithFalseStatus_WhenSubmissionNotExisting() throws Exception {
         when(submissionRepository.existsFinalSubmission(any(), any())).thenReturn(false);
 
-        mockMvc.perform(get("/api/challenge/submissions/exists-final-submission")
+        mockMvc.perform(get("/api/challenge/submissions/finalized")
                         .param("userId", "11111111-1111-1111-1111-111111111111")
                         .param("challengeId", "11111111-1111-1111-1111-111111111111"))
                 .andExpect(status().isOk())
@@ -112,7 +112,7 @@ class SubmissionControllerTest {
     void existsFinalSubmission_ShouldReturnOkWithTrueStatus_WhenSubmissionExisting() throws Exception {
         when(submissionRepository.existsFinalSubmission(any(), any())).thenReturn(true);
 
-        mockMvc.perform(get("/api/challenge/submissions/exists-final-submission")
+        mockMvc.perform(get("/api/challenge/submissions/finalized")
                         .param("userId", "11111111-1111-1111-1111-111111111111")
                         .param("challengeId", "11111111-1111-1111-1111-111111111111"))
                 .andExpect(status().isOk())
