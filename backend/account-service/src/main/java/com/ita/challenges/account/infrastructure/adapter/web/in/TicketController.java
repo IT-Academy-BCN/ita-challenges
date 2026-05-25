@@ -32,13 +32,16 @@ public class TicketController {
 
         String userId = user != null ? user.getAttribute("login") : "temp-user";
 
+        Ticket newTicket = Ticket.create(userId, request.title(), request.description());
+
+        Ticket savedTicket = ticketRepository.save(newTicket);
         return new TicketResponse(
-                UUID.randomUUID().toString(),
-                userId,
-                request.title(),
-                request.description(),
-                null,
-                TicketStatus.OPEN
+                savedTicket.getId(),
+                savedTicket.getUserId(),
+                savedTicket.getTitle(),
+                savedTicket.getDescription(),
+                savedTicket.getComment(),
+                savedTicket.getStatus()
         );
     }
 
