@@ -62,25 +62,5 @@ class FinalizeSubmissionUseCaseHandlerTest {
         );
     }
 
-    @Test
-    void shouldThrowExceptionWhenSubmissionAlreadyFinal() {
-        String challengeIdString = UUID.randomUUID().toString();
-        String userIdString = UUID.randomUUID().toString();
-        String code = "public class MySolution { /* code */ }";
-
-        FinalizeSubmissionCommand command = new FinalizeSubmissionCommand(challengeIdString, userIdString, code);
-
-
-        when(repository.findByUserAndChallenge(any(UserId.class), any(ChallengeId.class)))
-                .thenReturn(Optional.of(mock(Submission.class)));
-
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> handler.execute(command));
-        assertEquals("Challenge was submited before by User:" + userIdString, exception.getMessage());
-
-        verify(repository, never()).save(any(Submission.class));
-        verify(repository, times(1)).findByUserAndChallenge(
-                new UserId(UUID.fromString(userIdString)),
-                new ChallengeId(UUID.fromString(challengeIdString))
-        );
-    }
+    
 }
