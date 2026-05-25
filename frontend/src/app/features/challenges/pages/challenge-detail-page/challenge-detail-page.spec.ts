@@ -57,12 +57,12 @@ describe('ChallengeDetailPage', () => {
     expect(component.challenge()).toBeUndefined();
   });
 
-  it('should call postSolution with form data and challengeId', () => {
+  it('should call saveSolution with form data and challengeId', () => {
     fixture.detectChanges();
     component.codeSolutionForm.patchValue({ code: 'my-code' });
     component.saveSolution();
 
-    expect(mockChallengeApiService.postSolution).toHaveBeenCalledWith({
+    expect(mockChallengeApiService.saveSolution).toHaveBeenCalledWith({
       challengeId: 'test-123',
       userId: 'user-456',
       code: 'my-code'

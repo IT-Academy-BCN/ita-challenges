@@ -142,20 +142,20 @@ describe('ChallengeApiService', () => {
     });
   });
 
-  describe('postSolution', () => {
-  it('should call POST with correct URL and payload', () => {
-    const payload: IChallengeSubmission = {
-      challengeId: 'abc-123',
-      userId: 'abc-345',
-      code: 'code'
-    };
+  describe('saveSolution', () => {
+    it('should call POST with correct URL and payload', () => {
+      const payload: IChallengeSubmission = {
+        challengeId: 'abc-123',
+        userId: 'abc-345',
+        code: 'code'
+      };
 
-    service.postSolution(payload).subscribe();
+      service.saveSolution(payload).subscribe();
 
-    const req = httpTestingController.expectOne(`${apiUrl}/submissions/finalize`);
-    expect(req.request.method).toBe('POST');
-    expect(req.request.body).toEqual(payload);
-    req.flush(null);
+      const req = httpTestingController.expectOne(`${apiUrl}/submissions`);
+      expect(req.request.method).toBe('POST');
+      expect(req.request.body).toEqual(payload);
+      req.flush(null);
+    });
   });
-});
 });

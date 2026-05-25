@@ -50,7 +50,7 @@ export class ChallengeDetailPage {
           code: this.codeSolutionForm.value.code ?? ''
           };
 
-        this.challengeApiService.postSolution(challengeSolution).subscribe({
+        this.challengeApiService.saveSolution(challengeSolution).subscribe({
         next: () => {
           alert('Solució guardada!');
         }
