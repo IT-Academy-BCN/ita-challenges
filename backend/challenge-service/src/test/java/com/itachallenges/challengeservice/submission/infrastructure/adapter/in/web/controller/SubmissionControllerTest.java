@@ -1,9 +1,12 @@
 package com.itachallenges.challengeservice.submission.infrastructure.adapter.in.web.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.itachallenges.challengeservice.submission.application.dto.FinalizeSubmissionCommand;
 import com.itachallenges.challengeservice.submission.application.dto.SaveDraftSubmissionCommand;
+import com.itachallenges.challengeservice.submission.domain.port.in.FinalizeSubmissionUseCase;
 import com.itachallenges.challengeservice.submission.domain.port.in.SaveDraftSubmissionUseCase;
 import com.itachallenges.challengeservice.submission.domain.port.out.SubmissionRepository;
+import com.itachallenges.challengeservice.submission.infrastructure.adapter.in.web.dto.FinalizeSubmissionRequest;
 import com.itachallenges.challengeservice.submission.infrastructure.adapter.in.web.dto.SaveDraftSubmissionRequest;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -30,6 +33,9 @@ class SubmissionControllerTest {
 
     @MockBean
     private SaveDraftSubmissionUseCase saveDraftSubmissionUseCase;
+
+    @MockBean
+    private FinalizeSubmissionUseCase finalizeSubmissionUseCase;
 
     @MockBean
     private SubmissionRepository submissionRepository;
@@ -93,5 +99,29 @@ class SubmissionControllerTest {
         assertThat(captor.getValue().userId()).isEqualTo("student-1");
         assertThat(captor.getValue().code()).isEqualTo("console.log('hello world in a happy path')");
     }
+
+    @Test
+    void shouldSubmitFinalAnswerSuccessfully() throws Exception {
+        FinalizeSubmissionRequest finalizeSubmissionRequest = new FinalizeSubmissionRequest(
+                "challenge-1",
+                "student-1",
+                "console.log('hello world in a happy path')"
+        );
+
+        mockMvc.perform(post("/api/challenge/submissions/submit")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(finalizeSubmissionRequest)))
+                .andExpect(status().isCreated());
+
+        ArgumentCaptor<FinalizeSubmissionCommand> captor =
+                ArgumentCaptor.forClass(FinalizeSubmissionCommand.class);
+
+        verify(finalizeSubmissionUseCase).execute(captor.capture());
+
+        assertThat(captor.getValue().challengeId()).isEqualTo("challenge-1");
+        assertThat(captor.getValue().userId()).isEqualTo("student-1");
+        assertThat(captor.getValue().code()).isEqualTo("console.log('hello world in a happy path')");
+    }
+
 
 }
