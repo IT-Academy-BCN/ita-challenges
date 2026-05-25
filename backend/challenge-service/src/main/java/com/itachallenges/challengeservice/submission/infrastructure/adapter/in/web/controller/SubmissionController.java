@@ -1,7 +1,10 @@
 package com.itachallenges.challengeservice.submission.infrastructure.adapter.in.web.controller;
 
+import com.itachallenges.challengeservice.submission.application.dto.FinalizeSubmissionCommand;
 import com.itachallenges.challengeservice.submission.application.dto.SaveDraftSubmissionCommand;
+import com.itachallenges.challengeservice.submission.domain.port.in.FinalizeSubmissionUseCase;
 import com.itachallenges.challengeservice.submission.domain.port.in.SaveDraftSubmissionUseCase;
+import com.itachallenges.challengeservice.submission.infrastructure.adapter.in.web.dto.FinalizeSubmissionRequest;
 import com.itachallenges.challengeservice.submission.infrastructure.adapter.in.web.dto.SaveDraftSubmissionRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,8 +17,10 @@ import org.springframework.web.bind.annotation.*;
 public class SubmissionController {
 
     private final SaveDraftSubmissionUseCase saveDraftSubmissionUseCase;
-    public SubmissionController(SaveDraftSubmissionUseCase saveDraftSubmissionUseCase) {
+    private final FinalizeSubmissionUseCase finalizeSubmissionUseCase;
+    public SubmissionController(SaveDraftSubmissionUseCase saveDraftSubmissionUseCase, FinalizeSubmissionUseCase finalizeSubmissionUseCase) {
         this.saveDraftSubmissionUseCase = saveDraftSubmissionUseCase;
+        this.finalizeSubmissionUseCase = finalizeSubmissionUseCase;
     }
 
     @PostMapping
@@ -28,4 +33,15 @@ public class SubmissionController {
         ));
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
+    @PostMapping("/submit")
+    public ResponseEntity<Void> finalize(@RequestBody FinalizeSubmissionRequest request) {
+        String code = request.code() == null ? "" : request.code();
+        finalizeSubmissionUseCase.execute(new FinalizeSubmissionCommand(
+                request.challengeId(),
+                request.userId(),
+                code
+                ));
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
 }
