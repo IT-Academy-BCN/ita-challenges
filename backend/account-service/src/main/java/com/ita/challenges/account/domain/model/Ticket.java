@@ -54,38 +54,22 @@ public class Ticket {
         );
     }
 
-    public static Ticket restore(
-            String id, String userId, String title, String description,
+    public static Ticket restore(String id, String userId, String title, String description,
             TicketStatus status, String comment, Instant createdAt, Instant updatedAt) {
         return new Ticket(id, userId, title, description, status, comment, createdAt, updatedAt);
     }
-
-    public Ticket withComment(String comment) {
-        return new Ticket(
-                this.id,
-                this.userId,
-                this.title,
-                this.description,
-                this.status,
-                comment,
-                this.createdAt,
-                Instant.now()
-        );
+    public Ticket withUpdates(TicketStatus status, String comment) {
+    return new Ticket(
+            this.id,
+            this.userId,
+            this.title,
+            this.description,
+            status != null ? status : this.status,
+            comment != null ? comment : this.comment,
+            this.createdAt,
+            Instant.now()
+    );
     }
-
-    public Ticket withStatus(TicketStatus status) {
-        return new Ticket(
-                this.id,
-                this.userId,
-                this.title,
-                this.description,
-                status,
-                this.comment,
-                this.createdAt,
-                Instant.now()
-        );
-    }
-
     public String getId() {
         return id;
     }
