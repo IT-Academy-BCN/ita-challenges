@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
@@ -23,7 +22,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
@@ -125,5 +123,23 @@ class TicketControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(updateRequest)))
                 .andExpect(status().isForbidden());
+    }
+
+    @Test
+    void should_return_200_with_ticket_when_requesting_ticket() throws Exception {
+
+        String ticketId = "ticket-123";
+        String ownerId = "user-11";
+
+        Ticket existingTicket = Ticket.restore(ticketId, ownerId, "Title for test", "Description for tests");
+
+        when(ticketRepository.findById(ticketId)).thenReturn(Optional.of(existingTicket));
+
+        mockMvc.perform(get("/api/account/tickets/{id}", ticketId)
+                        .with(oauth2Login().attributes(attrs -> attrs.put("login", ownerId))))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.userId").value(ownerId))
+                .andExpect(jsonPath("$.title").value("Title for test"))
+                .andExpect(jsonPath("$.description").value("Description for tests"));
     }
 }
