@@ -18,6 +18,8 @@ describe('ChallengeDetailPage', () => {
     id: 'test-123',
     title: 'Test Challenge',
     description: 'Test Description',
+    language: 'JAVASCRIPT',
+    difficulty: 'EASY',
   };
 
   beforeEach(async () => {
@@ -67,5 +69,17 @@ describe('ChallengeDetailPage', () => {
       userId: 'user-456',
       code: 'my-code'
     });
+  });
+
+  it('should display language and difficulty in template', async () => {
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const element = fixture.nativeElement as HTMLElement;
+
+    expect(element.textContent).toContain('Test Challenge');
+    expect(element.textContent).toContain('Test Description');
+    expect(element.textContent).toContain('Llenguatge');
+    expect(element.textContent).toContain('Dificultat');
   });
 });
