@@ -14,7 +14,7 @@ describe('CreateChallengePage', () => {
   beforeEach(async () => {
 
     mockChallengeService = {
-      create: () => of({ id: '1', title: '', description: '', difficulty: 'EASY' })
+      create: () => of({ id: '1', title: '', description: '', solution: '', difficulty: 'EASY' })
     };
 
     mockRouter = {
@@ -43,9 +43,11 @@ describe('CreateChallengePage', () => {
     const title = component.challengeForm.get('title');
     const description = component.challengeForm.get('description');
     const difficulty = component.challengeForm.get('difficulty');
+    const solution = component.challengeForm.get('solution');
 
     expect(title?.value).toBe('');
     expect(description?.value).toBe('');
+    expect(solution?.value).toBe('');
     expect(difficulty?.value).toBe('');
   });
 
@@ -59,7 +61,7 @@ describe('CreateChallengePage', () => {
   });
 
   it('should call challengeService.create when call onSubmit with correct data', () => {
-    const testData = { title: 'Nou Repte', description: 'Descripció', difficulty: 'EASY' as ChallengeDifficulty };
+    const testData = { title: 'Nou Repte', description: 'Descripció', solution: 'Solució', difficulty: 'EASY' as ChallengeDifficulty };
     component.challengeForm.setValue(testData);
 
     vi.spyOn(mockChallengeService, 'create').mockReturnValue(of({ id: '1', ...testData }));

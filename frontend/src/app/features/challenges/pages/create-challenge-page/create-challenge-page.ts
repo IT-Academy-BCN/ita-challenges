@@ -22,6 +22,7 @@ export class CreateChallengePage {
   challengeForm = this.fb.group({
     title: [''],
     description: [''],
+    solution: [''],
     difficulty: [''],
   })
 
