@@ -19,8 +19,8 @@ export class TicketDetailPage {
   ngOnInit() {
     const id = this.route.snapshot.paramMap.get('id')!;
 
-    this.ticketService.getById(id).subscribe((selectedChallenge) => {
-      this.ticket.set(selectedChallenge);
+    this.ticketService.getById(id).subscribe((selectedTicket) => {
+      this.ticket.set(selectedTicket);
     });
   }
 
