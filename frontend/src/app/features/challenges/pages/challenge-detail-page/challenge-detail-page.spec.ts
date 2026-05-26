@@ -25,7 +25,7 @@ describe('ChallengeDetailPage', () => {
   beforeEach(async () => {
     mockChallengeService = { getById: vi.fn().mockReturnValue(of(mockChallenge)) };
     mockActivatedRoute = { snapshot: { paramMap: { get: vi.fn().mockReturnValue('test-123') } } };
-    mockChallengeApiService = {postSolution: vi.fn().mockReturnValue(of({}))};
+    mockChallengeApiService = { saveSolution: vi.fn().mockReturnValue(of({}))};
     mockAuthService = {user: vi.fn().mockReturnValue({ id: 'user-456' })};
 
     await TestBed.configureTestingModule({
