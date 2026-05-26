@@ -30,4 +30,13 @@ describe('TicketDetailPage', () => {
     expect(paragraphs[0]?.textContent).toContain(TICKETS_MOCK[0].userId);
     expect(paragraphs[1]?.textContent).toContain(TICKETS_MOCK[0].description);
   });
+
+  it('should render the status select with 3 options', () => {
+    const compiled = fixture.nativeElement as HTMLElement;
+    const selectElement = compiled.querySelector('select');
+    const options = compiled.querySelectorAll('select option');
+
+    expect(selectElement).toBeTruthy();
+    expect(options.length).toBe(4);
+  });
 });
