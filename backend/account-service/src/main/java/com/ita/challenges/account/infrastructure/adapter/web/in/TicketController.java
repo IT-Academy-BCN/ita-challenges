@@ -2,7 +2,9 @@ package com.ita.challenges.account.infrastructure.adapter.web.in;
 
 import com.ita.challenges.account.domain.model.Role;
 import com.ita.challenges.account.domain.model.Ticket;
+import com.ita.challenges.account.domain.model.User;
 import com.ita.challenges.account.domain.port.out.TicketRepository;
+import com.ita.challenges.account.domain.port.out.UserRepository;
 import com.ita.challenges.account.infrastructure.adapter.web.in.dto.TicketPatchRequest;
 import com.ita.challenges.account.infrastructure.adapter.web.in.dto.TicketPatchResponse;
 import com.ita.challenges.account.infrastructure.adapter.web.in.dto.TicketRequest;
@@ -14,15 +16,18 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/api/account/tickets")
 public class TicketController {
 
     private final TicketRepository ticketRepository;
+    private final UserRepository userRepository;
 
-    public TicketController(TicketRepository ticketRepository) {
+    public TicketController(TicketRepository ticketRepository, UserRepository userRepository) {
         this.ticketRepository = ticketRepository;
+        this.userRepository = userRepository;
     }
 
     @PostMapping
@@ -119,12 +124,18 @@ public class TicketController {
     public ResponseEntity<TicketPatchResponse> patchTicket(@PathVariable String id,
                                                            @RequestBody TicketPatchRequest patchRequest,
                                                            @AuthenticationPrincipal OAuth2User user){
+
         if (user == null || user.getAttribute("login") == null) {
-            return ResponseEntity.status(401).build();
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
-        if (!Role.MENTOR.name().equals(user.getAttribute("rol"))) {
-            return ResponseEntity.status(403).build();
+        String login = user.getAttribute("login");
+
+        User appUser = userRepository.findByUsername(login)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.FORBIDDEN, "User not registered"));
+
+        if (appUser.userRole() != Role.MENTOR) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 
         return ticketRepository.findById(id)

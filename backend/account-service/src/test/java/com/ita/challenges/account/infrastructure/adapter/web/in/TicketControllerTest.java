@@ -4,7 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ita.challenges.account.domain.model.Role;
 import com.ita.challenges.account.domain.model.Ticket;
 import com.ita.challenges.account.domain.model.TicketStatus;
+import com.ita.challenges.account.domain.model.User;
 import com.ita.challenges.account.domain.port.out.TicketRepository;
+import com.ita.challenges.account.domain.port.out.UserRepository;
 import com.ita.challenges.account.infrastructure.adapter.web.in.dto.TicketPatchRequest;
 import com.ita.challenges.account.infrastructure.adapter.web.in.dto.TicketRequest;
 import org.junit.jupiter.api.Test;
@@ -41,6 +43,9 @@ class TicketControllerTest {
 
     @MockBean
     private TicketRepository ticketRepository;
+
+    @MockBean
+    private UserRepository userRepository;
 
     @Test
     void should_create_ticket_and_return_201_created() throws Exception {
@@ -151,7 +156,10 @@ class TicketControllerTest {
         String currentUserId = "user-1";
 
         Ticket existingTicket = Ticket.restore(ticketId, currentUserId, "Old Title", "Old Desc");
-        TicketPatchRequest patchRequest = new TicketPatchRequest( TicketStatus.IN_PROGRESS, "Working on it");
+        TicketPatchRequest patchRequest = new TicketPatchRequest(TicketStatus.IN_PROGRESS, "Working on it");
+
+        User mockUser = new User(currentUserId, Role.MENTOR);
+        when(userRepository.findByUsername(currentUserId)).thenReturn(Optional.of(mockUser));
 
         when(ticketRepository.findById(ticketId)).thenReturn(Optional.of(existingTicket));
         when(ticketRepository.updateTicket(any(Ticket.class))).thenAnswer(i -> i.getArguments()[0]);
@@ -160,7 +168,6 @@ class TicketControllerTest {
                         .with(csrf())
                         .with(oauth2Login().attributes(attrs -> {
                             attrs.put("login", currentUserId);
-                            attrs.put("rol", "MENTOR");
                         }))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(patchRequest)))
