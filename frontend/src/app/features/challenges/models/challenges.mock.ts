@@ -4,16 +4,19 @@ export const CHALLENGES_MOCK: IChallenge[] = [
   {
     id: "1",
     title: "primer",
-    description: "descripció 1"
+    description: "descripció 1",
+    solution: 'solució 1',
   },
   {
     id: "2",
     title: "segon",
-    description: "descripció 2"
+    description: "descripció 2",
+    solution: 'solució 2',
   },
   {
     id: "3",
     title: "tercer",
-    description: "descripció 3"
+    description: "descripció 3",
+    solution: 'solució 3',
   },
 ];
