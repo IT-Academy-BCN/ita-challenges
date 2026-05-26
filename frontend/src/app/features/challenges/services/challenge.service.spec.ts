@@ -36,10 +36,11 @@ describe('ChallengeService', () => {
         title: 'New Title',
         description: 'New description',
         language: 'JAVA',
+        solution: `New solution`
       };
 
-      vi.mocked(mockChallengeApiService.update!).mockImplementation((id, data) =>
-        of({ id, ...data } as IChallenge),
+      mockChallengeApiService.update = vi.fn((id, data) =>
+        of({ id, ...data } as IChallenge)
       );
 
       const result = service.update(testId, testChallenge);
@@ -55,14 +56,15 @@ describe('ChallengeService', () => {
 
   describe('create', () => {
     it('should call challengeApiService.create with correct data and return the observable', () => {
-      const newChallenge: IChallengeRequest = {
-        title: 'New',
-        description: 'Desc',
-        language: 'JAVA',
+      const newChallenge: IChallengeRequest = { 
+        title: 'New', 
+        description: 'Desc', 
+        language: 'JAVA', 
+        solution: 'this'
       };
 
-      vi.mocked(mockChallengeApiService.create!).mockImplementation((data) =>
-        of({ id: '1', ...data } as IChallenge),
+      mockChallengeApiService.create = vi.fn((data) =>
+        of({ id: '1', ...data } as IChallenge)
       );
 
       const result = service.create(newChallenge);

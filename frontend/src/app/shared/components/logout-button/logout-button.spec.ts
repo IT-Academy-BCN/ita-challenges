@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { LogoutButton } from './logout-button';
 import { AuthService } from '../../../features/auth/data-access/auth-service';
+import { of } from 'rxjs';
 
 describe('LogoutButton', () => {
 
@@ -15,7 +16,7 @@ describe('LogoutButton', () => {
   beforeEach(async () => {
 
     authServiceMock = {
-      logout: vi.fn(),
+      logout: vi.fn().mockReturnValue(of(void 0)),
     };
 
     await TestBed.configureTestingModule({

@@ -34,6 +34,11 @@ describe('ChallengeApiService', () => {
       title: 'Updated Challenge',
       description: 'New Description',
       language: 'JAVA',
+<<<<<<< HEAD
+=======
+      difficulty: 'EASY',
+      solution: 'solution',
+>>>>>>> a17007f61144589e382468a3d1cec9b8bc3f21a1
     };
 
     it('should call PUT with correct URL and body', () => {
@@ -64,7 +69,7 @@ describe('ChallengeApiService', () => {
 
   describe('create', () => {
     it('should call POST with the correct URL and body and return the created challenge', () => {
-      const newChallenge: IChallengeRequest = { title: 'Test', description: 'Desc' };
+      const newChallenge: IChallengeRequest = { title: 'Test', description: 'Desc', solution: 'solution' };
       const mockResponse: IChallenge = { id: '1', ...newChallenge };
 
       service.create(newChallenge).subscribe((result) => {
@@ -78,10 +83,19 @@ describe('ChallengeApiService', () => {
     });
 
     it('should return default challenge when API fails (Happy Path Fallback)', () => {
+<<<<<<< HEAD
       const newChallenge: IChallengeRequest = {
         title: 'Test',
         description: 'Desc',
         language: 'JAVA',
+=======
+      const newChallenge: IChallengeRequest = { 
+        title: 'Test', 
+        description: 'Desc', 
+        language: 'JAVA',
+        difficulty: 'EASY',
+        solution: 'solution',
+>>>>>>> a17007f61144589e382468a3d1cec9b8bc3f21a1
       };
 
       service.create(newChallenge).subscribe((response) => {
@@ -143,17 +157,30 @@ describe('ChallengeApiService', () => {
     });
   });
 
+<<<<<<< HEAD
   describe('postSolution', () => {
+=======
+  describe('saveSolution', () => {
+>>>>>>> a17007f61144589e382468a3d1cec9b8bc3f21a1
     it('should call POST with correct URL and payload', () => {
       const payload: IChallengeSubmission = {
         challengeId: 'abc-123',
         userId: 'abc-345',
+<<<<<<< HEAD
         code: 'code',
       };
 
       service.postSolution(payload).subscribe();
 
       const req = httpTestingController.expectOne(`${apiUrl}/submissions/finalize`);
+=======
+        code: 'code'
+      };
+
+      const req = httpTestingController.expectOne(`${apiUrl}/submissions`);
+      service.saveSolution(payload).subscribe();
+
+>>>>>>> a17007f61144589e382468a3d1cec9b8bc3f21a1
       expect(req.request.method).toBe('POST');
       expect(req.request.body).toEqual(payload);
       req.flush(null);

@@ -1,1 +1,12 @@
-<p>ticket-detail-page works!</p>
+@if (ticket) {
+    <h1>{{ ticket.title}}</h1>
+    <p>Usuari ID: {{ ticket.userId }}</p>
+    <p>{{ ticket.description }}</p>
+
+    <select id="status">
+      <option value="" disabled>Selecciona l'estat</option>
+        @for (status of statusOptions; track $index) {
+          <option [value]="status.value">{{ status.label }}</option>
+        }
+    </select>
+}

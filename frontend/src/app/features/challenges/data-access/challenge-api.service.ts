@@ -21,6 +21,11 @@ export class ChallengeApiService {
           title: challenge.title,
           description: challenge.description,
           language: challenge.language,
+<<<<<<< HEAD
+=======
+          difficulty: challenge.difficulty,
+          solution: challenge.solution,
+>>>>>>> a17007f61144589e382468a3d1cec9b8bc3f21a1
         });
       }),
     );
@@ -42,6 +47,11 @@ export class ChallengeApiService {
           title: challenge.title,
           description: challenge.description,
           language: challenge.language,
+<<<<<<< HEAD
+=======
+          difficulty: challenge.difficulty,
+          solution: challenge.solution,
+>>>>>>> a17007f61144589e382468a3d1cec9b8bc3f21a1
         }),
       ),
     );
@@ -55,7 +65,7 @@ export class ChallengeApiService {
     );
   }
 
-  postSolution(payload: IChallengeSubmission): Observable<void> {
+  saveSolution(payload: IChallengeSubmission): Observable<void> {
     return this.http.post<void>(`${this.apiUrl}/submissions`, payload);
   }
 }

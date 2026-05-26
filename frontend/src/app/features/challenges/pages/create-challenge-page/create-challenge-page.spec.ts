@@ -1,8 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { CreateChallengePage } from './create-challenge-page';
-import { ChallengeService } from '../../services/challenge.service';
 import { Router } from '@angular/router';
 import { of } from 'rxjs';
+
+import { CreateChallengePage } from './create-challenge-page';
+import { ChallengeService } from '../../services/challenge.service';
+import { ChallengeLanguage } from '../../models/challenge-language.type';
+import { ChallengeDifficulty } from '../../models/challenge-difficulty.type';
 
 describe('CreateChallengePage', () => {
   let component: CreateChallengePage;
@@ -13,7 +16,14 @@ describe('CreateChallengePage', () => {
   beforeEach(async () => {
 
     mockChallengeService = {
-      create: () => of({ id: '1', title: '', description: '' })
+      create: () => of({ 
+        id: '1', 
+        title: '', 
+        description: '', 
+        language: 'JAVA',
+        difficulty: 'EASY',
+        solution: ''
+      })
     };
 
     mockRouter = {
@@ -41,9 +51,15 @@ describe('CreateChallengePage', () => {
   it('should start the form with empty fields', () => {
     const title = component.challengeForm.get('title');
     const description = component.challengeForm.get('description');
+    const language = component.challengeForm.get('language');
+    const difficulty = component.challengeForm.get('difficulty');
+    const solution = component.challengeForm.get('solution');
 
     expect(title?.value).toBe('');
     expect(description?.value).toBe('');
+    expect(language?.value).toBe('');
+    expect(difficulty?.value).toBe('');
+    expect(solution?.value).toBe('');
   });
 
   it('should call onSubmit when form is submitted', () => {
@@ -56,7 +72,13 @@ describe('CreateChallengePage', () => {
   });
 
   it('should call challengeService.create when call onSubmit with correct data', () => {
-    const testData = { title: 'Nou Repte', description: 'Descripció' };
+    const testData = { 
+      title: 'Nou Repte', 
+      description: 'Descripció', 
+      language: 'JAVA' as ChallengeLanguage,
+      difficulty: 'EASY' as ChallengeDifficulty,
+      solution: 'Solució'
+    };
     component.challengeForm.setValue(testData);
 
     vi.spyOn(mockChallengeService, 'create').mockReturnValue(of({ id: '1', ...testData }));
