@@ -1,3 +1,4 @@
+import { TicketStatus } from './status.enum';
 import { ITicket } from './iticket.interface';
 
 export const TICKETS_MOCK: ITicket[] = [
@@ -6,17 +7,29 @@ export const TICKETS_MOCK: ITicket[] = [
     userId: 'primer',
     title: 'primer titol',
     description: 'primera descripcio',
+    status: TicketStatus.OPEN,
+    comment: 'primer comment',
+    createdAt: new Date('2026-05-18T10:00:00Z'),
+    updatedAt: new Date('2026-05-18T10:00:00Z'),
   },
   {
     id: '2',
     userId: 'segon',
     title: 'segon titol',
     description: 'segona descripcio',
+    status: TicketStatus.OPEN,
+    comment: 'segon comment',
+    createdAt: new Date('2026-05-18T10:00:00Z'),
+    updatedAt: new Date('2026-05-18T10:00:00Z'),
   },
   {
     id: '3',
     userId: 'tercer',
     title: 'tercer titol',
     description: 'tercera descripcio',
+    status: TicketStatus.OPEN,
+    comment: 'tercer comment',
+    createdAt: new Date('2026-05-18T10:00:00Z'),
+    updatedAt: new Date('2026-05-18T10:00:00Z'),
   },
 ];

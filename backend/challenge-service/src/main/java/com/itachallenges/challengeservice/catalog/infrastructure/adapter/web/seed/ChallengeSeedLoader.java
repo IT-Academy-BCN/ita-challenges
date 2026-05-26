@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.itachallenges.challengeservice.catalog.domain.model.Challenge;
 import com.itachallenges.challengeservice.catalog.domain.port.out.ChallengeRepository;
+import com.itachallenges.challengeservice.catalog.domain.valueobject.ChallengeDifficulty;
 import com.itachallenges.challengeservice.catalog.domain.valueobject.ChallengeId;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -32,7 +33,8 @@ public class ChallengeSeedLoader implements ApplicationRunner {
                     .map(seed -> Challenge.restore(
                             ChallengeId.of(seed.id()),
                             seed.title(),
-                            seed.description()
+                            seed.description(),
+                            ChallengeDifficulty.EASY
                     ))
                     .forEach(repository::save);
         }
