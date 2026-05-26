@@ -123,7 +123,7 @@ public class TicketController {
             return ResponseEntity.status(401).build();
         }
 
-        if ( user.getAttribute("rol") != Role.MENTOR) {
+        if (!Role.MENTOR.name().equals(user.getAttribute("rol"))) {
             return ResponseEntity.status(403).build();
         }
 

@@ -159,8 +159,8 @@ class TicketControllerTest {
         mockMvc.perform(patch("/api/account/tickets/{id}", ticketId)
                         .with(csrf())
                         .with(oauth2Login().attributes(attrs -> {
-                                attrs.put("login", currentUserId);
-                                attrs.put("rol", Role.MENTOR);
+                            attrs.put("login", currentUserId);
+                            attrs.put("rol", "MENTOR");
                         }))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(patchRequest)))
