@@ -50,4 +50,9 @@ describe('TicketListPage', () => {
     expect(compiled.textContent).toContain(firstTicket.title);
     expect(compiled.textContent).toContain(firstTicket.description);
   });
+
+  it('should have a routerLink button for each ticket', () => {
+  const links = fixture.debugElement.queryAll(By.directive(RouterLink));
+  expect(links.length).toBe(TICKETS_MOCK.length);
+  });
 });

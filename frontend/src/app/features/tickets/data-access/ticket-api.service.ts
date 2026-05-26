@@ -14,17 +14,11 @@ export class TicketApiService {
   private readonly ticketsUrl = '/api/account/tickets';
 
   create(ticket: ITicketRequest): Observable<ITicket> {
-    return this.http.post<ITicket>(this.ticketsUrl, ticket).pipe(
-      catchError(() => of({id: '1', userId: 'u-1', ...ticket} as ITicket))
-    );
+    return this.http.post<ITicket>(this.ticketsUrl, ticket)
   }
 
   loadAll(): Observable<ITicket[]> {
-    return this.http.get<ITicket[]>(this.ticketsUrl).pipe(
-      catchError((error: HttpErrorResponse) => {
-        return of(TICKETS_MOCK);
-      })
-    );
+    return this.http.get<ITicket[]>(this.ticketsUrl)
   }
 
   update(id: string, data: Partial<ITicket>): Observable<ITicket> {
