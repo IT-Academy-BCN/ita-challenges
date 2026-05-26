@@ -4,6 +4,7 @@ import com.itachallenges.challengeservice.catalog.domain.model.Challenge;
 import com.itachallenges.challengeservice.catalog.domain.port.out.ChallengeRepository;
 import com.itachallenges.challengeservice.catalog.domain.valueobject.ChallengeDifficulty;
 import com.itachallenges.challengeservice.catalog.domain.valueobject.ChallengeId;
+import com.itachallenges.challengeservice.catalog.domain.valueobject.ChallengeLanguage;
 import com.itachallenges.challengeservice.catalog.infrastructure.adapter.web.in.dto.ChallengeResponse;
 import com.itachallenges.challengeservice.catalog.infrastructure.adapter.web.in.dto.ChallengeRequest;
 import lombok.AllArgsConstructor;
@@ -24,7 +25,7 @@ public class ChallengeController {
     @PostMapping
     public ResponseEntity<ChallengeResponse> create(@RequestBody ChallengeRequest request) {
         Challenge saved = repository.save(
-                Challenge.create(request.title(), request.description(), ChallengeDifficulty.EASY, request.solution())
+                Challenge.create(request.title(), request.description(), ChallengeLanguage.JAVA, ChallengeDifficulty.EASY, request.solution())
         );
 
         return ResponseEntity.status(HttpStatus.CREATED).body(
@@ -32,6 +33,7 @@ public class ChallengeController {
                         saved.getId().toString(),
                         saved.getTitle().toString(),
                         saved.getDescription().toString(),
+                        saved.getLanguage(),
                         saved.getSolution().toString()
                 )
         );
@@ -41,7 +43,7 @@ public class ChallengeController {
     public ResponseEntity<List<ChallengeResponse>> findAll() {
         List<ChallengeResponse> challenges = repository.findAll()
                 .stream()
-                .map(c -> new ChallengeResponse(c.getId().toString(), c.getTitle().toString(), c.getDescription().toString(), c.getSolution().toString()))
+                .map(c -> new ChallengeResponse(c.getId().toString(), c.getTitle().toString(), c.getDescription().toString(), c.getLanguage(), c.getSolution().toString()))
                 .toList();
         return ResponseEntity.ok(challenges);
     }
@@ -55,7 +57,9 @@ public class ChallengeController {
                 new ChallengeResponse(challenge.getId().toString(),
                         challenge.getTitle().toString(),
                         challenge.getDescription().toString(),
-                        challenge.getSolution().toString());
+                        challenge.getLanguage(),
+                        challenge.getSolution().toString()
+                );
         return ResponseEntity.ok(challengeResponse);
     }
 
@@ -76,6 +80,7 @@ public class ChallengeController {
                 new ChallengeId(UUID.fromString(id)),
                 request.title(),
                 request.description(),
+                ChallengeLanguage.JAVA,
                 ChallengeDifficulty.EASY,
                 request.solution()
         );
@@ -85,6 +90,7 @@ public class ChallengeController {
                 updated.getId().toString(),
                 updated.getTitle().toString(),
                 updated.getDescription().toString(),
+                updated.getLanguage(),
                 updated.getSolution().toString()
         );
 

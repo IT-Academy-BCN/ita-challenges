@@ -6,6 +6,7 @@ import com.itachallenges.challengeservice.catalog.domain.model.Challenge;
 import com.itachallenges.challengeservice.catalog.domain.port.out.ChallengeRepository;
 import com.itachallenges.challengeservice.catalog.domain.valueobject.ChallengeDifficulty;
 import com.itachallenges.challengeservice.catalog.domain.valueobject.ChallengeId;
+import com.itachallenges.challengeservice.catalog.domain.valueobject.ChallengeLanguage;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.core.io.ClassPathResource;
@@ -36,6 +37,7 @@ public class ChallengeSeedLoader implements ApplicationRunner {
                             ChallengeId.of(seed.id()),
                             seed.title(),
                             seed.description(),
+                            ChallengeLanguage.JAVA,
                             ChallengeDifficulty.EASY,
                             seed.solution()
                     ))
