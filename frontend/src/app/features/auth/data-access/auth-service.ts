@@ -1,5 +1,5 @@
 import { inject, Injectable, signal } from '@angular/core';
-import { Observable } from 'rxjs';
+import { map, Observable, tap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { AuthUser } from '../models/auth-user.model';
 
@@ -11,6 +11,7 @@ export class AuthService {
 
   private readonly githubLoginUrl = '/api/account/oauth2/authorization/github';
   private readonly currentUserUrl = '/api/account/auth/me';
+  private readonly logoutUrl = '/api/account/auth/logout';
 
   user = signal<AuthUser | null>(null);
 
@@ -30,7 +31,12 @@ export class AuthService {
     return this.user();
   }
 
-  logout(): void {
-    this.user.set(null);
+  logout(): Observable<void> {
+    return this.http.post(this.logoutUrl, {}, { responseType: 'text' }).pipe(
+      tap(() => {
+        this.user.set(null);
+      }),
+      map(() => { })
+    );
   }
 }
