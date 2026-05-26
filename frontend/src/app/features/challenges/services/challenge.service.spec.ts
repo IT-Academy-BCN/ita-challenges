@@ -35,10 +35,13 @@ describe('ChallengeService', () => {
       const testChallenge: IChallengeRequest = {
         title: 'New Title',
         description: 'New description',
-        solution: `New solution`,
+        language: 'JAVA',
+        solution: `New solution`
       };
 
-      mockChallengeApiService.update = vi.fn((id, data) => of({ id, ...data } as IChallenge));
+      mockChallengeApiService.update = vi.fn((id, data) =>
+        of({ id, ...data } as IChallenge)
+      );
 
       const result = service.update(testId, testChallenge);
 
@@ -53,13 +56,16 @@ describe('ChallengeService', () => {
 
   describe('create', () => {
     it('should call challengeApiService.create with correct data and return the observable', () => {
-      const newChallenge: IChallengeRequest = {
-        title: 'New',
-        description: 'Desc',
-        solution: 'this',
+      const newChallenge: IChallengeRequest = { 
+        title: 'New', 
+        description: 'Desc', 
+        language: 'JAVA', 
+        solution: 'this'
       };
 
-      mockChallengeApiService.create = vi.fn((data) => of({ id: '1', ...data } as IChallenge));
+      mockChallengeApiService.create = vi.fn((data) =>
+        of({ id: '1', ...data } as IChallenge)
+      );
 
       const result = service.create(newChallenge);
 
@@ -68,6 +74,7 @@ describe('ChallengeService', () => {
       result.subscribe((response) => {
         expect(response.title).toBe(newChallenge.title);
         expect(response.description).toBe(newChallenge.description);
+        expect(response.language).toBe(newChallenge.language);
       });
     });
   });
