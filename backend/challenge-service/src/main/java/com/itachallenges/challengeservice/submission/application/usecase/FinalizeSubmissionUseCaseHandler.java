@@ -16,7 +16,7 @@ import java.util.UUID;
 @Service
 @AllArgsConstructor
 public class FinalizeSubmissionUseCaseHandler implements FinalizeSubmissionUseCase {
-    private  final SubmissionRepository repository;
+    private final SubmissionRepository repository;
 
     @Override
     public void execute(FinalizeSubmissionCommand command) {
@@ -24,8 +24,19 @@ public class FinalizeSubmissionUseCaseHandler implements FinalizeSubmissionUseCa
         UserId userId = new UserId(UUID.fromString(command.userId()));
 
         Optional<Submission> existingSubmission = repository.findByUserAndChallenge(userId, challengeId);
+
         if (existingSubmission.isPresent()) {
-            throw new RuntimeException("Challenge was submited before by User:" + command.userId());
+            if (repository.existsFinalSubmission(userId, challengeId)) {
+                throw new RuntimeException("Challenge was submited before by User:" + userId);
+            }
+            Submission previewSubmission = Submission.createSubmitted(
+                    existingSubmission.get().getId(),
+                    challengeId,
+                    userId,
+                    command.code()
+            );
+            repository.save(previewSubmission);
+
         }
 
         Submission submission = Submission.createSubmitted(

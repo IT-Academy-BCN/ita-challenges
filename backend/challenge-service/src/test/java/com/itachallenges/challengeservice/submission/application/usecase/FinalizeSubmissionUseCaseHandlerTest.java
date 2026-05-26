@@ -73,6 +73,9 @@ class FinalizeSubmissionUseCaseHandlerTest {
 
         when(repository.findByUserAndChallenge(any(UserId.class), any(ChallengeId.class)))
                 .thenReturn(Optional.of(mock(Submission.class)));
+        when(repository.existsFinalSubmission(any(UserId.class), any(ChallengeId.class)))
+                .thenReturn(true);
+
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> handler.execute(command));
         assertEquals("Challenge was submited before by User:" + userIdString, exception.getMessage());
