@@ -1,4 +1,7 @@
 package com.itachallenges.challengeservice.catalog.infrastructure.adapter.web.in.dto;
 
-public record ChallengeResponse(String id, String title, String description, String solution) {
+import com.itachallenges.challengeservice.catalog.domain.valueobject.ChallengeLanguage;
+
+public record ChallengeResponse(String id, String title, String description, ChallengeLanguage language,
+                                String solution) {
 }
