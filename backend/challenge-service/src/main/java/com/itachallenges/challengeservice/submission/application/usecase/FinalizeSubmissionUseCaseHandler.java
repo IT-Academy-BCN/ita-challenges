@@ -27,7 +27,7 @@ public class FinalizeSubmissionUseCaseHandler implements FinalizeSubmissionUseCa
 
         if (existingSubmission.isPresent()) {
             if (repository.existsFinalSubmission(userId, challengeId)) {
-                throw new RuntimeException("Challenge was submited before by User:" + userId);
+                throw new RuntimeException("Challenge was submitted before by User:" + userId);
             }
             Submission previewSubmission = Submission.createSubmitted(
                     existingSubmission.get().getId(),

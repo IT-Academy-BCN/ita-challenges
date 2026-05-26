@@ -15,7 +15,8 @@ import org.mockito.MockitoAnnotations;
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.*;
 
 class FinalizeSubmissionUseCaseHandlerTest {
@@ -49,11 +50,11 @@ class FinalizeSubmissionUseCaseHandlerTest {
         verify(repository, times(1)).save(submissionCaptor.capture());
 
         Submission capturedSubmission = submissionCaptor.getValue();
-        assertNotNull(capturedSubmission.getId());
-        assertEquals(new ChallengeId(UUID.fromString(challengeIdString)), capturedSubmission.getChallengeId());
-        assertEquals(new UserId(UUID.fromString(userIdString)), capturedSubmission.getUserId());
-        assertEquals(code, capturedSubmission.getCode());
-        assertNotNull(capturedSubmission.getCreatedAt());
+        assertThat(capturedSubmission.getId()).isNotNull();
+        assertThat(capturedSubmission.getChallengeId()).isEqualTo(new ChallengeId(UUID.fromString(challengeIdString)));
+        assertThat(capturedSubmission.getUserId()).isEqualTo(new UserId(UUID.fromString(userIdString)));
+        assertThat(capturedSubmission.getCode()).isEqualTo(code);
+        assertThat(capturedSubmission.getCreatedAt()).isNotNull();
 
 
         verify(repository, times(1)).findByUserAndChallenge(
@@ -77,8 +78,9 @@ class FinalizeSubmissionUseCaseHandlerTest {
                 .thenReturn(true);
 
 
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> handler.execute(command));
-        assertEquals("Challenge was submited before by User:" + userIdString, exception.getMessage());
+        assertThatThrownBy(() -> handler.execute(command))
+                .isInstanceOf(RuntimeException.class)
+                .hasMessage("Challenge was submitted before by User:" + userIdString);
 
         verify(repository, never()).save(any(Submission.class));
         verify(repository, times(1)).findByUserAndChallenge(
