@@ -4,6 +4,7 @@ import { TICKETS_MOCK } from '../../models/tickets.mock';
 import { TicketService } from '../../ticket.service';
 import { of } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
+import { TicketApiService } from '../../data-access/ticket-api.service';
 
 describe('TicketDetailPage', () => {
   let component: TicketDetailPage;
@@ -17,6 +18,10 @@ describe('TicketDetailPage', () => {
         {
           provide: TicketService,
           useValue: { getById: () => of(mockTicket) }
+        },
+        {
+          provide: TicketApiService,
+          useValue: { update: () => of(mockTicket) }
         },
         {
           provide: ActivatedRoute,
@@ -53,5 +58,20 @@ describe('TicketDetailPage', () => {
 
     expect(selectElement).toBeTruthy();
     expect(options.length).toBe(4);
+  });
+
+  it('should preselect the status from the ticket', () => {
+    expect(component.ticketForm.value.status).toBe(mockTicket.status);
+  });
+
+  it('should call update on submit', () => {
+    const ticketApiService = TestBed.inject(TicketApiService);
+    vi.spyOn(ticketApiService, 'update').mockReturnValue(of(mockTicket));
+
+    component.onSubmit();
+
+    expect(ticketApiService.update).toHaveBeenCalledWith(mockTicket.id, {
+      status: mockTicket.status
+    });
   });
 });
