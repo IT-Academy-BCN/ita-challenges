@@ -35,9 +35,8 @@ class UserControllerTest {
         User user = new User("testuser", Role.STUDENT);
         when(userRepository.findByUsername("testuser")).thenReturn(Optional.of(user));
 
-        mockMvc.perform(get("/api/account/users/testuser"))
+        mockMvc.perform(get("/api/account/users/testuser/role"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.username").value("testuser"))
                 .andExpect(jsonPath("$.role").value("STUDENT"));
     }
 
@@ -46,7 +45,7 @@ class UserControllerTest {
     void shouldReturn404WhenUserNotFound() throws Exception {
         when(userRepository.findByUsername("unknown")).thenReturn(Optional.empty());
 
-        mockMvc.perform(get("/api/account/users/unknown"))
+        mockMvc.perform(get("/api/account/users/unknown/role"))
                 .andExpect(status().isNotFound());
     }
 }
