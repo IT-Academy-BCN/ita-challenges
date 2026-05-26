@@ -26,6 +26,11 @@ export class EditChallengePage {
     if (this.editForm.valid) {
       const { id, title, description, solution } = this.editForm.getRawValue();
 
+      if (!id) {
+        console.error('No es pot actualitzar un repte sense un ID vàlid.');
+        return;
+      }
+
       const challengePayload: IChallengeRequest = {
         title: title ?? '',
         description: description ?? '',
@@ -35,6 +40,9 @@ export class EditChallengePage {
       this.challengeService.update(id ?? '', challengePayload).subscribe({
         next: () => {
           this.goChallenges();
+        },
+        error: (error) => {
+          console.error('Error updating challenge:', error);
         },
       });
     }
