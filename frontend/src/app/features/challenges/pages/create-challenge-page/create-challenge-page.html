@@ -21,5 +21,22 @@
     </select>
   </div>
 
+  <div>
+    <label for="difficulty">Dificultat</label>
+    <select id="difficulty" formControlName="difficulty">
+      <option value="" disabled>Selecciona dificultat</option>
+      @for (difficulty of difficulties; track difficulty) {
+        <option [value]="difficulty">
+          {{ difficulty }}
+        </option>
+      }
+    </select>
+  </div>
+
+  <div>
+    <label for="solution">Solució oficial</label>
+    <textarea id="solution" formControlName="solution"></textarea>
+  </div>
+
   <button type="submit">Crear</button>
 </form>

@@ -6,6 +6,8 @@ import {
 import { provideHttpClient } from '@angular/common/http';
 import { TicketApiService } from './ticket-api.service';
 import { TICKETS_MOCK } from '../models/tickets.mock';
+import { ITicket } from '../models/iticket.interface';
+import { TicketStatus } from '../models/status.enum';
 
 describe('TicketApiService', () => {
   let service: TicketApiService;
@@ -106,4 +108,16 @@ describe('TicketApiService', () => {
 
     expect(result).toEqual({ id: '1', userId: 'u-1', ...mockTicket });
   });
+
+  it('should call PATCH with correct URL and body', () => {
+  const id = '123';
+  const partialData: Partial<ITicket> = { status: TicketStatus.RESOLVED };
+
+  service.update(id, partialData).subscribe();
+
+  const req = httpMock.expectOne(`${API_URL}/${id}`);
+  expect(req.request.method).toBe('PATCH');
+  expect(req.request.body).toEqual(partialData);
+  req.flush({});
+});
 });
