@@ -10,8 +10,15 @@
   </div>
 
   <div>
-    <label for="solution">Solució oficial</label>
-    <textarea id="solution" formControlName="solution"></textarea>
+    <label for="language">Llenguatge</label>
+    <select id="language" formControlName="language">
+      <option value="" selected disabled>Selecciona llenguatge</option>
+      @for (language of languages; track language) {
+        <option [value]="language">
+          {{ language }}
+        </option>
+      }
+    </select>
   </div>
 
   <div>
@@ -24,6 +31,11 @@
         </option>
       }
     </select>
+  </div>
+
+  <div>
+    <label for="solution">Solució oficial</label>
+    <textarea id="solution" formControlName="solution"></textarea>
   </div>
 
   <button type="submit">Crear</button>
