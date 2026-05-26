@@ -26,4 +26,8 @@ export class TicketApiService {
       })
     );
   }
+
+  update(id: string, data: Partial<ITicket>): Observable<ITicket> {
+    return this.http.patch<ITicket>(`${this.ticketsUrl}/${id}`, data);
+  }
 }

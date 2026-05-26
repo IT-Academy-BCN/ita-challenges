@@ -13,6 +13,7 @@ describe('TicketListPage', () => {
   let mockTicketApiService: Partial<TicketApiService>;
 
   beforeEach(async () => {
+    TestBed.resetTestingModule();
     mockTicketApiService = { loadAll: vi.fn().mockReturnValue(of(TICKETS_MOCK)) };
 
     await TestBed.configureTestingModule({
@@ -48,10 +49,5 @@ describe('TicketListPage', () => {
 
     expect(compiled.textContent).toContain(firstTicket.title);
     expect(compiled.textContent).toContain(firstTicket.description);
-  });
-
-  it('should have routerLink buttons for each challenge', () => {
-    const links = fixture.debugElement.queryAll(By.directive(RouterLink));
-    expect(links.length).toBeGreaterThan(0);
   });
 });

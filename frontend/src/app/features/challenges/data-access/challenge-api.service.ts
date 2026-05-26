@@ -20,6 +20,9 @@ export class ChallengeApiService {
           id: '1',
           title: challenge.title,
           description: challenge.description,
+          language: challenge.language,
+          difficulty: challenge.difficulty,
+          solution: challenge.solution,
         });
       }),
     );
@@ -40,6 +43,9 @@ export class ChallengeApiService {
           id: id,
           title: challenge.title,
           description: challenge.description,
+          language: challenge.language,
+          difficulty: challenge.difficulty,
+          solution: challenge.solution,
         }),
       ),
     );
@@ -53,7 +59,7 @@ export class ChallengeApiService {
     );
   }
 
-  postSolution(payload: IChallengeSubmission): Observable<void> {
+  saveSolution(payload: IChallengeSubmission): Observable<void> {
     return this.http.post<void>(`${this.apiUrl}/submissions`, payload);
   }
 }

@@ -8,8 +8,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
+
 import org.springframework.http.HttpStatus;
+
 
 @RestController
 @RequestMapping("/api/account/tickets")
@@ -22,19 +25,25 @@ public class TicketController {
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public TicketResponse createTicket(
+    public ResponseEntity<TicketResponse> createTicket(
             @RequestBody TicketRequest request,
             @AuthenticationPrincipal OAuth2User user) {
 
-        String userId = user != null ? user.getAttribute("login") : "temp-user";
+        if (user == null || user.getAttribute("login") == null) {
+            return ResponseEntity.<TicketResponse>status(HttpStatus.UNAUTHORIZED).build();
+        }
 
-        return new TicketResponse(
-                "temp-id",
-                userId,
-                request.title(),
-                request.description()
-        );
+        String userId = user.getAttribute("login");
+
+        Ticket newTicket = Ticket.create(userId, request.title(), request.description());
+        Ticket savedTicket = ticketRepository.save(newTicket);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(new TicketResponse(
+                        savedTicket.getId(),
+                        savedTicket.getUserId(),
+                        savedTicket.getTitle(),
+                        savedTicket.getDescription()
+                ));
     }
 
     @GetMapping
