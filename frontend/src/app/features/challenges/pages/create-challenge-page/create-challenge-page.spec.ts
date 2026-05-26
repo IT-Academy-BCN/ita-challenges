@@ -3,6 +3,7 @@ import { CreateChallengePage } from './create-challenge-page';
 import { ChallengeService } from '../../services/challenge.service';
 import { Router } from '@angular/router';
 import { of } from 'rxjs';
+import { ChallengeDifficulty } from '../../models/challenge-difficulty.type';
 
 describe('CreateChallengePage', () => {
   let component: CreateChallengePage;
@@ -13,7 +14,7 @@ describe('CreateChallengePage', () => {
   beforeEach(async () => {
 
     mockChallengeService = {
-      create: () => of({ id: '1', title: '', description: '', solution: '' })
+      create: () => of({ id: '1', title: '', description: '', solution: '', difficulty: 'EASY' })
     };
 
     mockRouter = {
@@ -41,11 +42,13 @@ describe('CreateChallengePage', () => {
   it('should start the form with empty fields', () => {
     const title = component.challengeForm.get('title');
     const description = component.challengeForm.get('description');
+    const difficulty = component.challengeForm.get('difficulty');
     const solution = component.challengeForm.get('solution');
 
     expect(title?.value).toBe('');
     expect(description?.value).toBe('');
     expect(solution?.value).toBe('');
+    expect(difficulty?.value).toBe('');
   });
 
   it('should call onSubmit when form is submitted', () => {
@@ -58,7 +61,7 @@ describe('CreateChallengePage', () => {
   });
 
   it('should call challengeService.create when call onSubmit with correct data', () => {
-    const testData = { title: 'Nou Repte', description: 'Descripció', solution: 'Solució' };
+    const testData = { title: 'Nou Repte', description: 'Descripció', solution: 'Solució', difficulty: 'EASY' as ChallengeDifficulty };
     component.challengeForm.setValue(testData);
 
     vi.spyOn(mockChallengeService, 'create').mockReturnValue(of({ id: '1', ...testData }));

@@ -21,6 +21,7 @@ export class ChallengeApiService {
           title: challenge.title,
           description: challenge.description,
           solution: challenge.solution,
+          difficulty: challenge.difficulty,
         });
       }),
     );
@@ -42,6 +43,7 @@ export class ChallengeApiService {
           title: challenge.title,
           description: challenge.description,
           solution: challenge.solution,
+          difficulty: challenge.difficulty,
         }),
       ),
     );
