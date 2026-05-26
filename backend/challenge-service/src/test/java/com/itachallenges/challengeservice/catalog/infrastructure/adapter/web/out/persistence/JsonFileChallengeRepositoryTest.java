@@ -3,6 +3,7 @@ package com.itachallenges.challengeservice.catalog.infrastructure.adapter.web.ou
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.itachallenges.challengeservice.catalog.domain.model.Challenge;
 import com.itachallenges.challengeservice.catalog.domain.valueobject.ChallengeLanguage;
+import com.itachallenges.challengeservice.catalog.domain.valueobject.ChallengeDifficulty;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -37,7 +38,8 @@ class JsonFileChallengeRepositoryTest {
         Challenge challenge = Challenge.create(
                 "Clean Code",
                 "Write readable code",
-                ChallengeLanguage.JAVA
+                ChallengeLanguage.JAVA,
+                ChallengeDifficulty.EASY
         );
 
         repository.save(challenge);
