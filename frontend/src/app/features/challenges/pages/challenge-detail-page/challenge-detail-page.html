@@ -1,15 +1,14 @@
 
 @if (challenge()) {
-
   <h1>{{ challenge()?.title }}</h1>
   <p>{{ challenge()?.description}}</p>
-  <form [formGroup]="codeSolutionForm" (ngSubmit)="onSubmit()">
+  <form [formGroup]="codeSolutionForm" (ngSubmit)="saveSolution()">
     <textarea
         id="challengeAnswer"
         formControlName="code"
         rows="10"
         placeholder="Escriu aquí la resposta del repte...">
       </textarea>
-    <button type="submit">Enviar</button>
+    <button type="submit">Guardar</button>
   </form>
 }

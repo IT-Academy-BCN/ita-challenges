@@ -152,7 +152,7 @@ describe('ChallengeApiService', () => {
     });
   });
 
-  describe('postSolution', () => {
+  describe('saveSolution', () => {
     it('should call POST with correct URL and payload', () => {
       const payload: IChallengeSubmission = {
         challengeId: 'abc-123',
@@ -160,7 +160,8 @@ describe('ChallengeApiService', () => {
         code: 'code'
       };
 
-      service.postSolution(payload).subscribe();
+      const req = httpTestingController.expectOne(`${apiUrl}/submissions`);
+      service.saveSolution(payload).subscribe();
 
       const req = httpTestingController.expectOne(`${apiUrl}/submissions/finalize`);
       expect(req.request.method).toBe('POST');
