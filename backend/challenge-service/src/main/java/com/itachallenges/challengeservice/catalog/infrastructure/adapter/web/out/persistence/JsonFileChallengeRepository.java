@@ -90,7 +90,7 @@ public class JsonFileChallengeRepository implements ChallengeRepository {
                                 ChallengeId.of(r.id()),
                                 r.title(),
                                 r.description(),
-                                r.solution())));
+                                (r.solution() != null && !r.solution().isBlank() ? r.solution() : "No solution provided"))));
     }
 
     record ChallengeRecord(String id, String title, String description, String solution) {
