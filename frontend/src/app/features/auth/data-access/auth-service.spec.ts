@@ -78,13 +78,17 @@ describe('AuthService', () => {
     expect(result).toEqual(MOCK_USER);
   });
 
-  it('should clear current user on logout', () => {
-
+  it('should clear current user on logout', async () => {
     service.setUser(MOCK_USER);
 
-    service.logout();
+    const promise = firstValueFrom(service.logout());
+
+    const req = httpMock.expectOne('/api/account/auth/logout');
+    expect(req.request.method).toBe('POST');
+    req.flush('');
+
+    await promise;
 
     expect(service.user()).toBeNull();
-
   });
 });
