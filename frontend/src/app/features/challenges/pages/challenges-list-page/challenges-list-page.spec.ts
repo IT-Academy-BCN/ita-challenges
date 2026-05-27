@@ -78,4 +78,21 @@ describe('ChallengesListPage', () => {
     component.onRoleChange(false);
     expect(component.isMentor()).toBe(false);
   });
+
+  it('should hide form initially when isMentor is false', () => {
+    const compiled = fixture.nativeElement as HTMLElement;
+    const form = compiled.querySelector('form');
+    expect(form).toBeFalsy();
+  });
+
+  it('should show form when role selector toggles to mentor', () => {
+    // Simular el evento del role-selector
+    component.onRoleChange(true);
+    fixture.detectChanges();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    const form = compiled.querySelector('form');
+    expect(form).toBeTruthy();
+  });
+
 });
