@@ -77,7 +77,7 @@ public class ChallengeController {
                 new ChallengeId(UUID.fromString(id)),
                 request.title(),
                 request.description(),
-                ChallengeDifficulty.EASY
+                request.difficulty()
         );
 
         Challenge updated = repository.update(challenge);

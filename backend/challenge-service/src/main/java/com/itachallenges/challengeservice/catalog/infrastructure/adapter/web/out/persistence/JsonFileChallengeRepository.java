@@ -75,7 +75,8 @@ public class JsonFileChallengeRepository implements ChallengeRepository {
                 .map(c -> new ChallengeRecord(
                         c.getId().toString(),
                         c.getTitle().toString(),
-                        c.getDescription().toString()))
+                        c.getDescription().toString(),
+                        c.getDifficulty().toString()))
                 .toList());
     }
 
@@ -89,8 +90,8 @@ public class JsonFileChallengeRepository implements ChallengeRepository {
                                 ChallengeId.of(r.id()),
                                 r.title(),
                                 r.description(),
-                                ChallengeDifficulty.EASY)));
+                                ChallengeDifficulty.valueOf(r.difficulty()))));
     }
 
-    record ChallengeRecord(String id, String title, String description) {}
+    record ChallengeRecord(String id, String title, String description, String difficulty) {}
 }

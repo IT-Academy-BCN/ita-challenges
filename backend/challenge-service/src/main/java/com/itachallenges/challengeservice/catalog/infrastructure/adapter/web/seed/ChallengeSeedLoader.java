@@ -34,11 +34,11 @@ public class ChallengeSeedLoader implements ApplicationRunner {
                             ChallengeId.of(seed.id()),
                             seed.title(),
                             seed.description(),
-                            ChallengeDifficulty.EASY
+                            seed.difficulty()
                     ))
                     .forEach(repository::save);
         }
     }
 
-    private record ChallengeSeed(String id, String title, String description) {}
+    private record ChallengeSeed(String id, String title, String description, ChallengeDifficulty difficulty) {}
 }
