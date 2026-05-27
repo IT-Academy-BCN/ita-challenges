@@ -6,6 +6,7 @@ import com.itachallenges.challengeservice.catalog.domain.model.Challenge;
 import com.itachallenges.challengeservice.catalog.domain.port.out.ChallengeRepository;
 import com.itachallenges.challengeservice.catalog.domain.valueobject.ChallengeDifficulty;
 import com.itachallenges.challengeservice.catalog.domain.valueobject.ChallengeId;
+import com.itachallenges.challengeservice.catalog.domain.valueobject.ChallengeLanguage;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
@@ -73,11 +74,12 @@ public class JsonFileChallengeRepository implements ChallengeRepository {
     private void persistToFile() throws IOException {
         objectMapper.writeValue(storageFile, storage.values().stream()
                 .map(c -> new ChallengeRecord(
-                        c.getId().toString(),
-                        c.getTitle().toString(),
-                        c.getDescription().toString(),
-                        c.getDifficulty().toString()))
-                .toList());
+                                        c.getId().toString(),
+                                        c.getTitle().toString(),
+                                        c.getDescription().toString(),
+                                        c.getLanguage().toString(),
+                                        c.getDifficulty().toString()
+                )).toList());
     }
 
     private void loadFromFile() throws IOException {
@@ -90,8 +92,11 @@ public class JsonFileChallengeRepository implements ChallengeRepository {
                                 ChallengeId.of(r.id()),
                                 r.title(),
                                 r.description(),
-                                ChallengeDifficulty.valueOf(r.difficulty()))));
+                                ChallengeLanguage.valueOf(r.language()),
+                                ChallengeDifficulty.valueOf(r.difficulty())
+                        )
+                ));
     }
 
-    record ChallengeRecord(String id, String title, String description, String difficulty) {}
+    record ChallengeRecord(String id, String title, String description, String language, String difficulty) {}
 }

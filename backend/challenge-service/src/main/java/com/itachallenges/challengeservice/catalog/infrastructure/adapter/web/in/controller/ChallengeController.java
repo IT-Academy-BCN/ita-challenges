@@ -4,6 +4,7 @@ import com.itachallenges.challengeservice.catalog.domain.model.Challenge;
 import com.itachallenges.challengeservice.catalog.domain.port.out.ChallengeRepository;
 import com.itachallenges.challengeservice.catalog.domain.valueobject.ChallengeDifficulty;
 import com.itachallenges.challengeservice.catalog.domain.valueobject.ChallengeId;
+import com.itachallenges.challengeservice.catalog.domain.valueobject.ChallengeLanguage;
 import com.itachallenges.challengeservice.catalog.infrastructure.adapter.web.in.dto.ChallengeResponse;
 import com.itachallenges.challengeservice.catalog.infrastructure.adapter.web.in.dto.ChallengeRequest;
 import lombok.AllArgsConstructor;
@@ -24,7 +25,7 @@ public class ChallengeController {
     @PostMapping
     public ResponseEntity<ChallengeResponse> create(@RequestBody ChallengeRequest request) {
         Challenge saved = repository.save(
-                Challenge.create(request.title(), request.description(), request.difficulty())
+                Challenge.create(request.title(), request.description(), request.language(), request.difficulty())
         );
 
         return ResponseEntity.status(HttpStatus.CREATED).body(
@@ -32,6 +33,7 @@ public class ChallengeController {
                         saved.getId().toString(),
                         saved.getTitle().toString(),
                         saved.getDescription().toString(),
+                        saved.getLanguage(),
                         saved.getDifficulty()
                 )
         );
@@ -41,7 +43,7 @@ public class ChallengeController {
     public ResponseEntity<List<ChallengeResponse>> findAll() {
         List<ChallengeResponse> challenges = repository.findAll()
                 .stream()
-                .map(c -> new ChallengeResponse(c.getId().toString(), c.getTitle().toString(), c.getDescription().toString(), c.getDifficulty()))
+                .map(c -> new ChallengeResponse(c.getId().toString(), c.getTitle().toString(), c.getDescription().toString(), c.getLanguage(), c.getDifficulty()))
                 .toList();
         return ResponseEntity.ok(challenges);
     }
@@ -53,9 +55,11 @@ public class ChallengeController {
 
             ChallengeResponse challengeResponse =
                     new ChallengeResponse(challenge.getId().toString(),
-                            challenge.getTitle().toString(),
-                            challenge.getDescription().toString(),
-                            challenge.getDifficulty());
+                                                challenge.getTitle().toString(),
+                                                challenge.getDescription().toString(),
+                                                challenge.getLanguage(),
+                                                challenge.getDifficulty()
+                                        );
             return ResponseEntity.ok(challengeResponse);
     }
 
@@ -74,19 +78,21 @@ public class ChallengeController {
     ) {
 
         Challenge challenge = Challenge.restore(
-                new ChallengeId(UUID.fromString(id)),
-                request.title(),
-                request.description(),
-                request.difficulty()
-        );
+                        new ChallengeId(UUID.fromString(id)),
+                        request.title(),
+                        request.description(),
+                        request.language(),
+                        request.difficulty()
+                );
 
         Challenge updated = repository.update(challenge);
         ChallengeResponse response = new ChallengeResponse(
-                updated.getId().toString(),
-                updated.getTitle().toString(),
-                updated.getDescription().toString(),
-                updated.getDifficulty()
-        );
+                        updated.getId().toString(),
+                        updated.getTitle().toString(),
+                        updated.getDescription().toString(),
+                        updated.getLanguage(),
+                        updated.getDifficulty()
+                );
 
         return ResponseEntity.ok(response);
     }

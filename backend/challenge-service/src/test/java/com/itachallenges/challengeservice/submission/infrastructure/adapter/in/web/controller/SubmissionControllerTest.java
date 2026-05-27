@@ -14,9 +14,12 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(SubmissionController.class)
@@ -94,4 +97,25 @@ class SubmissionControllerTest {
         assertThat(captor.getValue().code()).isEqualTo("console.log('hello world in a happy path')");
     }
 
+    @Test
+    void existsFinalSubmission_ShouldReturnOkWithFalseStatus_WhenSubmissionNotExisting() throws Exception {
+        when(submissionRepository.existsFinalSubmission(any(), any())).thenReturn(false);
+
+        mockMvc.perform(get("/api/challenge/submissions/finalized")
+                        .param("userId", "11111111-1111-1111-1111-111111111111")
+                        .param("challengeId", "11111111-1111-1111-1111-111111111111"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.exists").value(false));
+    }
+
+    @Test
+    void existsFinalSubmission_ShouldReturnOkWithTrueStatus_WhenSubmissionExisting() throws Exception {
+        when(submissionRepository.existsFinalSubmission(any(), any())).thenReturn(true);
+
+        mockMvc.perform(get("/api/challenge/submissions/finalized")
+                        .param("userId", "11111111-1111-1111-1111-111111111111")
+                        .param("challengeId", "11111111-1111-1111-1111-111111111111"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.exists").value(true));
+    }
 }
