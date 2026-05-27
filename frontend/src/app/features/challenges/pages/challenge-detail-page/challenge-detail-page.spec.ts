@@ -23,7 +23,10 @@ describe('ChallengeDetailPage', () => {
   beforeEach(async () => {
     mockChallengeService = { getById: vi.fn().mockReturnValue(of(mockChallenge)) };
     mockActivatedRoute = { snapshot: { paramMap: { get: vi.fn().mockReturnValue('test-123') } } };
-    mockChallengeApiService = {postSolution: vi.fn().mockReturnValue(of({}))};
+    mockChallengeApiService = {
+      saveSolution: vi.fn().mockReturnValue(of({})),
+      publishSolution: vi.fn().mockReturnValue(of({}))
+    };
     mockAuthService = {user: vi.fn().mockReturnValue({ id: 'user-456' })};
 
     await TestBed.configureTestingModule({
@@ -63,6 +66,18 @@ describe('ChallengeDetailPage', () => {
     component.saveSolution();
 
     expect(mockChallengeApiService.saveSolution).toHaveBeenCalledWith({
+      challengeId: 'test-123',
+      userId: 'user-456',
+      code: 'my-code'
+    });
+  });
+
+  it('should call publishSolution with form data and challengeId', () => {
+    fixture.detectChanges();
+    component.codeSolutionForm.patchValue({ code: 'my-code' });
+    component.publishSolution();
+
+    expect(mockChallengeApiService.publishSolution).toHaveBeenCalledWith({
       challengeId: 'test-123',
       userId: 'user-456',
       code: 'my-code'

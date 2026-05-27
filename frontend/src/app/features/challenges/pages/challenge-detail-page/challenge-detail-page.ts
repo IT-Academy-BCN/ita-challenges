@@ -57,4 +57,25 @@ export class ChallengeDetailPage {
       });
       }
     }
+
+  publishSolution(): void {
+    const currentChallenge = this.challenge();
+    const currentUser = this.authService.user() as AuthUserWithId;
+
+    if(this.codeSolutionForm.valid && currentChallenge?.id) {
+      const challengeSolution : IChallengeSubmission = {
+        challengeId: currentChallenge.id,
+        userId: currentUser?.id || '550e8400-e29b-41d4-a716-446655440000',
+        code: this.codeSolutionForm.value.code ?? ''
+      };
+      this.challengeApiService.publishSolution(challengeSolution).subscribe({
+        next: () => {
+          alert('Solució publicada!');
+        },
+        error: (err) => {
+          console.error('Error en publicar la solució:', err);
+        }
+      });
+    }
+  }
 }
