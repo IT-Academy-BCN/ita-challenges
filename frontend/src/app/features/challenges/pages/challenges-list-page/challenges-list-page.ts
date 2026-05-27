@@ -48,6 +48,9 @@ export class ChallengesListPage implements OnInit {
         this.challenges.update((current) =>
           current.filter((challenge) => challenge.id !== id)
         );
+      },
+      error: (err) => {
+        console.error('Error deleting challenge', err);
       }
     });
   }
