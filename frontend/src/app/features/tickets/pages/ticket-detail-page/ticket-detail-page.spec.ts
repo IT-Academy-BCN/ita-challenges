@@ -51,7 +51,7 @@ describe('TicketDetailPage', () => {
     expect(paragraphs[1]?.textContent).toContain(mockTicket.description);
   });
 
-  it('should render the status select with 3 options', () => {
+  it('should render the status select with 4 options', () => {
     const compiled = fixture.nativeElement as HTMLElement;
     const selectElement = compiled.querySelector('select');
     const options = compiled.querySelectorAll('select option');
@@ -67,11 +67,12 @@ describe('TicketDetailPage', () => {
   it('should call update on submit', () => {
     const ticketApiService = TestBed.inject(TicketApiService);
     vi.spyOn(ticketApiService, 'update').mockReturnValue(of(mockTicket));
-
+    component.ticketForm.patchValue({ comment: 'Test comment' });
     component.onSubmit();
 
     expect(ticketApiService.update).toHaveBeenCalledWith(mockTicket.id, {
-      status: mockTicket.status
+      status: mockTicket.status,
+      comment: 'Test comment'
     });
   });
 });
