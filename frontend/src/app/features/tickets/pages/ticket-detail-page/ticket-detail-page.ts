@@ -50,7 +50,8 @@ export class TicketDetailPage {
         };
 
       this.ticketApiService.update(currentTicket.id, ticketUpdate).subscribe({
-      next: () => {
+      next: (updatedTicket) => {
+        this.ticket.set(updatedTicket);
         alert('Canvi guardat!');
       }
     });
