@@ -2,7 +2,17 @@
   <h1>IT ACADEMY</h1>
 
   @if (user()) {
-    <h4 >
+    @if (user()?.role) {
+      <h4 class="user__profile">
+        {{ user()?.role }}
+      </h4>
+    } @else {
+       <h4 class="user__profile">
+        CONVIDAT
+      </h4>
+    }
+
+    <h4 class="user__profile">
       {{ user()?.username }}
     </h4>
 
