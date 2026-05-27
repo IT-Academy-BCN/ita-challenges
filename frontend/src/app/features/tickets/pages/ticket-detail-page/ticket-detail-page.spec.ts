@@ -74,5 +74,13 @@ describe('TicketDetailPage', () => {
       status: mockTicket.status,
       comment: 'Test comment'
     });
+  })
+
+  it('should render the comment textarea', () => {
+    const compiled = fixture.nativeElement as HTMLElement;
+    const textareaElement = compiled.querySelector('textarea');
+    expect(textareaElement).toBeTruthy();
+    expect(textareaElement?.getAttribute('id')).toBe('comment');
+    expect(textareaElement?.getAttribute('rows')).toBe('10');
   });
 });
