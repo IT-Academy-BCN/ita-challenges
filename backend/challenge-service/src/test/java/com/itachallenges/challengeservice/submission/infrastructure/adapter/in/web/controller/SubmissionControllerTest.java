@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.itachallenges.challengeservice.submission.application.dto.SaveDraftSubmissionCommand;
 import com.itachallenges.challengeservice.submission.domain.port.in.SaveDraftSubmissionUseCase;
 import com.itachallenges.challengeservice.submission.domain.port.out.SubmissionRepository;
+import com.itachallenges.challengeservice.submission.infrastructure.adapter.in.web.dto.FinalizeSubmissionRequest;
 import com.itachallenges.challengeservice.submission.infrastructure.adapter.in.web.dto.SaveDraftSubmissionRequest;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -103,5 +104,15 @@ class SubmissionControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.exists").value(false));
     }
+    @Test
+    void shouldFinalizeSubmissionSuccessfully() throws Exception {
+        FinalizeSubmissionRequest request = new FinalizeSubmissionRequest(
+                "challenge-1", "student-1", "my solution");
+        mockMvc.perform(post("/api/challenge/submissions/submit")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isCreated());
+    }
+
 
 }
