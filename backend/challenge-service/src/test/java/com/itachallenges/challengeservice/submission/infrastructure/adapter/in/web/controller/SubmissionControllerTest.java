@@ -14,6 +14,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.UUID;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -106,8 +108,10 @@ class SubmissionControllerTest {
     }
     @Test
     void shouldFinalizeSubmissionSuccessfully() throws Exception {
+        String challengeId = UUID.randomUUID().toString();
+        String userId = UUID.randomUUID().toString();
         FinalizeSubmissionRequest request = new FinalizeSubmissionRequest(
-                "challenge-1", "student-1", "my solution");
+                challengeId, userId, "my solution");
         mockMvc.perform(post("/api/challenge/submissions/submit")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
