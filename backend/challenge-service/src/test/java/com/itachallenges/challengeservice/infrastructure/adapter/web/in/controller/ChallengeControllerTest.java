@@ -43,7 +43,7 @@ class ChallengeControllerTest {
             "Clean Code Challenge",
             "A challenge about writing clean and maintainable code",
             ChallengeLanguage.JAVA,
-            null
+            "Challenge solution"
     );
 
     @Test
@@ -87,7 +87,7 @@ class ChallengeControllerTest {
                 "Updated title",
                 "Updated description",
                 ChallengeLanguage.JAVA,
-                null
+                "Challenge solution"
         );
 
         Challenge updatedChallenge = Challenge.restore(

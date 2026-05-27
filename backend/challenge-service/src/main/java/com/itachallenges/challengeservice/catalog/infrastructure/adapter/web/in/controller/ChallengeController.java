@@ -34,7 +34,7 @@ public class ChallengeController {
                         saved.getTitle().toString(),
                         saved.getDescription().toString(),
                         saved.getLanguage(),
-                        null
+                        "Challenge solution"
                 )
         );
     }
@@ -43,7 +43,7 @@ public class ChallengeController {
     public ResponseEntity<List<ChallengeResponse>> findAll() {
         List<ChallengeResponse> challenges = repository.findAll()
                 .stream()
-                .map(c -> new ChallengeResponse(c.getId().toString(), c.getTitle().toString(), c.getDescription().toString(), c.getLanguage(), null))
+                .map(c -> new ChallengeResponse(c.getId().toString(), c.getTitle().toString(), c.getDescription().toString(), c.getLanguage(), "Challenge solution"))
                 .toList();
         return ResponseEntity.ok(challenges);
     }
@@ -58,7 +58,7 @@ public class ChallengeController {
                         challenge.getTitle().toString(),
                         challenge.getDescription().toString(),
                         challenge.getLanguage(),
-                        null
+                        "Challenge solution"
                 );
         return ResponseEntity.ok(challengeResponse);
     }
@@ -90,7 +90,7 @@ public class ChallengeController {
                 updated.getTitle().toString(),
                 updated.getDescription().toString(),
                 challenge.getLanguage(),
-                null
+                "Challenge solution"
         );
 
         return ResponseEntity.ok(response);
