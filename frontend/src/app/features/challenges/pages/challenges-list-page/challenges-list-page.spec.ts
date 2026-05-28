@@ -15,12 +15,16 @@ describe('ChallengesListPage', () => {
   let mockChallengeService: any;
 
   beforeEach(async () => {
-    mockChallengeService = { loadAll: vi.fn().mockReturnValue(of(CHALLENGES_MOCK)) };
+    mockChallengeService = { loadAll: vi.fn().mockReturnValue(of(CHALLENGES_MOCK))};
 
     await TestBed.configureTestingModule({
       imports: [ChallengesListPage],
-      providers: [provideRouter([]), { provide: ChallengeService, useValue: mockChallengeService }],
-    }).compileComponents();
+      providers: [
+        provideRouter([]), 
+        { provide: ChallengeService, useValue: mockChallengeService }
+      ],
+    })
+    .compileComponents();
 
     fixture = TestBed.createComponent(ChallengesListPage);
     component = fixture.componentInstance;

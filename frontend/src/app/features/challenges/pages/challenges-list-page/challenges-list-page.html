@@ -1,25 +1,27 @@
 <div class="challenges-list__header">
-  <h1>Llistat de Reptes</h1>
+    <h1>Llistat de Reptes</h1>
 
-  <app-role-selector (roleChange)="onRoleChange($event)"></app-role-selector>
+    <app-role-selector
+        (roleChange)="onRoleChange($event)"
+    ></app-role-selector>
 </div>
 
-@if (isMentor()) {
-  <app-create-button></app-create-button>
+@if(isMentor()) {
+    <app-create-button></app-create-button>
 }
 
 @if (challenges().length > 0) {
-  <ul>
-    @for (challenge of challenges(); track $index) {
-      <li>
-        <h2>{{ challenge.title }}</h2>
-        <p>{{ challenge.description }}</p>
-        <p>Dificultat: {{ getDifficultyLabel(challenge.difficulty) }}</p>
-        <p>Llenguatge: {{ getLanguageLabel(challenge.language) }}</p>
-        <button [routerLink]="['/challenges', challenge.id]">Accedir al repte</button>
-      </li>
-    }
-  </ul>
+    <ul>
+        @for (challenge of challenges(); track $index) {
+        <li>
+            <h2>{{ challenge.title }}</h2>
+            <p>{{ challenge.description }}</p>
+            <p>Dificultat: {{ getDifficultyLabel(challenge.difficulty) }}</p>
+            <p>Llenguatge: {{ getLanguageLabel(challenge.language) }}</p>
+            <button [routerLink]="['/challenges', challenge.id]">Accedir al repte</button>
+        </li>
+        }
+    </ul>
 } @else {
-  <p>No hi ha reptes disponibles en aquest moment.</p>
+    <p>No hi ha reptes disponibles en aquest moment.</p>
 }

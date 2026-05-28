@@ -1,9 +1,9 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { IChallenge } from '../../models/ichallenge.interface';
 import { ChallengeService } from '../../services/challenge.service';
-import { RoleSelectorComponent } from '../../components/role-selector/role-selector';
+import { RoleSelectorComponent } from "../../components/role-selector/role-selector";
 import { CreateButtonComponent } from '../../components/buttons/create-button/create-button';
-import { RouterLink } from '@angular/router';
+import { RouterLink } from "@angular/router";
 import { ChallengeLanguage } from '../../models/challenge-language.type';
 import { ChallengeDifficulty } from '../../models/challenge-difficulty.type';
 @Component({
@@ -14,6 +14,7 @@ import { ChallengeDifficulty } from '../../models/challenge-difficulty.type';
   styleUrl: './challenges-list-page.css',
 })
 export class ChallengesListPage implements OnInit {
+
   private readonly challengesService = inject(ChallengeService);
 
   challenges = signal<IChallenge[]>([]);
@@ -50,7 +51,7 @@ export class ChallengesListPage implements OnInit {
     this.challengesService.loadAll().subscribe({
       next: (result) => {
         this.challenges.set(result);
-      },
+      }
     });
   }
 
