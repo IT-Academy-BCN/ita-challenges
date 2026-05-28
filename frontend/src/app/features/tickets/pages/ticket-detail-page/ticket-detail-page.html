@@ -1,12 +1,18 @@
-@if (ticket) {
-    <h1>{{ ticket.title}}</h1>
-    <p>Usuari ID: {{ ticket.userId }}</p>
-    <p>{{ ticket.description }}</p>
+@if (ticket(); as t) {
+    <h1>{{ t.title}}</h1>
+    <p>Usuari ID: {{ t.userId }}</p>
+    <p>{{ t.description }}</p>
 
     <select id="status">
       <option value="" disabled>Selecciona l'estat</option>
         @for (status of statusOptions; track $index) {
-          <option [value]="status.value">{{ status.label }}</option>
+          <option [value]="status.value" [selected]="status.value === t.status">
+            {{ status.label }}
+          </option>
         }
     </select>
+    <div>
+      <label for="comment">Comentari del Mentor:</label><br>
+      <textarea id="comment" rows="10"></textarea>
+    </div>
 }
