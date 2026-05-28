@@ -7,6 +7,7 @@ import { IChallengeRequest } from '../models/ichallenge-request.interface';
 import { IChallenge } from '../models/ichallenge.interface';
 import { CHALLENGES_MOCK } from '../models/challenges.mock';
 
+
 describe('ChallengeService', () => {
   let service: ChallengeService;
   let mockChallengeApiService: Partial<ChallengeApiService>;
@@ -16,11 +17,13 @@ describe('ChallengeService', () => {
       delete: (id: string) => of(undefined),
       loadAll: () => of(CHALLENGES_MOCK),
       update: vi.fn(),
-      create: vi.fn(),
+      create: vi.fn()
     };
 
     TestBed.configureTestingModule({
-      providers: [{ provide: ChallengeApiService, useValue: mockChallengeApiService }],
+      providers: [
+        { provide: ChallengeApiService, useValue: mockChallengeApiService }
+      ]
     });
     service = TestBed.inject(ChallengeService);
   });
@@ -47,11 +50,12 @@ describe('ChallengeService', () => {
 
       expect(mockChallengeApiService.update).toHaveBeenCalledWith(testId, testChallenge);
 
-      result.subscribe((response) => {
+      result.subscribe(response => {
         expect(response.id).toBe(testId);
         expect(response.title).toBe(testChallenge.title);
       });
     });
+
   });
 
   describe('create', () => {
@@ -71,7 +75,7 @@ describe('ChallengeService', () => {
 
       expect(mockChallengeApiService.create).toHaveBeenCalledWith(newChallenge);
 
-      result.subscribe((response) => {
+      result.subscribe(response => {
         expect(response.title).toBe(newChallenge.title);
         expect(response.description).toBe(newChallenge.description);
         expect(response.language).toBe(newChallenge.language);
@@ -101,16 +105,16 @@ describe('ChallengeService', () => {
   });
 
   describe('getById', () => {
-    it('should return the correct challenge when id exists', async () => {
-      const spy = vi.spyOn(mockChallengeApiService, 'loadAll');
-      const challenge = await firstValueFrom(service.getById(CHALLENGES_MOCK[0].id));
-      expect(challenge).toEqual(CHALLENGES_MOCK[0]);
-      expect(spy).toHaveBeenCalled();
-    });
+  it('should return the correct challenge when id exists', async () => {
+    const spy = vi.spyOn(mockChallengeApiService, 'loadAll');
+    const challenge = await firstValueFrom(service.getById(CHALLENGES_MOCK[0].id));
+    expect(challenge).toEqual(CHALLENGES_MOCK[0]);
+    expect(spy).toHaveBeenCalled();
+  });
 
-    it('should return undefined when id does not exist', async () => {
-      const challenge = await firstValueFrom(service.getById('inexistente'));
-      expect(challenge).toBeUndefined();
+  it('should return undefined when id does not exist', async () => {
+    const challenge = await firstValueFrom(service.getById('inexistente'));
+    expect(challenge).toBeUndefined();
     });
   });
 });
