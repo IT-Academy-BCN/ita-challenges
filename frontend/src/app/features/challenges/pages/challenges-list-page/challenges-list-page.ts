@@ -6,6 +6,7 @@ import { IChallenge } from '../../models/ichallenge.interface';
 import { ChallengeService } from '../../services/challenge.service';
 import { RoleSelectorComponent } from "../../components/role-selector/role-selector";
 import { CreateButtonComponent } from '../../components/buttons/create-button/create-button';
+import { DeleteButtonComponent } from "../../components/buttons/delete-button/delete-button";
 
 @Component({
   selector: 'app-challenges-list-page',
@@ -13,6 +14,7 @@ import { CreateButtonComponent } from '../../components/buttons/create-button/cr
     RouterLink, 
     RoleSelectorComponent, 
     CreateButtonComponent, 
+    DeleteButtonComponent
   ],
   standalone: true,
   templateUrl: './challenges-list-page.html',
