@@ -26,7 +26,7 @@ export class EditChallengePage {
   });
 
   onSubmit() {
-    if (this.editForm.valid) {
+
       const { id, title, description, difficulty } = this.editForm.getRawValue();
 
       const challengePayload: IChallengeRequest = {
@@ -40,10 +40,10 @@ export class EditChallengePage {
           this.goChallenges();
         },
       });
-    }
   }
 
   goChallenges() {
     this.router.navigate(['/challenges']);
-  }
+  };
+  
 }
