@@ -14,7 +14,10 @@ describe('ChallengeApiService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [provideHttpClient(), provideHttpClientTesting()],
+      providers: [
+        provideHttpClient(), 
+        provideHttpClientTesting()
+      ]
     });
     service = TestBed.inject(ChallengeApiService);
     httpTestingController = TestBed.inject(HttpTestingController);
@@ -41,7 +44,7 @@ describe('ChallengeApiService', () => {
     it('should call PUT with correct URL and body', () => {
       const mockResponse: IChallenge = { id: testId, ...updateData };
 
-      service.update(testId, updateData).subscribe((result) => {
+      service.update(testId, updateData).subscribe(result => {
         expect(result).toEqual(mockResponse);
       });
 
@@ -53,7 +56,7 @@ describe('ChallengeApiService', () => {
     });
 
     it('should return reconstructed challenge when API fails (Happy Path Fallback)', () => {
-      service.update(testId, updateData).subscribe((result) => {
+      service.update(testId, updateData).subscribe(result => {
         expect(result.id).toBe(testId);
         expect(result.title).toBe(updateData.title);
       });
@@ -64,16 +67,13 @@ describe('ChallengeApiService', () => {
     });
   });
 
+
   describe('create', () => {
     it('should call POST with the correct URL and body and return the created challenge', () => {
-      const newChallenge: IChallengeRequest = {
-        title: 'Test',
-        description: 'Desc',
-        solution: 'solution',
-      };
+      const newChallenge: IChallengeRequest = { title: 'Test', description: 'Desc', solution: 'solution' };
       const mockResponse: IChallenge = { id: '1', ...newChallenge };
 
-      service.create(newChallenge).subscribe((result) => {
+      service.create(newChallenge).subscribe(result => {
         expect(result).toEqual(mockResponse);
       });
 
@@ -92,7 +92,7 @@ describe('ChallengeApiService', () => {
         solution: 'solution',
       };
 
-      service.create(newChallenge).subscribe((response) => {
+      service.create(newChallenge).subscribe(response => {
         expect(response.id).toBe('1');
         expect(response.title).toBe(newChallenge.title);
         expect(response.language).toBe(newChallenge.language);
@@ -103,6 +103,7 @@ describe('ChallengeApiService', () => {
       req.flush('Error', { status: 500, statusText: 'Server Error' });
     });
   });
+
 
   describe('loadAll()', () => {
     it('should load all challenges via GET', () => {
@@ -142,7 +143,7 @@ describe('ChallengeApiService', () => {
       const mockId = '456';
       let responseResult: any = 'initial_value';
 
-      service.delete(mockId).subscribe((result) => (responseResult = result));
+      service.delete(mockId).subscribe(result => responseResult = result);
 
       const req = httpTestingController.expectOne(`${apiUrl}/${mockId}`);
       req.flush('Not Found', { status: 404, statusText: 'Not Found' });
@@ -156,7 +157,7 @@ describe('ChallengeApiService', () => {
       const payload: IChallengeSubmission = {
         challengeId: 'abc-123',
         userId: 'abc-345',
-        code: 'code',
+        code: 'code'
       };
 
       service.saveSolution(payload).subscribe();

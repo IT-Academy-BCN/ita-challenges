@@ -12,6 +12,7 @@ import { ChallengeLanguage } from '../../models/challenge-language.type';
   styleUrl: './edit-challenge-page.css',
 })
 export class EditChallengePage {
+
   private readonly challengeService = inject(ChallengeService);
   private readonly router = inject(Router);
   private readonly fb = inject(FormBuilder);
@@ -29,34 +30,30 @@ export class EditChallengePage {
     id: [''],
     title: [''],
     description: [''],
-    language: [''],
+    language: ['']
   });
 
   onSubmit() {
-    const { id, title, description, language } = this.editForm.getRawValue();
 
-    if (!id) {
-      console.error('No es pot actualitzar un repte sense un ID vàlid.');
-      return;
-    }
+    const { id, title, description, language } = this.editForm.getRawValue();
 
     const challengePayload: IChallengeRequest = {
       title: title ?? '',
       description: description ?? '',
-      language: language as ChallengeLanguage,
+      language: language as ChallengeLanguage
     };
 
-    this.challengeService.update(id ?? '', challengePayload).subscribe({
+    this.challengeService.update(id?? '', challengePayload).subscribe({
       next: () => {
-        this.goChallenges();
+        this.goChallenges()
       },
       error: (error) => {
         console.error('Error updating challenge:', error);
       },
-    });
+    })
   }
 
   goChallenges() {
     this.router.navigate(['/challenges']);
-  }
+  };
 }
