@@ -25,7 +25,10 @@ describe('ChallengeDetailPage', () => {
   beforeEach(async () => {
     mockChallengeService = { getById: vi.fn().mockReturnValue(of(mockChallenge)) };
     mockActivatedRoute = { snapshot: { paramMap: { get: vi.fn().mockReturnValue('test-123') } } };
-    mockChallengeApiService = { saveSolution: vi.fn().mockReturnValue(of({}))};
+    mockChallengeApiService = {
+      saveSolution: vi.fn().mockReturnValue(of({})),
+      publishSolution: vi.fn().mockReturnValue(of({}))
+    };
     mockAuthService = {user: vi.fn().mockReturnValue({ id: 'user-456' })};
 
     await TestBed.configureTestingModule({
@@ -59,6 +62,18 @@ describe('ChallengeDetailPage', () => {
     expect(component.challenge()).toBeUndefined();
   });
 
+  it('should display language and difficulty in template', async () => {
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const element = fixture.nativeElement as HTMLElement;
+
+    expect(element.textContent).toContain('Test Challenge');
+    expect(element.textContent).toContain('Test Description');
+    expect(element.textContent).toContain('Llenguatge');
+    expect(element.textContent).toContain('Dificultat');
+  });
+
   it('should call saveSolution with form data and challengeId', () => {
     fixture.detectChanges();
     component.codeSolutionForm.patchValue({ code: 'my-code' });
@@ -71,15 +86,16 @@ describe('ChallengeDetailPage', () => {
     });
   });
 
-  it('should display language and difficulty in template', async () => {
+  it('should call publishSolution with form data and challengeId', () => {
     fixture.detectChanges();
-    await fixture.whenStable();
+    component.codeSolutionForm.patchValue({ code: 'my-code' });
+    component.publishSolution();
 
-    const element = fixture.nativeElement as HTMLElement;
-
-    expect(element.textContent).toContain('Test Challenge');
-    expect(element.textContent).toContain('Test Description');
-    expect(element.textContent).toContain('Llenguatge');
-    expect(element.textContent).toContain('Dificultat');
+    expect(mockChallengeApiService.publishSolution).toHaveBeenCalledWith({
+      challengeId: 'test-123',
+      userId: 'user-456',
+      code: 'my-code'
+    });
   });
+
 });

@@ -1,3 +1,4 @@
+
 @if (challenge(); as ch) {
   <h1>{{ ch.title }}</h1>
   <p>{{ ch.description }}</p>
@@ -11,6 +12,9 @@
         rows="10"
         placeholder="Escriu aquí la resposta del repte...">
       </textarea>
-    <button type="submit">Guardar</button>
+    <div class="challenge__actions">
+      <button type="submit">Guardar</button>
+      <button type="button" (click)="publishSolution()">Publicar</button>
+    </div>
   </form>
 }
