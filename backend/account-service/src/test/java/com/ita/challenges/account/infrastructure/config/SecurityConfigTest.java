@@ -25,22 +25,22 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Import(SecurityConfig.class)
 class SecurityConfigTest {
 
-    @Autowired
+@Autowired
     private MockMvc mockMvc;
 
-    @Autowired
+@Autowired
     private SecurityFilterChain securityFilterChain;
 
-    @MockBean
+@MockBean
     private ClientRegistrationRepository clientRegistrationRepository;
 
-    @MockBean
+@MockBean
     private TicketRepository ticketRepository;
 
-    @MockBean
+@MockBean
     private UserRepository userRepository;
 
-    @MockBean
+@MockBean
     private RestClient restClient;
 
     @Test
