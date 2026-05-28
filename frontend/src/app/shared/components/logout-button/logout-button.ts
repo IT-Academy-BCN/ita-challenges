@@ -9,10 +9,13 @@ import { AuthService } from '../../../features/auth/data-access/auth-service';
 })
 export class LogoutButton {
 
-  private authService = inject(AuthService);
+  private readonly authService = inject(AuthService);
 
   logout(): void {
-    this.authService.logout();
+    this.authService.logout().subscribe({
+      error: (error) => {
+        console.error('Error durant el procés de logout:', error);
+      }
+    });
   }
-
 }

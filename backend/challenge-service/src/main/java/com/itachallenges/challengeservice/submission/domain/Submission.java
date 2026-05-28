@@ -33,4 +33,16 @@ public class Submission {
         return submission;
     }
 
+    public static Submission createSubmitted(SubmissionId id, ChallengeId challengeId, UserId userId, String code) {
+        Submission submission = new Submission();
+        submission.id = id;
+        submission.challengeId = challengeId;
+        submission.userId = userId;
+        submission.code = code;
+        submission.status = SubmissionStatus.SUBMITTED;
+        submission.createdAt = Instant.now();
+        submission.updatedAt = Instant.now();
+        return submission;
+    }
+
 }

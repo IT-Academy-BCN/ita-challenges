@@ -4,7 +4,9 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.itachallenges.challengeservice.catalog.domain.model.Challenge;
 import com.itachallenges.challengeservice.catalog.domain.port.out.ChallengeRepository;
+import com.itachallenges.challengeservice.catalog.domain.valueobject.ChallengeDifficulty;
 import com.itachallenges.challengeservice.catalog.domain.valueobject.ChallengeId;
+import com.itachallenges.challengeservice.catalog.domain.valueobject.ChallengeLanguage;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
@@ -87,7 +89,9 @@ public class JsonFileChallengeRepository implements ChallengeRepository {
                         Challenge.restore(
                                 ChallengeId.of(r.id()),
                                 r.title(),
-                                r.description())));
+                                r.description(),
+                                ChallengeLanguage.JAVA,
+                                ChallengeDifficulty.EASY)));
     }
 
     record ChallengeRecord(String id, String title, String description) {}

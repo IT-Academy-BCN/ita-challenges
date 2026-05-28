@@ -1,6 +1,16 @@
 <header>
   <h1>IT ACADEMY</h1>
 
+  @if (user()) {
+    <h4 >
+      {{ user()?.username }}
+    </h4>
+
+    <div class="user__profile">
+      <img [src]="user()?.avatarUrl" alt="avatar" class="avatar__image"/>
+    </div>
+  }
+
   <div>
     <button>Log In</button>
     <app-logout-button />
