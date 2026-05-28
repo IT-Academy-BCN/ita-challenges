@@ -26,22 +26,22 @@ import static org.assertj.core.api.Assertions.assertThat;
 class SecurityConfigTest {
 
 @Autowired
-    private MockMvc mockMvc;
+private MockMvc mockMvc;
 
 @Autowired
-    private SecurityFilterChain securityFilterChain;
+private SecurityFilterChain securityFilterChain;
 
 @MockBean
-    private ClientRegistrationRepository clientRegistrationRepository;
+private ClientRegistrationRepository clientRegistrationRepository;
 
 @MockBean
-    private TicketRepository ticketRepository;
+private TicketRepository ticketRepository;
 
 @MockBean
-    private UserRepository userRepository;
+private UserRepository userRepository;
 
 @MockBean
-    private RestClient restClient;
+private RestClient restClient;
 
     @Test
     @DisplayName("Should assure the SecurityFilterChain is loaded")
