@@ -18,12 +18,14 @@ describe('ChallengeDetailPage', () => {
     id: 'test-123',
     title: 'Test Challenge',
     description: 'Test Description',
+    language: 'JAVASCRIPT',
+    difficulty: 'EASY',
   };
 
   beforeEach(async () => {
     mockChallengeService = { getById: vi.fn().mockReturnValue(of(mockChallenge)) };
     mockActivatedRoute = { snapshot: { paramMap: { get: vi.fn().mockReturnValue('test-123') } } };
-    mockChallengeApiService = {postSolution: vi.fn().mockReturnValue(of({}))};
+    mockChallengeApiService = { saveSolution: vi.fn().mockReturnValue(of({}))};
     mockAuthService = {user: vi.fn().mockReturnValue({ id: 'user-456' })};
 
     await TestBed.configureTestingModule({
@@ -67,5 +69,17 @@ describe('ChallengeDetailPage', () => {
       userId: 'user-456',
       code: 'my-code'
     });
+  });
+
+  it('should display language and difficulty in template', async () => {
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const element = fixture.nativeElement as HTMLElement;
+
+    expect(element.textContent).toContain('Test Challenge');
+    expect(element.textContent).toContain('Test Description');
+    expect(element.textContent).toContain('Llenguatge');
+    expect(element.textContent).toContain('Dificultat');
   });
 });
