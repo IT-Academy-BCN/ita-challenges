@@ -36,7 +36,8 @@ export class TicketDetailPage {
   ];
 
   ticketForm = this.fb.group({
-      status: ['' as ITicket['status']]
+      status: ['' as ITicket['status']],
+      comment: ''
     })
 
   onSubmit() : void {
@@ -44,11 +45,13 @@ export class TicketDetailPage {
 
     if (this.ticketForm.valid && currentTicket?.id) {
       const ticketUpdate = {
-        status: this.ticketForm.value.status ?? undefined
+        status: this.ticketForm.value.status ?? undefined,
+        comment: this.ticketForm.value.comment || null
         };
 
       this.ticketApiService.update(currentTicket.id, ticketUpdate).subscribe({
-      next: () => {
+      next: (updatedTicket) => {
+        this.ticket.set(updatedTicket);
         alert('Canvi guardat!');
       }
     });

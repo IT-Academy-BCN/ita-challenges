@@ -10,10 +10,11 @@
             <option [value]="status.value">{{ status.label }}</option>
           }
       </select>
+
       <div>
-        <label for="comment">Comentari del Mentor:</label><br>
-        <textarea id="comment" rows="10"></textarea>
-      </div>
+      <label for="comment">Afegir comentari:</label><br>
+      <textarea id="comment" rows="10" formControlName="comment"></textarea>
+    </div>
 
       <button type="submit">Guardar</button>
     </form>
