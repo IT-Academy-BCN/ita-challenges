@@ -1,11 +1,11 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { RouterLink } from "@angular/router";
-
+import { RouterLink } from '@angular/router';
+import { ChallengeLanguage } from '../../models/challenge-language.type';
+import { ChallengeDifficulty } from '../../models/challenge-difficulty.type';
 import { IChallenge } from '../../models/ichallenge.interface';
 import { ChallengeService } from '../../services/challenge.service';
 import { RoleSelectorComponent } from "../../components/role-selector/role-selector";
 import { CreateButtonComponent } from '../../components/buttons/create-button/create-button';
-import { DeleteButtonComponent } from "../../components/buttons/delete-button/delete-button";
 
 @Component({
   selector: 'app-challenges-list-page',
@@ -13,7 +13,6 @@ import { DeleteButtonComponent } from "../../components/buttons/delete-button/de
     RouterLink, 
     RoleSelectorComponent, 
     CreateButtonComponent, 
-    DeleteButtonComponent
   ],
   standalone: true,
   templateUrl: './challenges-list-page.html',
