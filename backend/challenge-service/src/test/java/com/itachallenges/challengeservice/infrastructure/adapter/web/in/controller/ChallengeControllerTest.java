@@ -129,6 +129,7 @@ class ChallengeControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(uuid.toString()))
                 .andExpect(jsonPath("$.title").value("Test Title"))
-                .andExpect(jsonPath("$.description").value("Test Description"));
+                .andExpect(jsonPath("$.description").value("Test Description"))
+                .andExpect(jsonPath("$.language").value("JAVA"));
     }
 }
