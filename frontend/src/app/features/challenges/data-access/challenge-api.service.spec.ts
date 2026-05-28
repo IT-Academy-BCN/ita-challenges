@@ -170,16 +170,35 @@ describe('ChallengeApiService', () => {
   });
 
   describe('publishSolution', () => {
-    it('should return void (mocked implementation)', () => {
+    it('should call POST with correct URL and payload', () => {
       const payload: IChallengeSubmission = {
         challengeId: 'abc-123',
         userId: 'abc-345',
         code: 'code'
       };
 
-      service.publishSolution(payload).subscribe(result => {
-        expect(result).toBeUndefined();
-      });
+      service.publishSolution(payload).subscribe();
+
+      const req = httpTestingController.expectOne(`${apiUrl}/submissions/submit`);
+      expect(req.request.method).toBe('POST');
+      expect(req.request.body).toEqual(payload);
+      req.flush(null);
+    });
+
+    it('should return undefined if HTTP error happens', () => {
+      const payload: IChallengeSubmission = {
+        challengeId: 'abc-123',
+        userId: 'abc-345',
+        code: 'code'
+      };
+      let responseResult: any = 'initial_value';
+
+      service.publishSolution(payload).subscribe(result => responseResult = result);
+
+      const req = httpTestingController.expectOne(`${apiUrl}/submissions/submit`);
+      req.flush('Server Error', { status: 500, statusText: 'Internal Server Error' });
+
+      expect(responseResult).toBeUndefined();
     });
   });
-});
+})
