@@ -1,19 +1,39 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TicketDetailPage } from './ticket-detail-page';
 import { TICKETS_MOCK } from '../../models/tickets.mock';
+import { TicketService } from '../../ticket.service';
+import { of } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
+import { TicketApiService } from '../../data-access/ticket-api.service';
 
 describe('TicketDetailPage', () => {
   let component: TicketDetailPage;
   let fixture: ComponentFixture<TicketDetailPage>;
+  const mockTicket = TICKETS_MOCK[0];
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TicketDetailPage]
+      imports: [TicketDetailPage],
+      providers: [
+        {
+          provide: TicketService,
+          useValue: { getById: () => of(mockTicket) }
+        },
+        {
+          provide: TicketApiService,
+          useValue: { update: () => of(mockTicket) }
+        },
+        {
+          provide: ActivatedRoute,
+          useValue: { snapshot: { paramMap: { get: () => mockTicket.id } } }
+        }
+      ]
     })
     .compileComponents();
 
     fixture = TestBed.createComponent(TicketDetailPage);
     component = fixture.componentInstance;
+    fixture.detectChanges();
     await fixture.whenStable();
   });
 
@@ -26,9 +46,9 @@ describe('TicketDetailPage', () => {
     const titleElement = compiled.querySelector('h1');
     const paragraphs = compiled.querySelectorAll('p');
 
-    expect(titleElement?.textContent).toContain(TICKETS_MOCK[0].title);
-    expect(paragraphs[0]?.textContent).toContain(TICKETS_MOCK[0].userId);
-    expect(paragraphs[1]?.textContent).toContain(TICKETS_MOCK[0].description);
+    expect(titleElement?.textContent).toContain(mockTicket.title);
+    expect(paragraphs[0]?.textContent).toContain(mockTicket.userId);
+    expect(paragraphs[1]?.textContent).toContain(mockTicket.description);
   });
 
   it('should render the status select with 3 options', () => {
@@ -40,6 +60,21 @@ describe('TicketDetailPage', () => {
     expect(options.length).toBe(4);
   });
 
+  it('should preselect the status from the ticket', () => {
+    expect(component.ticketForm.value.status).toBe(mockTicket.status);
+  });
+
+  it('should call update on submit', () => {
+    const ticketApiService = TestBed.inject(TicketApiService);
+    vi.spyOn(ticketApiService, 'update').mockReturnValue(of(mockTicket));
+
+    component.onSubmit();
+
+    expect(ticketApiService.update).toHaveBeenCalledWith(mockTicket.id, {
+      status: mockTicket.status
+    });
+  })
+  
   it('should render the comment textarea', () => {
     const compiled = fixture.nativeElement as HTMLElement;
     const textareaElement = compiled.querySelector('textarea');

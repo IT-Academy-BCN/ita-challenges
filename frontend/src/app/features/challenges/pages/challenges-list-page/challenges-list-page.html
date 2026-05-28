@@ -12,13 +12,19 @@
 
 @if (challenges().length > 0) {
     <ul>
-        @for (challenge of challenges(); track $index) {
+        @for (challenge of challenges(); track challenge.id) {
         <li>
             <h2>{{ challenge.title }}</h2>
             <p>{{ challenge.description }}</p>
-            <p>Dificultat: {{ getDifficultyLabel(challenge.difficulty) }}</p>
-            <p>Llenguatge: {{ getLanguageLabel(challenge.language) }}</p>
-            <button [routerLink]="['/challenges', challenge.id]">Accedir al repte</button>
+
+            <div class="challenges-list__actions">
+                <button [routerLink]="['/challenges', challenge.id]">Accedir al repte</button>
+                @if(isMentor()) {
+                    <app-delete-button
+                        (deleteClick)="handleDelete(challenge.id)">
+                    </app-delete-button>
+                }
+            </div>
         </li>
         }
     </ul>
