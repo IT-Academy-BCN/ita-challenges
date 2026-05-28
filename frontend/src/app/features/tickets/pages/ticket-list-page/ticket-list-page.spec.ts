@@ -4,6 +4,8 @@ import { of } from 'rxjs';
 import { TicketListPage } from './ticket-list-page';
 import { TicketApiService } from '../../data-access/ticket-api.service';
 import { TICKETS_MOCK } from '../../models/tickets.mock';
+import { provideRouter, RouterLink } from '@angular/router';
+import { By } from '@angular/platform-browser';
 
 describe('TicketListPage', () => {
   let component: TicketListPage;
@@ -11,12 +13,14 @@ describe('TicketListPage', () => {
   let mockTicketApiService: Partial<TicketApiService>;
 
   beforeEach(async () => {
+    TestBed.resetTestingModule();
     mockTicketApiService = { loadAll: vi.fn().mockReturnValue(of(TICKETS_MOCK)) };
 
     await TestBed.configureTestingModule({
       imports: [TicketListPage],
       providers: [
-        { provide: TicketApiService, useValue: mockTicketApiService }
+        { provide: TicketApiService, useValue: mockTicketApiService },
+        provideRouter([])
       ]
     }).compileComponents();
 
@@ -45,5 +49,10 @@ describe('TicketListPage', () => {
 
     expect(compiled.textContent).toContain(firstTicket.title);
     expect(compiled.textContent).toContain(firstTicket.description);
+  });
+
+  it('should have a routerLink button for each ticket', () => {
+  const links = fixture.debugElement.queryAll(By.directive(RouterLink));
+  expect(links.length).toBe(TICKETS_MOCK.length);
   });
 });
