@@ -25,7 +25,7 @@ public class ChallengeController {
     @PostMapping
     public ResponseEntity<ChallengeResponse> create(@RequestBody ChallengeRequest request) {
         Challenge saved = repository.save(
-                Challenge.create(request.title(), request.description(), ChallengeLanguage.JAVA, ChallengeDifficulty.EASY, request.solution())
+                Challenge.create(request.title(), request.description(), request.language(), ChallengeDifficulty.EASY, request.solution())
         );
 
         return ResponseEntity.status(HttpStatus.CREATED).body(
@@ -80,7 +80,7 @@ public class ChallengeController {
                 new ChallengeId(UUID.fromString(id)),
                 request.title(),
                 request.description(),
-                ChallengeLanguage.JAVA,
+                request.language(),
                 ChallengeDifficulty.EASY,
                 request.solution()
         );

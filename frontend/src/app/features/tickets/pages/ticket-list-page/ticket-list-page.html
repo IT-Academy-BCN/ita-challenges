@@ -6,5 +6,6 @@
             <h3>{{ ticket.title }}</h3>
             <p>{{ ticket.description }}</p>
         </li>
+        <button [routerLink]="['/tickets', ticket.id]">Accedir al ticket</button>
     }
 </ul>

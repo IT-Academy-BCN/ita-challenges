@@ -6,6 +6,7 @@ import { vi } from 'vitest';
 
 import { AuthService } from './auth-service';
 import { AuthUser } from '../models/auth-user.model';
+import { Role } from '../../../core/models/role.enum';
 
 const MOCK_USER: AuthUser = {
   username: 'mockUser',
@@ -67,17 +68,6 @@ describe('AuthService', () => {
     vi.unstubAllGlobals();
   });
 
-  it('should fetch user from API', async () => {
-    const promise = firstValueFrom(service.fetchUser());
-
-    const req = httpMock.expectOne('/api/account/auth/me');
-    expect(req.request.method).toBe('GET');
-    req.flush(MOCK_USER);
-
-    const result = await promise;
-    expect(result).toEqual(MOCK_USER);
-  });
-
   it('should clear current user on logout', async () => {
     service.setUser(MOCK_USER);
 
@@ -90,5 +80,12 @@ describe('AuthService', () => {
     await promise;
 
     expect(service.user()).toBeNull();
+  });
+
+  it('should fetch user and role from API', async () => {
+    const promise = firstValueFrom(service.fetchUser());
+    httpMock.expectOne('/api/account/auth/me').flush(MOCK_USER);
+    httpMock.expectOne(`/api/account/users/${MOCK_USER.username}/role`).flush({ role: Role.GUEST });
+    expect(await promise).toEqual({ ...MOCK_USER, role: Role.GUEST });
   });
 });

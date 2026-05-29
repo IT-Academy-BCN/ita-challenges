@@ -168,4 +168,18 @@ describe('ChallengeApiService', () => {
       req.flush(null);
     });
   });
+
+  describe('publishSolution', () => {
+    it('should return void (mocked implementation)', () => {
+      const payload: IChallengeSubmission = {
+        challengeId: 'abc-123',
+        userId: 'abc-345',
+        code: 'code'
+      };
+
+      service.publishSolution(payload).subscribe(result => {
+        expect(result).toBeUndefined();
+      });
+    });
+  });
 });

@@ -18,12 +18,17 @@ describe('ChallengeDetailPage', () => {
     id: 'test-123',
     title: 'Test Challenge',
     description: 'Test Description',
+    language: 'JAVASCRIPT',
+    difficulty: 'EASY',
   };
 
   beforeEach(async () => {
     mockChallengeService = { getById: vi.fn().mockReturnValue(of(mockChallenge)) };
     mockActivatedRoute = { snapshot: { paramMap: { get: vi.fn().mockReturnValue('test-123') } } };
-    mockChallengeApiService = {postSolution: vi.fn().mockReturnValue(of({}))};
+    mockChallengeApiService = {
+      saveSolution: vi.fn().mockReturnValue(of({})),
+      publishSolution: vi.fn().mockReturnValue(of({}))
+    };
     mockAuthService = {user: vi.fn().mockReturnValue({ id: 'user-456' })};
 
     await TestBed.configureTestingModule({
@@ -57,6 +62,18 @@ describe('ChallengeDetailPage', () => {
     expect(component.challenge()).toBeUndefined();
   });
 
+  it('should display language and difficulty in template', async () => {
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const element = fixture.nativeElement as HTMLElement;
+
+    expect(element.textContent).toContain('Test Challenge');
+    expect(element.textContent).toContain('Test Description');
+    expect(element.textContent).toContain('Llenguatge');
+    expect(element.textContent).toContain('Dificultat');
+  });
+
   it('should call saveSolution with form data and challengeId', () => {
     fixture.detectChanges();
     component.codeSolutionForm.patchValue({ code: 'my-code' });
@@ -68,4 +85,17 @@ describe('ChallengeDetailPage', () => {
       code: 'my-code'
     });
   });
+
+  it('should call publishSolution with form data and challengeId', () => {
+    fixture.detectChanges();
+    component.codeSolutionForm.patchValue({ code: 'my-code' });
+    component.publishSolution();
+
+    expect(mockChallengeApiService.publishSolution).toHaveBeenCalledWith({
+      challengeId: 'test-123',
+      userId: 'user-456',
+      code: 'my-code'
+    });
+  });
+
 });
