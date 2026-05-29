@@ -12,6 +12,7 @@ import { ChallengeDifficulty } from '../../models/challenge-difficulty.type';
   styleUrl: './edit-challenge-page.css',
 })
 export class EditChallengePage {
+
   private readonly challengeService = inject(ChallengeService);
   private readonly router = inject(Router);
   private readonly fb = inject(FormBuilder);
@@ -35,15 +36,15 @@ export class EditChallengePage {
         difficulty: difficulty as ChallengeDifficulty,
       };
 
-      this.challengeService.update(id ?? '', challengePayload).subscribe({
+      this.challengeService.update(id?? '', challengePayload).subscribe({
         next: () => {
-          this.goChallenges();
+          this.goChallenges()
         },
       });
-  }
+    };
 
-  goChallenges() {
-    this.router.navigate(['/challenges']);
-  };
-  
-}
+    goChallenges() {
+      this.router.navigate(['/challenges']);
+    };
+    
+  }

@@ -14,10 +14,9 @@ describe('ChallengeApiService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: 
-      [
+      providers: [
         provideHttpClient(), 
-        provideHttpClientTesting()
+        provideHttpClientTesting(),
       ]
     });
     service = TestBed.inject(ChallengeApiService);
@@ -67,6 +66,7 @@ describe('ChallengeApiService', () => {
       req.flush('Error', { status: 500, statusText: 'Server Error' });
     });
   });
+
 
   describe('create', () => {
     it('should call POST with the correct URL and body and return the created challenge', () => {
@@ -143,7 +143,7 @@ describe('ChallengeApiService', () => {
       const mockId = '456';
       let responseResult: any = 'initial_value';
 
-      service.delete(mockId).subscribe(result => (responseResult = result));
+      service.delete(mockId).subscribe(result => responseResult = result);
 
       const req = httpTestingController.expectOne(`${apiUrl}/${mockId}`);
       req.flush('Not Found', { status: 404, statusText: 'Not Found' });
