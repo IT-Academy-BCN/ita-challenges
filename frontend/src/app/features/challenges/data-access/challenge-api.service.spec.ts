@@ -15,7 +15,7 @@ describe('ChallengeApiService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
-        provideHttpClient(), 
+        provideHttpClient(),
         provideHttpClientTesting(),
       ]
     });
