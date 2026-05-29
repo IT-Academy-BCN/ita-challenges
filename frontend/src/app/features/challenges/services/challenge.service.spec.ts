@@ -57,7 +57,7 @@ describe('ChallengeService', () => {
       });
     });
 
-  
+
   describe('create', () => {
     it('should call challengeApiService.create with correct data and return the observable', () => {
       const newChallenge: IChallengeRequest = { 
