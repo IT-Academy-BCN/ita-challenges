@@ -28,23 +28,23 @@ export class EditChallengePage {
 
   onSubmit() {
 
-      const { id, title, description, difficulty } = this.editForm.getRawValue();
+    const { id, title, description, difficulty} = this.editForm.getRawValue();
 
-      const challengePayload: IChallengeRequest = {
-        title: title ?? '',
-        description: description ?? '',
-        difficulty: difficulty as ChallengeDifficulty,
-      };
-
-      this.challengeService.update(id?? '', challengePayload).subscribe({
-        next: () => {
-          this.goChallenges()
-        },
-      });
+    const challengePayload: IChallengeRequest = {
+      title: title ?? '',
+      description: description ?? '',
+      difficulty: difficulty as ChallengeDifficulty,
     };
 
-    goChallenges() {
-      this.router.navigate(['/challenges']);
-    };
-    
-  }
+    this.challengeService.update(id?? '', challengePayload).subscribe({
+      next: () => {
+        this.goChallenges()
+      },
+    });
+  };
+
+  goChallenges() {
+    this.router.navigate(['/challenges']);
+  };
+
+}
