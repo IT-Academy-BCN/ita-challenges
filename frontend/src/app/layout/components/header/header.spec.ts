@@ -5,11 +5,13 @@ import { signal } from '@angular/core';
 import { AuthUser } from '../../../features/auth/models/auth-user.model';
 import { of } from 'rxjs';
 import { AuthService } from '../../../features/auth/data-access/auth-service';
+import { Role } from '../../../core/models/role.enum';
 
 const MOCK_USER: AuthUser = {
   username: 'mockUser',
   avatarUrl: 'https://github.com/MockUser.png',
   token: 'token-808',
+  role: Role.GUEST,
 };
 
 describe('Header', () => {
@@ -19,14 +21,18 @@ describe('Header', () => {
   let authServiceMock: {
     user: ReturnType<typeof signal<AuthUser | null>>;
     logout: ReturnType<typeof vi.fn>;
+    fetchUser: ReturnType<typeof vi.fn>;
+    getUser: ReturnType<typeof vi.fn>;
+    setUser: ReturnType<typeof vi.fn>;
   };
-
   beforeEach(async () => {
     authServiceMock = {
       user: signal(null),
       logout: vi.fn().mockReturnValue(of(void 0)),
+      fetchUser: vi.fn().mockReturnValue(of(null)),
+      getUser: vi.fn().mockReturnValue(null),
+      setUser: vi.fn(),
     };
-
     await TestBed.configureTestingModule({
       imports: [Header],
       providers: [
@@ -56,6 +62,25 @@ describe('Header', () => {
 
   });
 
+  it('should show username when user is logged in', () => {
+    authServiceMock.user.set(MOCK_USER);
+    fixture.detectChanges();
+
+    const h4s = fixture.nativeElement.querySelectorAll('h4');
+    const usernameEl = Array.from(h4s).find((el: any) =>
+      el.textContent.includes(MOCK_USER.username)
+    );
+    expect(usernameEl).toBeTruthy();
+  });
+
+  it('should not show username when user is not logged in', () => {
+    authServiceMock.user.set(null);
+    fixture.detectChanges();
+
+    const h4 = fixture.nativeElement.querySelector('h4');
+    expect(h4).toBeFalsy();
+  });
+
   it('should show user avatar when user is logged in', () => {
     authServiceMock.user.set(MOCK_USER);
     fixture.detectChanges();
@@ -71,5 +96,17 @@ describe('Header', () => {
 
     const avatar = fixture.nativeElement.querySelector('.avatar__image');
     expect(avatar).toBeFalsy();
+  });
+
+  it('should show user role when user has a role', () => {
+    authServiceMock.user.set({ ...MOCK_USER, role: Role.GUEST });
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector('h4').textContent).toContain(Role.GUEST);
+  });
+
+  it('should show CONVIDAT when user has no role', () => {
+    authServiceMock.user.set({ ...MOCK_USER, role: undefined });
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector('h4').textContent).toContain('CONVIDAT');
   });
 });

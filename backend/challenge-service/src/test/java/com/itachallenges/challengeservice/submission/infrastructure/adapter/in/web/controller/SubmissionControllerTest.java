@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.itachallenges.challengeservice.submission.application.dto.SaveDraftSubmissionCommand;
 import com.itachallenges.challengeservice.submission.domain.port.in.SaveDraftSubmissionUseCase;
 import com.itachallenges.challengeservice.submission.domain.port.out.SubmissionRepository;
+import com.itachallenges.challengeservice.submission.infrastructure.adapter.in.web.dto.FinalizeSubmissionRequest;
 import com.itachallenges.challengeservice.submission.infrastructure.adapter.in.web.dto.SaveDraftSubmissionRequest;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -12,6 +13,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -107,6 +110,18 @@ class SubmissionControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.exists").value(false));
     }
+    @Test
+    void shouldFinalizeSubmissionSuccessfully() throws Exception {
+        String challengeId = UUID.randomUUID().toString();
+        String userId = UUID.randomUUID().toString();
+        FinalizeSubmissionRequest request = new FinalizeSubmissionRequest(
+                challengeId, userId, "my solution");
+        mockMvc.perform(post("/api/challenge/submissions/submit")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isCreated());
+    }
+
 
     @Test
     void existsFinalSubmission_ShouldReturnOkWithTrueStatus_WhenSubmissionExisting() throws Exception {

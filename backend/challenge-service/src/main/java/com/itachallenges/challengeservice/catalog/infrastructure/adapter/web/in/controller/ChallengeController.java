@@ -34,7 +34,8 @@ public class ChallengeController {
                         saved.getTitle().toString(),
                         saved.getDescription().toString(),
                         saved.getLanguage(),
-                        saved.getDifficulty()
+                        saved.getDifficulty(),
+                        "Challenge solution"
                 )
         );
     }
@@ -43,24 +44,26 @@ public class ChallengeController {
     public ResponseEntity<List<ChallengeResponse>> findAll() {
         List<ChallengeResponse> challenges = repository.findAll()
                 .stream()
-                .map(c -> new ChallengeResponse(c.getId().toString(), c.getTitle().toString(), c.getDescription().toString(), c.getLanguage(), c.getDifficulty()))
+                .map(c -> new ChallengeResponse(c.getId().toString(), c.getTitle().toString(), c.getDescription().toString(), c.getLanguage(), c.getDifficulty(), "Challenge solution"))
                 .toList();
         return ResponseEntity.ok(challenges);
     }
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<ChallengeResponse> find(@PathVariable String id){
-            Challenge challenge = repository.find(ChallengeId.of(id));
+    public ResponseEntity<ChallengeResponse> find(@PathVariable String id) {
+        Challenge challenge = repository.find(ChallengeId.of(id));
 
-            ChallengeResponse challengeResponse =
-                    new ChallengeResponse(challenge.getId().toString(),
-                                                challenge.getTitle().toString(),
-                                                challenge.getDescription().toString(),
-                                                challenge.getLanguage(),
-                                                challenge.getDifficulty()
-                                        );
-            return ResponseEntity.ok(challengeResponse);
+        ChallengeResponse challengeResponse =
+                new ChallengeResponse(challenge.getId().toString(),
+                        challenge.getTitle().toString(),
+                        challenge.getDescription().toString(),
+                        challenge.getLanguage(),
+                        challenge.getDifficulty(),
+                        "Challenge solution"
+                );
+        return ResponseEntity.ok(challengeResponse);
+
     }
 
     @DeleteMapping("/{id}")
@@ -68,7 +71,6 @@ public class ChallengeController {
         repository.delete(ChallengeId.of(id));
         return ResponseEntity.noContent().build();
     }
-
 
 
     @PutMapping("/{id}")
@@ -87,12 +89,13 @@ public class ChallengeController {
 
         Challenge updated = repository.update(challenge);
         ChallengeResponse response = new ChallengeResponse(
-                        updated.getId().toString(),
-                        updated.getTitle().toString(),
-                        updated.getDescription().toString(),
-                        updated.getLanguage(),
-                        updated.getDifficulty()
-                );
+                updated.getId().toString(),
+                updated.getTitle().toString(),
+                updated.getDescription().toString(),
+                challenge.getLanguage(),
+                challenge.getDifficulty(),
+                "Challenge solution"
+        );
 
         return ResponseEntity.ok(response);
     }

@@ -43,8 +43,10 @@ class ChallengeControllerTest {
                 "Clean Code Challenge",
                 "A challenge about writing clean and maintainable code",
                 ChallengeLanguage.JAVA,
-                ChallengeDifficulty.MEDIUM
+                ChallengeDifficulty.MEDIUM,
+                "Challenge solution"
         );
+
 
     @Test
     void should_return_200_with_empty_list_when_requesting_all_challenges() throws Exception {
@@ -71,7 +73,8 @@ class ChallengeControllerTest {
                 .andExpect(jsonPath("$.language").value("JAVA"));
     }
 
-    @Test  void should_return_204_when_delete_challenge_by_id() throws Exception {
+    @Test
+    void should_return_204_when_delete_challenge_by_id() throws Exception {
         String challengeIdStr = UUID.randomUUID().toString();
 
         mockMvc.perform(delete("/api/challenge/{id}", challengeIdStr))
@@ -87,7 +90,8 @@ class ChallengeControllerTest {
                 "Updated title",
                 "Updated description",
                 ChallengeLanguage.JAVA,
-                ChallengeDifficulty.HARD
+                ChallengeDifficulty.HARD,
+                "Challenge solution"
                 );
 
         Challenge updatedChallenge = Challenge.restore(
@@ -132,7 +136,10 @@ class ChallengeControllerTest {
                 .andExpect(jsonPath("$.id").value(uuid.toString()))
                 .andExpect(jsonPath("$.title").value("Test Title"))
                 .andExpect(jsonPath("$.description").value("Test Description"))
+                .andExpect(jsonPath("$.language").value("JAVA"))
                 .andExpect(jsonPath("$.difficulty").value("EASY"))
-                .andExpect(jsonPath("$.language").value("JAVA"));
+                .andExpect(jsonPath("$.solution").value("Challenge solution"));
+
+
     }
 }

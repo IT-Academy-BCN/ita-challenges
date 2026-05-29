@@ -1,0 +1,11 @@
+.challenge__form {
+    display: flex;
+    flex-direction: column;
+    max-width: 50rem;
+    gap: 1rem;
+}
+
+.challenge__actions {
+    display: flex;
+    gap: 1rem;
+}

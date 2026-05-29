@@ -15,14 +15,17 @@ describe('ChallengesListPage', () => {
   let mockChallengeService: any;
 
   beforeEach(async () => {
-    mockChallengeService = { loadAll: vi.fn().mockReturnValue(of(CHALLENGES_MOCK))};
+    mockChallengeService = { 
+      loadAll: vi.fn().mockReturnValue(of(CHALLENGES_MOCK)),
+      delete: vi.fn().mockReturnValue(of(void 0)),
+    };
 
     await TestBed.configureTestingModule({
       imports: [ChallengesListPage],
       providers: [
-        provideRouter([]),
+        provideRouter([]), 
         { provide: ChallengeService, useValue: mockChallengeService }
-      ]
+      ],
     })
     .compileComponents();
 
@@ -45,6 +48,21 @@ describe('ChallengesListPage', () => {
 
     expect(listItems.length).toBe(CHALLENGES_MOCK.length);
     expect(listItems[0].textContent).toContain(CHALLENGES_MOCK[0].title);
+  });
+
+  it('should return correct difficulty and language labels', () => {
+    expect(component.getDifficultyLabel('EASY')).toBe('Fàcil');
+    expect(component.getDifficultyLabel('MEDIUM')).toBe('Mitjana');
+    expect(component.getDifficultyLabel('HARD')).toBe('Difícil');
+    expect(component.getDifficultyLabel()).toBe('');
+
+    expect(component.getLanguageLabel('JAVA')).toBe('Java');
+    expect(component.getLanguageLabel('PYTHON')).toBe('Python');
+    expect(component.getLanguageLabel('JAVASCRIPT')).toBe('JavaScript');
+    expect(component.getLanguageLabel('TYPESCRIPT')).toBe('TypeScript');
+    expect(component.getLanguageLabel('PHP')).toBe('PHP');
+    expect(component.getLanguageLabel('SQL')).toBe('SQL');
+    expect(component.getLanguageLabel()).toBe('');
   });
 
   it('should render role selector component', () => {
@@ -77,5 +95,15 @@ describe('ChallengesListPage', () => {
 
     component.onRoleChange(false);
     expect(component.isMentor()).toBe(false);
+  });
+
+  it('should delete a challenge and remove it from the list', () => {
+    const initialLength = component.challenges().length;
+
+    component.handleDelete(CHALLENGES_MOCK[0].id);
+
+    expect(mockChallengeService.delete).toHaveBeenCalledWith(CHALLENGES_MOCK[0].id);
+    expect(component.challenges().length).toBe(initialLength - 1);
+    expect(component.challenges().some(c => c.id === CHALLENGES_MOCK[0].id)).toBe(false);
   });
 });

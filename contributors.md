@@ -16,3 +16,4 @@
 - Josep J. Roca - https://github.com/Urian1983
 - Jordi Espinosa - https://github.com/JEspinosa1770
 - Isaac Malagón - https://github.com/isaacmg-bit
+- Cristhian Chulca - https://github.com/cristhianchulca49

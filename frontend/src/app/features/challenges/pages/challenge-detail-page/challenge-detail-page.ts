@@ -7,6 +7,8 @@ import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { ChallengeApiService } from '../../data-access/challenge-api.service';
 import { AuthService } from '../../../auth/data-access/auth-service';
 import { IChallengeSubmission } from '../../models/ichallenge-submission.interface';
+import { ChallengeLanguage } from '../../models/challenge-language.type';
+import { ChallengeDifficulty } from '../../models/challenge-difficulty.type';
 
 interface AuthUserWithId extends AuthUser {
   id: string;
@@ -27,12 +29,35 @@ export class ChallengeDetailPage {
 
   challenge = signal<IChallenge | undefined>(undefined);
 
+  languageLabels: Record<ChallengeLanguage, string> = {
+    JAVA: 'Java',
+    PHP: 'PHP',
+    JAVASCRIPT: 'JavaScript',
+    TYPESCRIPT: 'TypeScript',
+    PYTHON: 'Python',
+    SQL: 'SQL',
+  };
+
+  difficultyLabels: Record<ChallengeDifficulty, string> = {
+    EASY: 'Fàcil',
+    MEDIUM: 'Mitjana',
+    HARD: 'Difícil',
+  };
+
   ngOnInit() {
     const id = this.route.snapshot.paramMap.get('id')!;
 
     this.challengesService.getById(id).subscribe((selectedChallenge) => {
       this.challenge.set(selectedChallenge);
     });
+  }
+
+  getLanguageLabel(lang?: ChallengeLanguage): string {
+    return lang ? this.languageLabels[lang] : '';
+  }
+
+  getDifficultyLabel(diff?: ChallengeDifficulty): string {
+    return diff ? this.difficultyLabels[diff] : '';
   }
 
   codeSolutionForm = this.fb.group({
@@ -57,4 +82,25 @@ export class ChallengeDetailPage {
       });
       }
     }
+
+  publishSolution(): void {
+    const currentChallenge = this.challenge();
+    const currentUser = this.authService.user() as AuthUserWithId;
+
+    if(this.codeSolutionForm.valid && currentChallenge?.id) {
+      const challengeSolution : IChallengeSubmission = {
+        challengeId: currentChallenge.id,
+        userId: currentUser?.id || '550e8400-e29b-41d4-a716-446655440000',
+        code: this.codeSolutionForm.value.code ?? ''
+      };
+      this.challengeApiService.publishSolution(challengeSolution).subscribe({
+        next: () => {
+          alert('Solució publicada!');
+        },
+        error: (err) => {
+          console.error('Error en publicar la solució:', err);
+        }
+      });
+    }
+  }
 }
