@@ -4,10 +4,12 @@ import { TicketService } from '../../ticket.service';
 import { ActivatedRoute } from '@angular/router';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { TicketApiService } from '../../data-access/ticket-api.service';
+import { CreateButtonComponent } from '../../../challenges/components/buttons/create-button/create-button';
+import { RoleSelectorComponent } from '../../../challenges/components/role-selector/role-selector';
 
 @Component({
   selector: 'app-ticket-detail-page',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, RoleSelectorComponent],
   templateUrl: './ticket-detail-page.html',
   styleUrl: './ticket-detail-page.css',
 })
@@ -18,7 +20,7 @@ export class TicketDetailPage {
   private readonly route = inject(ActivatedRoute)
   private readonly fb = inject(FormBuilder)
   ticket = signal<ITicket | undefined>(undefined)
-
+  isMentor = signal(false);
 
   ngOnInit() {
     const id = this.route.snapshot.paramMap.get('id')!;
@@ -56,6 +58,10 @@ export class TicketDetailPage {
       }
     });
     }
+  }
+
+  onRoleChange(value: boolean): void {
+    this.isMentor.set(value);
   }
 
 }
