@@ -160,8 +160,8 @@ describe('ChallengeApiService', () => {
         code: 'code'
       };
 
-      service.saveSolution(payload).subscribe();
       const req = httpTestingController.expectOne(`${apiUrl}/submissions`);
+      service.saveSolution(payload).subscribe();
 
       expect(req.request.method).toBe('POST');
       expect(req.request.body).toEqual(payload);
