@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { IChallengeRequest } from '../../models/ichallenge-request.interface';
 
+
 @Component({
   selector: 'app-edit-challenge-page',
   imports: [ReactiveFormsModule],
@@ -11,6 +12,7 @@ import { IChallengeRequest } from '../../models/ichallenge-request.interface';
   styleUrl: './edit-challenge-page.css',
 })
 export class EditChallengePage {
+
   private readonly challengeService = inject(ChallengeService);
   private readonly router = inject(Router);
   private readonly fb = inject(FormBuilder);
@@ -24,26 +26,23 @@ export class EditChallengePage {
 
   onSubmit() {
 
-      const { id, title, description, solution } = this.editForm.getRawValue();
+    const { id, title, description, solution} = this.editForm.getRawValue();
 
-      const challengePayload: IChallengeRequest = {
-        title: title ?? '',
-        description: description ?? '',
-        solution: solution ?? '',
-      };
+    const challengePayload: IChallengeRequest = {
+      title: title ?? '',
+      description: description ?? '',
+      solution: solution ?? '',
+    };
 
-      this.challengeService.update(id ?? '', challengePayload).subscribe({
-        next: () => {
-          this.goChallenges();
-        },
-        error: (error) => {
-          console.error('Error updating challenge:', error);
-        },
-      });
-  }
+    this.challengeService.update(id?? '', challengePayload).subscribe({
+      next: () => {
+        this.goChallenges()
+      },
+    });
+  };
 
   goChallenges() {
     this.router.navigate(['/challenges']);
   };
-  
+
 }

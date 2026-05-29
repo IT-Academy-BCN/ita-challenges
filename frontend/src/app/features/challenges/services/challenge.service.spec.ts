@@ -53,11 +53,11 @@ describe('ChallengeService', () => {
       result.subscribe(response => {
         expect(response.id).toBe(testId);
         expect(response.title).toBe(testChallenge.title);
+        });
       });
     });
 
-  });
-
+  
   describe('create', () => {
     it('should call challengeApiService.create with correct data and return the observable', () => {
       const newChallenge: IChallengeRequest = { 
@@ -115,6 +115,6 @@ describe('ChallengeService', () => {
   it('should return undefined when id does not exist', async () => {
     const challenge = await firstValueFrom(service.getById('inexistente'));
     expect(challenge).toBeUndefined();
-    });
   });
+});
 });

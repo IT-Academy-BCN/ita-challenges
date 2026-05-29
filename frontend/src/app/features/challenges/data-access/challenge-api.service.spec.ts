@@ -104,7 +104,7 @@ describe('ChallengeApiService', () => {
     });
   });
 
-  
+
   describe('loadAll()', () => {
     it('should load all challenges via GET', () => {
       service.loadAll().subscribe((challenges) => {
@@ -143,7 +143,7 @@ describe('ChallengeApiService', () => {
       const mockId = '456';
       let responseResult: any = 'initial_value';
 
-      service.delete(mockId).subscribe((result) => (responseResult = result));
+      service.delete(mockId).subscribe(result => responseResult = result);
 
       const req = httpTestingController.expectOne(`${apiUrl}/${mockId}`);
       req.flush('Not Found', { status: 404, statusText: 'Not Found' });
