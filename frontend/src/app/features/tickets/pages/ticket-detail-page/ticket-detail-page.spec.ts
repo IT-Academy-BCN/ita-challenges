@@ -34,6 +34,8 @@ describe('TicketDetailPage', () => {
 
     fixture = TestBed.createComponent(TicketDetailPage);
     component = fixture.componentInstance;
+    component.isMentor.set(true);
+
     fixture.detectChanges();
     await fixture.whenStable();
   });
@@ -68,6 +70,7 @@ describe('TicketDetailPage', () => {
   it('should call update on submit', () => {
     const ticketApiService = TestBed.inject(TicketApiService);
     vi.spyOn(ticketApiService, 'update').mockReturnValue(of(mockTicket));
+
     component.ticketForm.patchValue({ comment: 'Test comment' });
     component.onSubmit();
 
@@ -75,7 +78,7 @@ describe('TicketDetailPage', () => {
       status: mockTicket.status,
       comment: 'Test comment'
     });
-  })
+  });
 
   it('should render the comment textarea', () => {
     const compiled = fixture.nativeElement as HTMLElement;
@@ -86,28 +89,33 @@ describe('TicketDetailPage', () => {
     expect(textareaElement?.getAttribute('rows')).toBe('10');
   });
 
- it('should NOT render the comment section if ticket.comment is null or undefined', () => {
-     const ticketService = TestBed.inject(TicketService);
-     vi.spyOn(ticketService, 'getById').mockReturnValue(of({ ...TICKETS_MOCK[0], comment: null as any }));
+  it('should NOT render the comment section if ticket.comment is null or undefined', async () => {
+    const ticketService = TestBed.inject(TicketService);
+    vi.spyOn(ticketService, 'getById').mockReturnValue(of({ ...TICKETS_MOCK[0], comment: null as any }));
 
-     const freshFixture = TestBed.createComponent(TicketDetailPage);
-     freshFixture.detectChanges();
+    const freshFixture = TestBed.createComponent(TicketDetailPage);
 
-     const commentSection = freshFixture.debugElement.query(By.css('.ticket-comment-section'));
-     expect(commentSection).toBeNull();
-   });
+    freshFixture.detectChanges();
+    await freshFixture.whenStable();
+    freshFixture.detectChanges();
 
-   it('should render the comment section if ticket.comment has text', () => {
-     const testComment = 'This is a test comment for testing purposes.';
-     const ticketService = TestBed.inject(TicketService);
-     vi.spyOn(ticketService, 'getById').mockReturnValue(of({ ...TICKETS_MOCK[0], comment: testComment }));
+    const commentSection = freshFixture.debugElement.query(By.css('.ticket-comment-section'));
+    expect(commentSection).toBeNull();
+  });
 
-     const freshFixture = TestBed.createComponent(TicketDetailPage);
-     freshFixture.detectChanges();
+  it('should render the comment section if ticket.comment has text', async () => {
+    const testComment = 'This is a test comment for testing purposes.';
+    const ticketService = TestBed.inject(TicketService);
+    vi.spyOn(ticketService, 'getById').mockReturnValue(of({ ...TICKETS_MOCK[0], comment: testComment }));
 
-     const commentSection = freshFixture.debugElement.query(By.css('.ticket-comment-section'));
-     expect(commentSection).toBeTruthy();
-     expect(commentSection.nativeElement.textContent).toContain(testComment);
-   });
- });
+    const freshFixture = TestBed.createComponent(TicketDetailPage);
 
+    freshFixture.detectChanges();
+    await freshFixture.whenStable();
+    freshFixture.detectChanges();
+
+    const commentSection = freshFixture.debugElement.query(By.css('.ticket-comment-section'));
+    expect(commentSection).toBeTruthy();
+    expect(commentSection.nativeElement.textContent).toContain(testComment);
+  });
+});
