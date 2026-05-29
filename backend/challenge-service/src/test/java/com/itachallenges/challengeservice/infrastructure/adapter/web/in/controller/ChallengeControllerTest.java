@@ -54,7 +54,7 @@ class ChallengeControllerTest {
 
     @Test
     void should_create_challenge_with_title_and_description_and_return_201() throws Exception {
-        Challenge saved = Challenge.create(request.title(), request.description(), ChallengeLanguage.JAVA, ChallengeDifficulty.EASY, request.solution());
+        Challenge saved = Challenge.create(request.title(), request.description(), request.language(), ChallengeDifficulty.EASY, request.solution());
         when(repository.save(any(Challenge.class))).thenReturn(saved);
 
         mockMvc.perform(post("/api/challenge")
