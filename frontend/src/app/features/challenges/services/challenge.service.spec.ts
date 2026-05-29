@@ -53,9 +53,10 @@ describe('ChallengeService', () => {
       result.subscribe(response => {
         expect(response.id).toBe(testId);
         expect(response.title).toBe(testChallenge.title);
+        });
       });
     });
-  });
+
 
   describe('create', () => {
     it('should call challengeApiService.create with correct data and return the observable', () => {

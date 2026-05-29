@@ -15,8 +15,8 @@ describe('ChallengeApiService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
-        provideHttpClient(), 
-        provideHttpClientTesting()
+        provideHttpClient(),
+        provideHttpClientTesting(),
       ]
     });
     service = TestBed.inject(ChallengeApiService);
@@ -84,9 +84,9 @@ describe('ChallengeApiService', () => {
     });
 
     it('should return default challenge when API fails (Happy Path Fallback)', () => {
-      const newChallenge: IChallengeRequest = {
-        title: 'Test',
-        description: 'Desc',
+      const newChallenge: IChallengeRequest = { 
+        title: 'Test', 
+        description: 'Desc', 
         language: 'JAVA',
         difficulty: 'EASY',
         solution: 'solution',
