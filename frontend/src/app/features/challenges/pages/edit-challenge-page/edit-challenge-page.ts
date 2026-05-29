@@ -56,4 +56,5 @@ export class EditChallengePage {
   goChallenges() {
     this.router.navigate(['/challenges']);
   };
+
 }

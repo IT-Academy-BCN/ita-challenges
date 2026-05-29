@@ -1,1 +1,1 @@
-export type ChallengeLanguage = 'JAVA' | 'PHP' | 'JAVASCRIPT' | 'TYPESCRIPT' | 'PYTHON' | 'SQL'; 
+export type ChallengeLanguage = 'JAVA' | 'PHP' | 'JAVASCRIPT' | 'TYPESCRIPT' | 'PYTHON' | 'SQL';

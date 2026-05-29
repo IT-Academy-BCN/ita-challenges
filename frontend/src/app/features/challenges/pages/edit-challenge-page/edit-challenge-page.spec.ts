@@ -50,6 +50,7 @@ describe('EditChallengePage', () => {
       language: 'JAVA'
     });
 
+
     expect(navigateSpy).toHaveBeenCalled();
   });
 
