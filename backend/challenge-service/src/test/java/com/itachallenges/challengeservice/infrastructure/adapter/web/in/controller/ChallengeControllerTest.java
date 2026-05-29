@@ -42,7 +42,8 @@ class ChallengeControllerTest {
     ChallengeRequest request = new ChallengeRequest(
             "Clean Code Challenge",
             "A challenge about writing clean and maintainable code",
-            ChallengeLanguage.JAVA
+            ChallengeLanguage.JAVA,
+            "Challenge solution"
     );
 
     @Test
@@ -69,7 +70,8 @@ class ChallengeControllerTest {
                 .andExpect(jsonPath("$.language").value("JAVA"));
     }
 
-    @Test  void should_return_204_when_delete_challenge_by_id() throws Exception {
+    @Test
+    void should_return_204_when_delete_challenge_by_id() throws Exception {
         String challengeIdStr = UUID.randomUUID().toString();
 
         mockMvc.perform(delete("/api/challenge/{id}", challengeIdStr))
@@ -84,7 +86,8 @@ class ChallengeControllerTest {
         ChallengeRequest request = new ChallengeRequest(
                 "Updated title",
                 "Updated description",
-                ChallengeLanguage.JAVA
+                ChallengeLanguage.JAVA,
+                "Challenge solution"
         );
 
         Challenge updatedChallenge = Challenge.restore(
@@ -127,6 +130,7 @@ class ChallengeControllerTest {
                 .andExpect(jsonPath("$.id").value(uuid.toString()))
                 .andExpect(jsonPath("$.title").value("Test Title"))
                 .andExpect(jsonPath("$.description").value("Test Description"))
-                .andExpect(jsonPath("$.language").value("JAVA"));
+                .andExpect(jsonPath("$.language").value("JAVA"))
+                .andExpect(jsonPath("$.solution").value("Challenge solution"));
     }
 }
