@@ -74,11 +74,11 @@ public class JsonFileChallengeRepository implements ChallengeRepository {
     private void persistToFile() throws IOException {
         objectMapper.writeValue(storageFile, storage.values().stream()
                 .map(c -> new ChallengeRecord(
-                                        c.getId().toString(),
-                                        c.getTitle().toString(),
-                                        c.getDescription().toString(),
-                                        c.getLanguage().toString(),
-                                        c.getDifficulty().toString()
+                                            c.getId().toString(),
+                                            c.getTitle().toString(),
+                                            c.getDescription().toString(),
+                                            c.getLanguage().toString(),
+                                            c.getDifficulty().toString()
                 )).toList());
     }
 
