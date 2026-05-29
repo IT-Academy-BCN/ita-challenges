@@ -1,6 +1,7 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { RouterLink } from "@angular/router";
-
+import { RouterLink } from '@angular/router';
+import { ChallengeLanguage } from '../../models/challenge-language.type';
+import { ChallengeDifficulty } from '../../models/challenge-difficulty.type';
 import { IChallenge } from '../../models/ichallenge.interface';
 import { ChallengeService } from '../../services/challenge.service';
 import { RoleSelectorComponent } from "../../components/role-selector/role-selector";
@@ -26,8 +27,31 @@ export class ChallengesListPage implements OnInit {
   challenges = signal<IChallenge[]>([]);
   isMentor = signal(false);
 
+  languageLabels: Record<ChallengeLanguage, string> = {
+    JAVA: 'Java',
+    PHP: 'PHP',
+    JAVASCRIPT: 'JavaScript',
+    TYPESCRIPT: 'TypeScript',
+    PYTHON: 'Python',
+    SQL: 'SQL',
+  };
+
+  difficultyLabels: Record<ChallengeDifficulty, string> = {
+    EASY: 'Fàcil',
+    MEDIUM: 'Mitjana',
+    HARD: 'Difícil',
+  };
+
   ngOnInit(): void {
     this.loadChallenges();
+  }
+
+  getLanguageLabel(lang?: ChallengeLanguage): string {
+    return lang ? this.languageLabels[lang] : '';
+  }
+
+  getDifficultyLabel(diff?: ChallengeDifficulty): string {
+    return diff ? this.difficultyLabels[diff] : '';
   }
 
   loadChallenges(): void {

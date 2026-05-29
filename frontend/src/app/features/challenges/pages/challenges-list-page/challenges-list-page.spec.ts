@@ -23,9 +23,9 @@ describe('ChallengesListPage', () => {
     await TestBed.configureTestingModule({
       imports: [ChallengesListPage],
       providers: [
-        provideRouter([]),
+        provideRouter([]), 
         { provide: ChallengeService, useValue: mockChallengeService }
-      ]
+      ],
     })
     .compileComponents();
 
@@ -48,6 +48,21 @@ describe('ChallengesListPage', () => {
 
     expect(listItems.length).toBe(CHALLENGES_MOCK.length);
     expect(listItems[0].textContent).toContain(CHALLENGES_MOCK[0].title);
+  });
+
+  it('should return correct difficulty and language labels', () => {
+    expect(component.getDifficultyLabel('EASY')).toBe('Fàcil');
+    expect(component.getDifficultyLabel('MEDIUM')).toBe('Mitjana');
+    expect(component.getDifficultyLabel('HARD')).toBe('Difícil');
+    expect(component.getDifficultyLabel()).toBe('');
+
+    expect(component.getLanguageLabel('JAVA')).toBe('Java');
+    expect(component.getLanguageLabel('PYTHON')).toBe('Python');
+    expect(component.getLanguageLabel('JAVASCRIPT')).toBe('JavaScript');
+    expect(component.getLanguageLabel('TYPESCRIPT')).toBe('TypeScript');
+    expect(component.getLanguageLabel('PHP')).toBe('PHP');
+    expect(component.getLanguageLabel('SQL')).toBe('SQL');
+    expect(component.getLanguageLabel()).toBe('');
   });
 
   it('should render role selector component', () => {
