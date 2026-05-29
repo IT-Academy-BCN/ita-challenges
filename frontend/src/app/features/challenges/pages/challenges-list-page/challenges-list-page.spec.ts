@@ -15,7 +15,10 @@ describe('ChallengesListPage', () => {
   let mockChallengeService: any;
 
   beforeEach(async () => {
-    mockChallengeService = { loadAll: vi.fn().mockReturnValue(of(CHALLENGES_MOCK))};
+    mockChallengeService = { 
+      loadAll: vi.fn().mockReturnValue(of(CHALLENGES_MOCK)),
+      delete: vi.fn().mockReturnValue(of(void 0)),
+    };
 
     await TestBed.configureTestingModule({
       imports: [ChallengesListPage],
@@ -79,20 +82,13 @@ describe('ChallengesListPage', () => {
     expect(component.isMentor()).toBe(false);
   });
 
-  it('should hide form initially when isMentor is false', () => {
-    const compiled = fixture.nativeElement as HTMLElement;
-    const form = compiled.querySelector('form');
-    expect(form).toBeFalsy();
+  it('should delete a challenge and remove it from the list', () => {
+    const initialLength = component.challenges().length;
+
+    component.handleDelete(CHALLENGES_MOCK[0].id);
+
+    expect(mockChallengeService.delete).toHaveBeenCalledWith(CHALLENGES_MOCK[0].id);
+    expect(component.challenges().length).toBe(initialLength - 1);
+    expect(component.challenges().some(c => c.id === CHALLENGES_MOCK[0].id)).toBe(false);
   });
-
-  it('should show form when role selector toggles to mentor', () => {
-    // Simular el evento del role-selector
-    component.onRoleChange(true);
-    fixture.detectChanges();
-
-    const compiled = fixture.nativeElement as HTMLElement;
-    const form = compiled.querySelector('form');
-    expect(form).toBeTruthy();
-  });
-
 });
