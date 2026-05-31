@@ -3,25 +3,32 @@
 </div>
 
 @if (ticket(); as t) {
-  <h1>{{ t.title }}</h1>
-  <p>Usuari ID: {{ t.userId }}</p>
-  <p>{{ t.description }}</p>
+<h1>{{ t.title }}</h1>
+<p>Usuari ID: {{ t.userId }}</p>
+<p>{{ t.description }}</p>
 
-  @if (isMentor()) {
-    <form [formGroup]="ticketForm" (ngSubmit)="onSubmit()">
-      <select id="status" formControlName="status">
-        <option value="" disabled>Selecciona l'estat</option>
-        @for (status of statusOptions; track $index) {
-          <option [value]="status.value">{{ status.label }}</option>
-        }
-      </select>
+@if (isMentor()) {
+<form [formGroup]="ticketForm" (ngSubmit)="onSubmit()">
+  <select id="status" formControlName="status">
+    <option value="" disabled>Selecciona l'estat</option>
+    @for (status of statusOptions; track $index) {
+    <option [value]="status.value">{{ status.label }}</option>
+    }
+  </select>
 
-      <div>
-        <label for="comment">Afegir comentari:</label><br>
-        <textarea id="comment" rows="10" formControlName="comment"></textarea>
-      </div>
+  <div>
+    <label for="comment">Afegir comentari:</label><br>
+    <textarea id="comment" rows="10" formControlName="comment"></textarea>
+  </div>
 
-      <button type="submit">Guardar</button>
-    </form>
-  }
+  <button type="submit">Guardar</button>
+</form>
+}
+
+@if (t.comment) {
+<div class="ticket-comment-section">
+  <h4>Ultim comentari:</h4>
+  <p>{{ t.comment }}</p>
+</div>
+}
 }
