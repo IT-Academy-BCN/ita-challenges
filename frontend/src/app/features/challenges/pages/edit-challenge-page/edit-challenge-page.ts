@@ -3,6 +3,7 @@ import { ChallengeService } from '../../services/challenge.service';
 import { Router } from '@angular/router';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { IChallengeRequest } from '../../models/ichallenge-request.interface';
+import { ChallengeDifficulty } from '../../models/challenge-difficulty.type';
 import { ChallengeLanguage } from '../../models/challenge-language.type';
 
 @Component({
@@ -17,6 +18,7 @@ export class EditChallengePage {
   private readonly router = inject(Router);
   private readonly fb = inject(FormBuilder);
 
+  readonly difficulties: ChallengeDifficulty[] = ['EASY', 'MEDIUM', 'HARD'];
   readonly languages: ChallengeLanguage[] = [
     'JAVA',
     'PHP',
@@ -30,16 +32,18 @@ export class EditChallengePage {
     id: [''],
     title: [''],
     description: [''],
+    difficulty: ['EASY'],
     language: ['']
   });
 
   onSubmit() {
 
-    const { id, title, description, language } = this.editForm.getRawValue();
+    const { id, title, description, difficulty, language } = this.editForm.getRawValue();
 
     const challengePayload: IChallengeRequest = {
       title: title ?? '',
       description: description ?? '',
+      difficulty: difficulty as ChallengeDifficulty,
       language: language as ChallengeLanguage
     };
 
