@@ -38,7 +38,7 @@ describe('EditChallengePage', () => {
 
   it('should call challengeService.update with correct values and navigate', () => {
 
-    const testData = { id: '777', title: 'Repte Editat', description: 'Nova descripció', language: 'JAVA', difficulty: 'EASY' };
+    const testData = { id: '777', title: 'Repte Editat', description: 'Nova descripció', language: 'JAVA', difficulty: 'EASY', solution: 'Placeholder solució' };
 
     component.editForm.setValue(testData);
 
@@ -49,7 +49,8 @@ describe('EditChallengePage', () => {
     expect(mockChallengeService.update).toHaveBeenCalledWith('777', {
       title: 'Repte Editat',
       description: 'Nova descripció',
-      difficulty: 'EASY'
+      solution: 'Placeholder solució',
+      difficulty: 'EASY',
       language: 'JAVA'
     });
 

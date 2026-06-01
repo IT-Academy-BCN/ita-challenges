@@ -20,24 +20,30 @@
     ></textarea>
   </div>
 
+<div>
+    <label for="solution">Solució</label>
+    <textarea
+      id="solution"
+      formControlName="solution"
+      rows="50"
+      placeholder="Escriu aquí la solució del repte..."
+    ></textarea>
+  </div>
   <div>
     <label for="difficulty">Dificultat</label>
     <select id="difficulty" formControlName="difficulty">
       <option value="" disabled>Selecciona dificultat</option>
       @for (difficulty of difficulties; track difficulty) {
-        <option [value]="difficulty">
-          {{ difficulty }}</option>
-    }
-  </select>
-</div>
+        <option [value]="difficulty">{{ difficulty }}</option>
+      }
+    </select>
+  </div>
   <div>
     <label for="language">Llenguatge</label>
     <select id="language" formControlName="language">
       <option value="" selected disabled>Selecciona llenguatge</option>
       @for (language of languages; track language) {
-        <option [value]="language">
-          {{ language }}
-        </option>
+        <option [value]="language">{{ language }}</option>
       }
     </select>
   </div>
