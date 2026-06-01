@@ -35,12 +35,12 @@ public class ChallengeSeedLoader implements ApplicationRunner {
                             ChallengeId.of(seed.id()),
                             seed.title(),
                             seed.description(),
-                            ChallengeLanguage.JAVA,
-                            ChallengeDifficulty.EASY
+                            ChallengeLanguage.valueOf(seed.language()),
+                            ChallengeDifficulty.valueOf(seed.difficulty())
                     ))
                     .forEach(repository::save);
         }
     }
 
-    private record ChallengeSeed(String id, String title, String description) {}
+    private record ChallengeSeed(String id, String title, String description, String language, String difficulty) {}
 }

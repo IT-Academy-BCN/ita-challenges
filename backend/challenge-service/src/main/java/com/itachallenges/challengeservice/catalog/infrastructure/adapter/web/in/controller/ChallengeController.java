@@ -25,7 +25,7 @@ public class ChallengeController {
     @PostMapping
     public ResponseEntity<ChallengeResponse> create(@RequestBody ChallengeRequest request) {
         Challenge saved = repository.save(
-                Challenge.create(request.title(), request.description(), ChallengeLanguage.JAVA, ChallengeDifficulty.EASY)
+                Challenge.create(request.title(), request.description(), request.language(), request.difficulty())
         );
 
         return ResponseEntity.status(HttpStatus.CREATED).body(
@@ -34,6 +34,7 @@ public class ChallengeController {
                         saved.getTitle().toString(),
                         saved.getDescription().toString(),
                         saved.getLanguage(),
+                        saved.getDifficulty(),
                         "Challenge solution"
                 )
         );
@@ -43,7 +44,7 @@ public class ChallengeController {
     public ResponseEntity<List<ChallengeResponse>> findAll() {
         List<ChallengeResponse> challenges = repository.findAll()
                 .stream()
-                .map(c -> new ChallengeResponse(c.getId().toString(), c.getTitle().toString(), c.getDescription().toString(), c.getLanguage(), "Challenge solution"))
+                .map(c -> new ChallengeResponse(c.getId().toString(), c.getTitle().toString(), c.getDescription().toString(), c.getLanguage(), c.getDifficulty(), "Challenge solution"))
                 .toList();
         return ResponseEntity.ok(challenges);
     }
@@ -58,9 +59,11 @@ public class ChallengeController {
                         challenge.getTitle().toString(),
                         challenge.getDescription().toString(),
                         challenge.getLanguage(),
+                        challenge.getDifficulty(),
                         "Challenge solution"
                 );
         return ResponseEntity.ok(challengeResponse);
+
     }
 
     @DeleteMapping("/{id}")
@@ -77,12 +80,12 @@ public class ChallengeController {
     ) {
 
         Challenge challenge = Challenge.restore(
-                new ChallengeId(UUID.fromString(id)),
-                request.title(),
-                request.description(),
-                ChallengeLanguage.JAVA,
-                ChallengeDifficulty.EASY
-        );
+                        new ChallengeId(UUID.fromString(id)),
+                        request.title(),
+                        request.description(),
+                        request.language(),
+                        request.difficulty()
+                );
 
         Challenge updated = repository.update(challenge);
         ChallengeResponse response = new ChallengeResponse(
@@ -90,6 +93,7 @@ public class ChallengeController {
                 updated.getTitle().toString(),
                 updated.getDescription().toString(),
                 challenge.getLanguage(),
+                challenge.getDifficulty(),
                 "Challenge solution"
         );
 
