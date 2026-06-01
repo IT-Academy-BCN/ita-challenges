@@ -1,9 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TicketDetailPage } from './ticket-detail-page';
 import { TICKETS_MOCK } from '../../models/tickets.mock';
+import { By } from '@angular/platform-browser';
 import { TicketService } from '../../ticket.service';
 import { of } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
+import { TicketApiService } from '../../data-access/ticket-api.service';
 
 describe('TicketDetailPage', () => {
   let component: TicketDetailPage;
@@ -19,6 +21,10 @@ describe('TicketDetailPage', () => {
           useValue: { getById: () => of(mockTicket) }
         },
         {
+          provide: TicketApiService,
+          useValue: { update: () => of(mockTicket) }
+        },
+        {
           provide: ActivatedRoute,
           useValue: { snapshot: { paramMap: { get: () => mockTicket.id } } }
         }
@@ -28,6 +34,8 @@ describe('TicketDetailPage', () => {
 
     fixture = TestBed.createComponent(TicketDetailPage);
     component = fixture.componentInstance;
+    component.isMentor.set(true);
+
     fixture.detectChanges();
     await fixture.whenStable();
   });
@@ -46,7 +54,7 @@ describe('TicketDetailPage', () => {
     expect(paragraphs[1]?.textContent).toContain(mockTicket.description);
   });
 
-  it('should render the status select with 3 options', () => {
+  it('should render the status select with 4 options', () => {
     const compiled = fixture.nativeElement as HTMLElement;
     const selectElement = compiled.querySelector('select');
     const options = compiled.querySelectorAll('select option');
@@ -55,11 +63,59 @@ describe('TicketDetailPage', () => {
     expect(options.length).toBe(4);
   });
 
+  it('should preselect the status from the ticket', () => {
+    expect(component.ticketForm.value.status).toBe(mockTicket.status);
+  });
+
+  it('should call update on submit', () => {
+    const ticketApiService = TestBed.inject(TicketApiService);
+    vi.spyOn(ticketApiService, 'update').mockReturnValue(of(mockTicket));
+
+    component.ticketForm.patchValue({ comment: 'Test comment' });
+    component.onSubmit();
+
+    expect(ticketApiService.update).toHaveBeenCalledWith(mockTicket.id, {
+      status: mockTicket.status,
+      comment: 'Test comment'
+    });
+  });
+
   it('should render the comment textarea', () => {
     const compiled = fixture.nativeElement as HTMLElement;
     const textareaElement = compiled.querySelector('textarea');
+
     expect(textareaElement).toBeTruthy();
     expect(textareaElement?.getAttribute('id')).toBe('comment');
     expect(textareaElement?.getAttribute('rows')).toBe('10');
+  });
+
+  it('should NOT render the comment section if ticket.comment is null or undefined', async () => {
+    const ticketService = TestBed.inject(TicketService);
+    vi.spyOn(ticketService, 'getById').mockReturnValue(of({ ...TICKETS_MOCK[0], comment: null as any }));
+
+    const freshFixture = TestBed.createComponent(TicketDetailPage);
+
+    freshFixture.detectChanges();
+    await freshFixture.whenStable();
+    freshFixture.detectChanges();
+
+    const commentSection = freshFixture.debugElement.query(By.css('.ticket-comment-section'));
+    expect(commentSection).toBeNull();
+  });
+
+  it('should render the comment section if ticket.comment has text', async () => {
+    const testComment = 'This is a test comment for testing purposes.';
+    const ticketService = TestBed.inject(TicketService);
+    vi.spyOn(ticketService, 'getById').mockReturnValue(of({ ...TICKETS_MOCK[0], comment: testComment }));
+
+    const freshFixture = TestBed.createComponent(TicketDetailPage);
+
+    freshFixture.detectChanges();
+    await freshFixture.whenStable();
+    freshFixture.detectChanges();
+
+    const commentSection = freshFixture.debugElement.query(By.css('.ticket-comment-section'));
+    expect(commentSection).toBeTruthy();
+    expect(commentSection.nativeElement.textContent).toContain(testComment);
   });
 });

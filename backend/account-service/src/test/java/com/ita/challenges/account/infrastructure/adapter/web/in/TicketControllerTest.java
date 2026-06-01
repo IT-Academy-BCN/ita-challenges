@@ -183,4 +183,19 @@ class TicketControllerTest {
     }
 
 
+    @Test
+    void should_return_200_with_ticket_list_when_user_is_authenticated() throws Exception {
+        String userId = "user-42";
+        Ticket ticket = Ticket.restore("ticket-999", userId, "Payment error", "Card declined");
+
+        when(ticketRepository.findAllByUserId(userId)).thenReturn(List.of(ticket));
+
+        mockMvc.perform(get("/api/account/tickets")
+                        .with(oauth2Login().attributes(attrs -> attrs.put("login", userId))))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].id").value("ticket-999"))
+                .andExpect(jsonPath("$[0].userId").value(userId))
+                .andExpect(jsonPath("$[0].title").value("Payment error"))
+                .andExpect(jsonPath("$[0].description").value("Card declined"));
+    }
 }

@@ -3,8 +3,12 @@ package com.itachallenges.challengeservice.submission.infrastructure.adapter.in.
 import com.itachallenges.challengeservice.catalog.domain.valueobject.ChallengeId;
 import com.itachallenges.challengeservice.shared.domain.valueobject.UserId;
 import com.itachallenges.challengeservice.submission.application.dto.SaveDraftSubmissionCommand;
+import com.itachallenges.challengeservice.submission.domain.Submission;
 import com.itachallenges.challengeservice.submission.domain.port.in.SaveDraftSubmissionUseCase;
+import com.itachallenges.challengeservice.submission.domain.port.out.SubmissionRepository;
+import com.itachallenges.challengeservice.submission.domain.valueobject.SubmissionId;
 import com.itachallenges.challengeservice.submission.infrastructure.adapter.in.web.dto.ExistsFinalSubmissionResponse;
+import com.itachallenges.challengeservice.submission.infrastructure.adapter.in.web.dto.FinalizeSubmissionRequest;
 import com.itachallenges.challengeservice.submission.domain.port.out.SubmissionRepository;
 import com.itachallenges.challengeservice.submission.infrastructure.adapter.in.web.dto.SaveDraftSubmissionRequest;
 import org.springframework.http.HttpStatus;
@@ -32,6 +36,19 @@ public class SubmissionController {
                 request.userId(),
                 code
         ));
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @PostMapping("/submit")
+    public ResponseEntity<Void> finalize(@RequestBody FinalizeSubmissionRequest request) {
+        Submission finalSubmission = Submission.createSubmitted(
+                SubmissionId.generate(),
+                ChallengeId.of(request.challengeId()),
+                UserId.of(request.userId()),
+                request.code()
+        );
+        repository.save(finalSubmission);
+
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
