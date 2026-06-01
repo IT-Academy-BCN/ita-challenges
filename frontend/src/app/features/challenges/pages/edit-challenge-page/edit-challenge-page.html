@@ -20,5 +20,17 @@
     ></textarea>
   </div>
 
+  <div>
+    <label for="language">Llenguatge</label>
+    <select id="language" formControlName="language">
+      <option value="" selected disabled>Selecciona llenguatge</option>
+      @for (language of languages; track language) {
+        <option [value]="language">
+          {{ language }}
+        </option>
+      }
+    </select>
+  </div>
+
   <button type="submit">Editar Repte</button>
 </form>
