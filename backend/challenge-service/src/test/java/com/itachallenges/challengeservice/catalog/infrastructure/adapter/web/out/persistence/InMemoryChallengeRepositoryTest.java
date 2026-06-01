@@ -3,6 +3,7 @@ package com.itachallenges.challengeservice.catalog.infrastructure.adapter.web.ou
 import com.itachallenges.challengeservice.catalog.domain.model.Challenge;
 import com.itachallenges.challengeservice.catalog.domain.valueobject.ChallengeDifficulty;
 import com.itachallenges.challengeservice.catalog.domain.valueobject.ChallengeId;
+import com.itachallenges.challengeservice.catalog.domain.valueobject.ChallengeLanguage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -19,7 +20,7 @@ class InMemoryChallengeRepositoryTest {
     @BeforeEach
     void setUp() {
         repository = new InMemoryChallengeRepository();
-        challenge = Challenge.create("Clean Code Challenge", "A challenge about writing clean and maintainable code", ChallengeDifficulty.EASY);
+        challenge = Challenge.create("Clean Code Challenge", "A challenge about writing clean and maintainable code", ChallengeLanguage.JAVA, ChallengeDifficulty.EASY);
     }
 
     @Test
@@ -31,7 +32,7 @@ class InMemoryChallengeRepositoryTest {
 
     @Test
     void should_create_new_challenge() {
-        Challenge newChallenge = Challenge.create("New Challenge Title", "New Challenge Description", ChallengeDifficulty.EASY);
+        Challenge newChallenge = Challenge.create("New Challenge Title", "New Challenge Description", ChallengeLanguage.JAVA, ChallengeDifficulty.EASY);
         Challenge result = repository.save(newChallenge);
 
         assertThat(result.getTitle().toString()).isEqualTo("New Challenge Title");
@@ -40,12 +41,13 @@ class InMemoryChallengeRepositoryTest {
 
     @Test
     void should_update_existing_challenge() {
-        Challenge original = repository.save(Challenge.create("Old title", "Old description", ChallengeDifficulty.EASY));
+        Challenge original = repository.save(Challenge.create("Old title", "Old description", ChallengeLanguage.JAVA, ChallengeDifficulty.EASY));
 
         Challenge updated = Challenge.restore(
                 original.getId(),
                 "New title",
                 "New description",
+                ChallengeLanguage.JAVA,
                 ChallengeDifficulty.EASY
         );
 
@@ -59,7 +61,7 @@ class InMemoryChallengeRepositoryTest {
 
     @Test
     void should_delete_existing_challenge() {
-        Challenge challenge = Challenge.create("To be deleted", "Description", ChallengeDifficulty.EASY);
+        Challenge challenge = Challenge.create("To be deleted", "Description", ChallengeLanguage.JAVA, ChallengeDifficulty.EASY);
 
         ChallengeId id = challenge.getId();
         repository.save(challenge);

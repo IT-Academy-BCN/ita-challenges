@@ -62,4 +62,10 @@ export class ChallengeApiService {
   saveSolution(payload: IChallengeSubmission): Observable<void> {
     return this.http.post<void>(`${this.apiUrl}/submissions`, payload);
   }
+
+  publishSolution(payload: IChallengeSubmission): Observable<void> {
+    return this.http.post<void>(`${this.apiUrl}/submissions/submit`, payload).pipe(
+      catchError(() => of(undefined))
+    );
+  }
 }

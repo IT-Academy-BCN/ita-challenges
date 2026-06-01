@@ -6,6 +6,7 @@ import com.itachallenges.challengeservice.catalog.domain.model.Challenge;
 import com.itachallenges.challengeservice.catalog.domain.valueobject.ChallengeDescription;
 import com.itachallenges.challengeservice.catalog.domain.valueobject.ChallengeDifficulty;
 import com.itachallenges.challengeservice.catalog.domain.valueobject.ChallengeId;
+import com.itachallenges.challengeservice.catalog.domain.valueobject.ChallengeLanguage;
 import com.itachallenges.challengeservice.catalog.domain.valueobject.ChallengeTitle;
 import com.itachallenges.challengeservice.catalog.infrastructure.adapter.web.in.controller.ChallengeController;
 import com.itachallenges.challengeservice.catalog.infrastructure.adapter.web.in.dto.ChallengeRequest;
@@ -40,7 +41,9 @@ class ChallengeControllerTest {
 
     ChallengeRequest request = new ChallengeRequest(
             "Clean Code Challenge",
-            "A challenge about writing clean and maintainable code"
+            "A challenge about writing clean and maintainable code",
+            ChallengeLanguage.JAVA,
+            "Challenge solution"
     );
 
     @Test
@@ -54,7 +57,7 @@ class ChallengeControllerTest {
 
     @Test
     void should_create_challenge_with_title_and_description_and_return_201() throws Exception {
-        Challenge saved = Challenge.create(request.title(), request.description(), ChallengeDifficulty.EASY);
+        Challenge saved = Challenge.create(request.title(), request.description(), ChallengeLanguage.JAVA, ChallengeDifficulty.EASY);
         when(repository.save(any(Challenge.class))).thenReturn(saved);
 
         mockMvc.perform(post("/api/challenge")
@@ -63,10 +66,12 @@ class ChallengeControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").isNotEmpty())
                 .andExpect(jsonPath("$.title").value("Clean Code Challenge"))
-                .andExpect(jsonPath("$.description").value("A challenge about writing clean and maintainable code"));
+                .andExpect(jsonPath("$.description").value("A challenge about writing clean and maintainable code"))
+                .andExpect(jsonPath("$.language").value("JAVA"));
     }
 
-    @Test  void should_return_204_when_delete_challenge_by_id() throws Exception {
+    @Test
+    void should_return_204_when_delete_challenge_by_id() throws Exception {
         String challengeIdStr = UUID.randomUUID().toString();
 
         mockMvc.perform(delete("/api/challenge/{id}", challengeIdStr))
@@ -80,13 +85,16 @@ class ChallengeControllerTest {
         String id = UUID.randomUUID().toString();
         ChallengeRequest request = new ChallengeRequest(
                 "Updated title",
-                "Updated description"
+                "Updated description",
+                ChallengeLanguage.JAVA,
+                "Challenge solution"
         );
 
         Challenge updatedChallenge = Challenge.restore(
                 new ChallengeId(UUID.fromString(id)),
                 "Updated title",
                 "Updated description",
+                ChallengeLanguage.JAVA,
                 ChallengeDifficulty.EASY
         );
 
@@ -99,7 +107,8 @@ class ChallengeControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(id))
                 .andExpect(jsonPath("$.title").value("Updated title"))
-                .andExpect(jsonPath("$.description").value("Updated description"));
+                .andExpect(jsonPath("$.description").value("Updated description"))
+                .andExpect(jsonPath("$.language").value("JAVA"));
     }
 
 
@@ -112,6 +121,7 @@ class ChallengeControllerTest {
         when(challenge.getId()).thenReturn(challengeId);
         when(challenge.getTitle()).thenReturn(new ChallengeTitle("Test Title"));
         when(challenge.getDescription()).thenReturn(new ChallengeDescription("Test Description"));
+        when(challenge.getLanguage()).thenReturn(ChallengeLanguage.JAVA);
 
         when(repository.find(challengeId)).thenReturn(challenge);
 
@@ -119,6 +129,8 @@ class ChallengeControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(uuid.toString()))
                 .andExpect(jsonPath("$.title").value("Test Title"))
-                .andExpect(jsonPath("$.description").value("Test Description"));
+                .andExpect(jsonPath("$.description").value("Test Description"))
+                .andExpect(jsonPath("$.language").value("JAVA"))
+                .andExpect(jsonPath("$.solution").value("Challenge solution"));
     }
 }

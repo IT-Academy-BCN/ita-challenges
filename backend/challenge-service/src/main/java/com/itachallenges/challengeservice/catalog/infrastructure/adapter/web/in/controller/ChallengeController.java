@@ -4,6 +4,7 @@ import com.itachallenges.challengeservice.catalog.domain.model.Challenge;
 import com.itachallenges.challengeservice.catalog.domain.port.out.ChallengeRepository;
 import com.itachallenges.challengeservice.catalog.domain.valueobject.ChallengeDifficulty;
 import com.itachallenges.challengeservice.catalog.domain.valueobject.ChallengeId;
+import com.itachallenges.challengeservice.catalog.domain.valueobject.ChallengeLanguage;
 import com.itachallenges.challengeservice.catalog.infrastructure.adapter.web.in.dto.ChallengeResponse;
 import com.itachallenges.challengeservice.catalog.infrastructure.adapter.web.in.dto.ChallengeRequest;
 import lombok.AllArgsConstructor;
@@ -24,14 +25,16 @@ public class ChallengeController {
     @PostMapping
     public ResponseEntity<ChallengeResponse> create(@RequestBody ChallengeRequest request) {
         Challenge saved = repository.save(
-                Challenge.create(request.title(), request.description(), ChallengeDifficulty.EASY)
+                Challenge.create(request.title(), request.description(), ChallengeLanguage.JAVA, ChallengeDifficulty.EASY)
         );
 
         return ResponseEntity.status(HttpStatus.CREATED).body(
                 new ChallengeResponse(
                         saved.getId().toString(),
                         saved.getTitle().toString(),
-                        saved.getDescription().toString()
+                        saved.getDescription().toString(),
+                        saved.getLanguage(),
+                        "Challenge solution"
                 )
         );
     }
@@ -40,21 +43,24 @@ public class ChallengeController {
     public ResponseEntity<List<ChallengeResponse>> findAll() {
         List<ChallengeResponse> challenges = repository.findAll()
                 .stream()
-                .map(c -> new ChallengeResponse(c.getId().toString(), c.getTitle().toString(), c.getDescription().toString()))
+                .map(c -> new ChallengeResponse(c.getId().toString(), c.getTitle().toString(), c.getDescription().toString(), c.getLanguage(), "Challenge solution"))
                 .toList();
         return ResponseEntity.ok(challenges);
     }
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<ChallengeResponse> find(@PathVariable String id){
-            Challenge challenge = repository.find(ChallengeId.of(id));
+    public ResponseEntity<ChallengeResponse> find(@PathVariable String id) {
+        Challenge challenge = repository.find(ChallengeId.of(id));
 
-            ChallengeResponse challengeResponse =
-                    new ChallengeResponse(challenge.getId().toString(),
-                            challenge.getTitle().toString(),
-                            challenge.getDescription().toString());
-            return ResponseEntity.ok(challengeResponse);
+        ChallengeResponse challengeResponse =
+                new ChallengeResponse(challenge.getId().toString(),
+                        challenge.getTitle().toString(),
+                        challenge.getDescription().toString(),
+                        challenge.getLanguage(),
+                        "Challenge solution"
+                );
+        return ResponseEntity.ok(challengeResponse);
     }
 
     @DeleteMapping("/{id}")
@@ -62,7 +68,6 @@ public class ChallengeController {
         repository.delete(ChallengeId.of(id));
         return ResponseEntity.noContent().build();
     }
-
 
 
     @PutMapping("/{id}")
@@ -75,6 +80,7 @@ public class ChallengeController {
                 new ChallengeId(UUID.fromString(id)),
                 request.title(),
                 request.description(),
+                ChallengeLanguage.JAVA,
                 ChallengeDifficulty.EASY
         );
 
@@ -82,7 +88,9 @@ public class ChallengeController {
         ChallengeResponse response = new ChallengeResponse(
                 updated.getId().toString(),
                 updated.getTitle().toString(),
-                updated.getDescription().toString()
+                updated.getDescription().toString(),
+                challenge.getLanguage(),
+                "Challenge solution"
         );
 
         return ResponseEntity.ok(response);

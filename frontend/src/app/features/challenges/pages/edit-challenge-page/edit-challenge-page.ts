@@ -3,7 +3,8 @@ import { ChallengeService } from '../../services/challenge.service';
 import { Router } from '@angular/router';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { IChallengeRequest } from '../../models/ichallenge-request.interface';
-
+import { ChallengeDifficulty } from '../../models/challenge-difficulty.type';
+import { ChallengeLanguage } from '../../models/challenge-language.type';
 
 @Component({
   selector: 'app-edit-challenge-page',
@@ -17,29 +18,46 @@ export class EditChallengePage {
   private readonly router = inject(Router);
   private readonly fb = inject(FormBuilder);
 
+  readonly difficulties: ChallengeDifficulty[] = ['EASY', 'MEDIUM', 'HARD'];
+  readonly languages: ChallengeLanguage[] = [
+    'JAVA',
+    'PHP',
+    'JAVASCRIPT',
+    'TYPESCRIPT',
+    'PYTHON',
+    'SQL',
+  ];
+
   editForm = this.fb.group({
     id: [''],
     title: [''],
     description: [''],
     solution: [''],
+    difficulty: ['EASY'],
+    language: ['']
   });
 
   onSubmit() {
 
-    const { id, title, description, solution} = this.editForm.getRawValue();
+    const { id, title, description, difficulty, language, solution } = this.editForm.getRawValue();
 
     const challengePayload: IChallengeRequest = {
       title: title ?? '',
       description: description ?? '',
       solution: solution ?? '',
+      difficulty: difficulty as ChallengeDifficulty,
+      language: language as ChallengeLanguage
     };
 
     this.challengeService.update(id?? '', challengePayload).subscribe({
       next: () => {
         this.goChallenges()
       },
-    });
-  };
+      error: (error) => {
+        console.error('Error updating challenge:', error);
+      },
+    })
+  }
 
   goChallenges() {
     this.router.navigate(['/challenges']);
