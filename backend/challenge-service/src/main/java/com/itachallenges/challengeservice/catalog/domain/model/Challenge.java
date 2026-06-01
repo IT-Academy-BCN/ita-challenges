@@ -4,6 +4,7 @@ import com.itachallenges.challengeservice.catalog.domain.valueobject.ChallengeDe
 import com.itachallenges.challengeservice.catalog.domain.valueobject.ChallengeDifficulty;
 import com.itachallenges.challengeservice.catalog.domain.valueobject.ChallengeId;
 import com.itachallenges.challengeservice.catalog.domain.valueobject.ChallengeLanguage;
+import com.itachallenges.challengeservice.catalog.domain.valueobject.ChallengeSolution;
 import com.itachallenges.challengeservice.catalog.domain.valueobject.ChallengeTitle;
 import lombok.Getter;
 
@@ -15,32 +16,36 @@ public class Challenge {
     private final ChallengeDescription description;
     private final ChallengeLanguage language;
     private final ChallengeDifficulty difficulty;
+    private final ChallengeSolution solution;
 
-    private Challenge(ChallengeId id, ChallengeTitle title, ChallengeDescription description, ChallengeLanguage language, ChallengeDifficulty difficulty) {
+    private Challenge(ChallengeId id, ChallengeTitle title, ChallengeDescription description, ChallengeLanguage language, ChallengeDifficulty difficulty, ChallengeSolution solution) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.language = language;
         this.difficulty = difficulty;
+        this.solution = solution;
     }
 
-    public static Challenge create(String title, String description, ChallengeLanguage language, ChallengeDifficulty difficulty) {
+    public static Challenge create(String title, String description, ChallengeLanguage language, ChallengeDifficulty difficulty, String solution) {
         return new Challenge(
                 ChallengeId.generate(),
                 new ChallengeTitle(title),
                 new ChallengeDescription(description),
                 language,
-                difficulty
+                difficulty,
+                new ChallengeSolution(solution)
         );
     }
 
-    public static Challenge restore(ChallengeId id, String title, String description, ChallengeLanguage language, ChallengeDifficulty difficulty) {
+    public static Challenge restore(ChallengeId id, String title, String description, ChallengeLanguage language, ChallengeDifficulty difficulty, String solution) {
         return new Challenge(
                 id,
                 new ChallengeTitle(title),
                 new ChallengeDescription(description),
                 language,
-                difficulty
+                difficulty,
+                new ChallengeSolution(solution)
         );
     }
 }

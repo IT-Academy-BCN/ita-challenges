@@ -2,9 +2,7 @@ package com.itachallenges.challengeservice.catalog.infrastructure.adapter.web.in
 
 import com.itachallenges.challengeservice.catalog.domain.model.Challenge;
 import com.itachallenges.challengeservice.catalog.domain.port.out.ChallengeRepository;
-import com.itachallenges.challengeservice.catalog.domain.valueobject.ChallengeDifficulty;
 import com.itachallenges.challengeservice.catalog.domain.valueobject.ChallengeId;
-import com.itachallenges.challengeservice.catalog.domain.valueobject.ChallengeLanguage;
 import com.itachallenges.challengeservice.catalog.infrastructure.adapter.web.in.dto.ChallengeResponse;
 import com.itachallenges.challengeservice.catalog.infrastructure.adapter.web.in.dto.ChallengeRequest;
 import lombok.AllArgsConstructor;
@@ -25,7 +23,7 @@ public class ChallengeController {
     @PostMapping
     public ResponseEntity<ChallengeResponse> create(@RequestBody ChallengeRequest request) {
         Challenge saved = repository.save(
-                Challenge.create(request.title(), request.description(), request.language(), request.difficulty())
+                Challenge.create(request.title(), request.description(), request.language(), request.difficulty(), request.solution())
         );
 
         return ResponseEntity.status(HttpStatus.CREATED).body(
@@ -35,7 +33,7 @@ public class ChallengeController {
                         saved.getDescription().toString(),
                         saved.getLanguage(),
                         saved.getDifficulty(),
-                        "Challenge solution"
+                        saved.getSolution().toString()
                 )
         );
     }
@@ -44,7 +42,7 @@ public class ChallengeController {
     public ResponseEntity<List<ChallengeResponse>> findAll() {
         List<ChallengeResponse> challenges = repository.findAll()
                 .stream()
-                .map(c -> new ChallengeResponse(c.getId().toString(), c.getTitle().toString(), c.getDescription().toString(), c.getLanguage(), c.getDifficulty(), "Challenge solution"))
+                .map(c -> new ChallengeResponse(c.getId().toString(), c.getTitle().toString(), c.getDescription().toString(), c.getLanguage(), c.getDifficulty(), c.getSolution().toString()))
                 .toList();
         return ResponseEntity.ok(challenges);
     }
@@ -60,10 +58,9 @@ public class ChallengeController {
                         challenge.getDescription().toString(),
                         challenge.getLanguage(),
                         challenge.getDifficulty(),
-                        "Challenge solution"
+                        challenge.getSolution().toString()
                 );
         return ResponseEntity.ok(challengeResponse);
-
     }
 
     @DeleteMapping("/{id}")
@@ -80,21 +77,22 @@ public class ChallengeController {
     ) {
 
         Challenge challenge = Challenge.restore(
-                        new ChallengeId(UUID.fromString(id)),
-                        request.title(),
-                        request.description(),
-                        request.language(),
-                        request.difficulty()
-                );
+                new ChallengeId(UUID.fromString(id)),
+                request.title(),
+                request.description(),
+                request.language(),
+                request.difficulty(),
+                request.solution()
+        );
 
         Challenge updated = repository.update(challenge);
         ChallengeResponse response = new ChallengeResponse(
                 updated.getId().toString(),
                 updated.getTitle().toString(),
                 updated.getDescription().toString(),
-                challenge.getLanguage(),
-                challenge.getDifficulty(),
-                "Challenge solution"
+                updated.getLanguage(),
+                updated.getDifficulty(),
+                updated.getSolution().toString()
         );
 
         return ResponseEntity.ok(response);

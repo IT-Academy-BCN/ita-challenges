@@ -74,18 +74,20 @@ public class JsonFileChallengeRepository implements ChallengeRepository {
     private void persistToFile() throws IOException {
         objectMapper.writeValue(storageFile, storage.values().stream()
                 .map(c -> new ChallengeRecord(
-                                            c.getId().toString(),
-                                            c.getTitle().toString(),
-                                            c.getDescription().toString(),
-                                            c.getLanguage().toString(),
-                                            c.getDifficulty().toString()
+                        c.getId().toString(),
+                        c.getTitle().toString(),
+                        c.getDescription().toString(),
+                        c.getLanguage().toString(),
+                        c.getDifficulty().toString(),
+                        c.getSolution().toString()
                 )).toList());
     }
 
     private void loadFromFile() throws IOException {
         if (!storageFile.exists()) return;
 
-        objectMapper.readValue(storageFile, new TypeReference<List<ChallengeRecord>>() {})
+        objectMapper.readValue(storageFile, new TypeReference<List<ChallengeRecord>>() {
+                })
                 .forEach(r -> storage.put(
                         ChallengeId.of(r.id()),
                         Challenge.restore(
@@ -93,10 +95,13 @@ public class JsonFileChallengeRepository implements ChallengeRepository {
                                 r.title(),
                                 r.description(),
                                 ChallengeLanguage.valueOf(r.language()),
-                                ChallengeDifficulty.valueOf(r.difficulty())
+                                ChallengeDifficulty.valueOf(r.difficulty()),
+                                (r.solution() != null && !r.solution().isBlank() ? r.solution() : "No solution provided")
                         )
                 ));
     }
 
-    record ChallengeRecord(String id, String title, String description, String language, String difficulty) {}
+    record ChallengeRecord(String id, String title, String description, String language, String difficulty,
+                           String solution) {
+    }
 }

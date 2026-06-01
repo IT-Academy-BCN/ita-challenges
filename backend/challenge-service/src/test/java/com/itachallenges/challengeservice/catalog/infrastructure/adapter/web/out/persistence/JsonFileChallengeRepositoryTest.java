@@ -39,7 +39,8 @@ class JsonFileChallengeRepositoryTest {
                 "Clean Code",
                 "Write readable code",
                 ChallengeLanguage.JAVA,
-                ChallengeDifficulty.EASY
+                ChallengeDifficulty.EASY,
+                "Challenge solution"
         );
 
         repository.save(challenge);
