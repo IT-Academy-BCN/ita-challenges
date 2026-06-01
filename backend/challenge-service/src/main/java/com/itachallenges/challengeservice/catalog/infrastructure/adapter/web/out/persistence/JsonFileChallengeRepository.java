@@ -77,8 +77,10 @@ public class JsonFileChallengeRepository implements ChallengeRepository {
                         c.getId().toString(),
                         c.getTitle().toString(),
                         c.getDescription().toString(),
-                        c.getSolution().toString()))
-                .toList());
+                        c.getLanguage().toString(),
+                        c.getDifficulty().toString(),
+                        c.getSolution().toString()
+                )).toList());
     }
 
     private void loadFromFile() throws IOException {
@@ -92,12 +94,14 @@ public class JsonFileChallengeRepository implements ChallengeRepository {
                                 ChallengeId.of(r.id()),
                                 r.title(),
                                 r.description(),
-                                ChallengeLanguage.JAVA,
-                                ChallengeDifficulty.EASY,
-                                (r.solution() != null && !r.solution().isBlank() ? r.solution() : "No solution provided"))));
-
+                                ChallengeLanguage.valueOf(r.language()),
+                                ChallengeDifficulty.valueOf(r.difficulty()),
+                                (r.solution() != null && !r.solution().isBlank() ? r.solution() : "No solution provided")
+                        )
+                ));
     }
 
-    record ChallengeRecord(String id, String title, String description, String solution) {
+    record ChallengeRecord(String id, String title, String description, String language, String difficulty,
+                           String solution) {
     }
 }

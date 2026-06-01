@@ -40,6 +40,7 @@ class ChallengeControllerTest {
             "Clean Code Challenge",
             "A challenge about writing clean and maintainable code",
             ChallengeLanguage.JAVA,
+            ChallengeDifficulty.MEDIUM,
             "Challenge solution"
     );
 
@@ -54,7 +55,7 @@ class ChallengeControllerTest {
 
     @Test
     void should_create_challenge_with_title_and_description_and_return_201() throws Exception {
-        Challenge saved = Challenge.create(request.title(), request.description(), request.language(), ChallengeDifficulty.EASY, request.solution());
+        Challenge saved = Challenge.create(request.title(), request.description(), request.language(), request.difficulty(), request.solution());
         when(repository.save(any(Challenge.class))).thenReturn(saved);
 
         mockMvc.perform(post("/api/challenge")
@@ -64,7 +65,8 @@ class ChallengeControllerTest {
                 .andExpect(jsonPath("$.id").isNotEmpty())
                 .andExpect(jsonPath("$.title").value("Clean Code Challenge"))
                 .andExpect(jsonPath("$.description").value("A challenge about writing clean and maintainable code"))
-                .andExpect(jsonPath("$.language").value("JAVA"));
+                .andExpect(jsonPath("$.language").value("JAVA"))
+                .andExpect(jsonPath("$.solution").value("Challenge solution"));
     }
 
     @Test
@@ -84,6 +86,7 @@ class ChallengeControllerTest {
                 "Updated title",
                 "Updated description",
                 ChallengeLanguage.JAVA,
+                ChallengeDifficulty.HARD,
                 "Updated solution"
         );
 
@@ -106,6 +109,7 @@ class ChallengeControllerTest {
                 .andExpect(jsonPath("$.id").value(id))
                 .andExpect(jsonPath("$.title").value("Updated title"))
                 .andExpect(jsonPath("$.description").value("Updated description"))
+                .andExpect(jsonPath("$.difficulty").value("EASY"))
                 .andExpect(jsonPath("$.language").value("JAVA"))
                 .andExpect(jsonPath("$.solution").value("Updated solution"));
     }
@@ -120,6 +124,7 @@ class ChallengeControllerTest {
         when(challenge.getId()).thenReturn(challengeId);
         when(challenge.getTitle()).thenReturn(new ChallengeTitle("Test Title"));
         when(challenge.getDescription()).thenReturn(new ChallengeDescription("Test Description"));
+        when(challenge.getDifficulty()).thenReturn(ChallengeDifficulty.EASY);
         when(challenge.getLanguage()).thenReturn(ChallengeLanguage.JAVA);
         when(challenge.getSolution()).thenReturn(new ChallengeSolution("Test Solution"));
 
@@ -131,6 +136,7 @@ class ChallengeControllerTest {
                 .andExpect(jsonPath("$.title").value("Test Title"))
                 .andExpect(jsonPath("$.description").value("Test Description"))
                 .andExpect(jsonPath("$.language").value("JAVA"))
+                .andExpect(jsonPath("$.difficulty").value("EASY"))
                 .andExpect(jsonPath("$.solution").value("Test Solution"));
     }
 }

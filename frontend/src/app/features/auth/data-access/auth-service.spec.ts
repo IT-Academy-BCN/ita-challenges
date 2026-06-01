@@ -88,4 +88,12 @@ describe('AuthService', () => {
     httpMock.expectOne(`/api/account/users/${MOCK_USER.username}/role`).flush({ role: Role.GUEST });
     expect(await promise).toEqual({ ...MOCK_USER, role: Role.GUEST });
   });
+
+  it('should load user without role if role endpoint fails', async () => {
+    const promise = firstValueFrom(service.fetchUser());
+    httpMock.expectOne('/api/account/auth/me').flush(MOCK_USER);
+    httpMock.expectOne(`/api/account/users/${MOCK_USER.username}/role`)
+      .flush('', { status: 404, statusText: 'Not Found' });
+    expect(await promise).toEqual({ ...MOCK_USER, role: undefined });
+  });
 });
