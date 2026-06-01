@@ -38,7 +38,7 @@ export class EditChallengePage {
 
   onSubmit() {
 
-    const { id, title, description, language } = this.editForm.getRawValue();
+    const { id, title, description, difficulty, language } = this.editForm.getRawValue();
 
     const challengePayload: IChallengeRequest = {
       title: title ?? '',
