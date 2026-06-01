@@ -27,6 +27,12 @@
       @for (difficulty of difficulties; track difficulty) {
         <option [value]="difficulty">
           {{ difficulty }}
+    <label for="language">Llenguatge</label>
+    <select id="language" formControlName="language">
+      <option value="" selected disabled>Selecciona llenguatge</option>
+      @for (language of languages; track language) {
+        <option [value]="language">
+          {{ language }}
         </option>
       }
     </select>

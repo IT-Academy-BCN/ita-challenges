@@ -55,20 +55,22 @@ public class TicketController {
     }
 
     @GetMapping
-    public ResponseEntity<List<TicketResponse>> findAll(@AuthenticationPrincipal OAuth2User user) {
+    public ResponseEntity<List<TicketPatchResponse>> findAll(@AuthenticationPrincipal OAuth2User user) {
         if (user == null || user.getAttribute("login") == null) {
             return ResponseEntity.status(401).build();
         }
 
         String userId = user.getAttribute("login");
 
-        List<TicketResponse> tickets = ticketRepository.findAllByUserId(userId)
+        List<TicketPatchResponse> tickets = ticketRepository.findAllByUserId(userId)
                 .stream()
-                .map(ticket -> new TicketResponse(
+                .map(ticket -> new TicketPatchResponse(
                         ticket.getId(),
                         ticket.getUserId(),
                         ticket.getTitle(),
-                        ticket.getDescription()
+                        ticket.getDescription(),
+                        ticket.getStatus(),
+                        ticket.getComment()
                 ))
                 .toList();
 
