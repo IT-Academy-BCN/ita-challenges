@@ -1,5 +1,5 @@
 import { inject, Injectable, signal } from '@angular/core';
-import { map, Observable, switchMap, tap } from 'rxjs';
+import { catchError, map, Observable, of, switchMap, tap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { AuthUser } from '../models/auth-user.model';
 import { Role } from '../../../core/models/role.enum';
@@ -25,6 +25,7 @@ export class AuthService {
       switchMap(user =>
         this.getUserRole(user.username).pipe(
           map(role => ({ ...user, role })),
+          catchError(() => of({ ...user, role: undefined }))
         )
       )
     );

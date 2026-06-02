@@ -37,7 +37,9 @@ describe('EditChallengePage', () => {
   });
 
   it('should call challengeService.update with correct values and navigate', () => {
-    const testData = { id: '777', title: 'Repte Editat', description: 'Nova descripció' };
+
+    const testData = { id: '777', title: 'Repte Editat', description: 'Nova descripció', language: 'JAVA', difficulty: 'EASY', solution: 'Placeholder solució' };
+
     component.editForm.setValue(testData);
 
     const navigateSpy = vi.spyOn(component, 'goChallenges');
@@ -46,7 +48,10 @@ describe('EditChallengePage', () => {
 
     expect(mockChallengeService.update).toHaveBeenCalledWith('777', {
       title: 'Repte Editat',
-      description: 'Nova descripció'
+      description: 'Nova descripció',
+      solution: 'Placeholder solució',
+      difficulty: 'EASY',
+      language: 'JAVA'
     });
 
 
