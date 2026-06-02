@@ -18,6 +18,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/account/auth/**").permitAll()
                         .requestMatchers("/api/account/oauth2/**").permitAll()
                         .requestMatchers("/api/account/login/oauth2/**").permitAll()
+                        .requestMatchers("/api/account/users/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .oauth2Login(oauth2 -> oauth2
