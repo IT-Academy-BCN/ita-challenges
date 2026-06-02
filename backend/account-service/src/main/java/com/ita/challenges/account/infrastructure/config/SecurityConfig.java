@@ -30,6 +30,13 @@ public class SecurityConfig {
                                 .baseUri("/api/account/login/oauth2/code/**")
                         )
                         .defaultSuccessUrl("/profile", true)
+                )
+                .logout(logout -> logout
+                .logoutUrl("/api/account/auth/logout")
+                .invalidateHttpSession(true)
+                .deleteCookies("JSESSIONID", "remember-me")
+                .logoutSuccessHandler((request, response, authentication) ->
+                        response.setStatus(200))
                 );
         return http.build();
     }

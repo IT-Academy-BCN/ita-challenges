@@ -15,6 +15,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -62,5 +63,12 @@ class SecurityConfigTest {
    .andExpect(status().is3xxRedirection())
    .andExpect(redirectedUrlPattern("**/auth"));
  }
+
+ @Test
+ @DisplayName("Should permit POST requests to logout endpoint")
+ void shouldPermitLogoutEndpoint() throws Exception {
+  mockMvc.perform(post("/api/account/auth/logout"))
+   .andExpect(status().isOk());
+    }
 
 }
