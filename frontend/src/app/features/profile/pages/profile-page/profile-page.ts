@@ -23,19 +23,10 @@ export class ProfilePageComponent implements OnInit {
     const user = this.user();
 
     if (user) {
-      this.loading.set(false);
-      return;
+          this.loading.set(false);
+        } else {
+          this.error.set(true);
+          this.loading.set(false);
+        }
+      }
     }
-
-    this.authService.fetchUser().subscribe({
-      next: (user) => {
-        this.authService.setUser(user);
-        this.loading.set(false);
-      },
-      error: () => {
-        this.error.set(true);
-        this.loading.set(false);
-      },
-    });
-  }
-}
