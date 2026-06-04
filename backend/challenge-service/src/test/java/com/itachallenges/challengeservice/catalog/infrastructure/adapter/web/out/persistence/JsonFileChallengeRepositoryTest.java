@@ -50,4 +50,21 @@ class JsonFileChallengeRepositoryTest {
         assertThat(repository.findAll().get(0).getTitle().toString())
                 .isEqualTo("Clean Code");
     }
+
+    @Test
+    void delete_should_remove_challenge_from_storage() {
+
+        Challenge challenge = Challenge.create(
+                "Clean Code",
+                "Write readable code",
+                ChallengeLanguage.JAVA,
+                ChallengeDifficulty.EASY,
+                "Challenge solution"
+        );
+
+        repository.save(challenge);
+        repository.delete(challenge.getId());
+
+        assertThat(repository.findAll()).isEmpty();
+    }
 }
