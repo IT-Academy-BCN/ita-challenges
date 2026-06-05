@@ -11,9 +11,9 @@ import { DeleteButtonComponent } from "../../components/buttons/delete-button/de
 @Component({
   selector: 'app-challenges-list-page',
   imports: [
-    RouterLink, 
-    RoleSelectorComponent, 
-    CreateButtonComponent, 
+    RouterLink,
+    RoleSelectorComponent,
+    CreateButtonComponent,
     DeleteButtonComponent
   ],
   standalone: true,
@@ -79,4 +79,7 @@ export class ChallengesListPage implements OnInit {
     });
   }
 
+  getDifficultyClass(diff?: ChallengeDifficulty): string {
+    return diff ? `tag tag--difficulty-${diff.toLowerCase()}` : 'tag';
+  }
 }
