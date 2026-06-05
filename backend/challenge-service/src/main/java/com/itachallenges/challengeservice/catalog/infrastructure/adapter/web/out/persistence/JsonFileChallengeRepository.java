@@ -73,7 +73,7 @@ public class JsonFileChallengeRepository implements ChallengeRepository {
         try {
             persistToFile();
         } catch (IOException e) {
-            throw new RuntimeException("Failed to persist after delete");
+            throw new RuntimeException("Failed to persist after delete", e);
 
         }
     }
