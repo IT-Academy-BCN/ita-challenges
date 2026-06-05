@@ -11,23 +11,41 @@
 }
 
 @if (challenges().length > 0) {
-    <ul>
-        @for (challenge of challenges(); track challenge.id) {
-        <li>
-            <h2>{{ challenge.title }}</h2>
-            <p>{{ challenge.description }}</p>
+  <div class="cards-grid">
+    @for (challenge of challenges(); track challenge.id) {
+      <div class="challenge-card" [routerLink]="['/challenges', challenge.id]">
+        <div class="challenge-card__header">
+          <span class="challenge-card__lang">{{ getLanguageLabel(challenge.language) }}</span>
+          <i class="ti ti-bookmark challenge-card__bookmark" aria-hidden="true"></i>
+        </div>
 
-            <div class="challenges-list__actions">
-                <button [routerLink]="['/challenges', challenge.id]">Accedir al repte</button>
-                @if(isMentor()) {
-                    <app-delete-button
-                        (deleteClick)="handleDelete(challenge.id)">
-                    </app-delete-button>
-                }
-            </div>
-        </li>
+        <h3 class="challenge-card__title">{{ challenge.title }}</h3>
+        <p class="challenge-card__desc">{{ challenge.description }}</p>
+
+        <div class="challenge-card__tags">
+          <span class="tag">Lògica</span>
+          <span class="tag">Variables</span>
+          <span class="tag">Fonaments</span>
+        </div>
+
+        <div class="challenge-card__footer">
+          <span [class]="getDifficultyClass(challenge.difficulty)">
+            {{ getDifficultyLabel(challenge.difficulty) }}
+          </span>
+          <div class="challenge-card__stats">
+            <span><i class="ti ti-rocket" aria-hidden="true"></i> 214</span>
+            <span><i class="ti ti-heart" aria-hidden="true"></i> 143</span>
+            <span>20 Mai 2025</span>
+          </div>
+        </div>
+        @if(isMentor()) {
+          <div class="challenge-card__actions">
+            <app-delete-button (deleteClick)="handleDelete(challenge.id)" />
+          </div>
         }
-    </ul>
+      </div>
+    }
+  </div>
 } @else {
-    <p>No hi ha reptes disponibles en aquest moment.</p>
+  <p>No hi ha reptes disponibles en aquest moment.</p>
 }
