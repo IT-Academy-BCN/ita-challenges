@@ -1,11 +1,8 @@
 <section class="auth">
     <h1>Login</h1>
 
-    <button (click)="login()" [disabled]="loading()" class="auth__button">
-        @if (loading()) {
-            <span>Loading...</span>
-        } @else {
-            <span>Login with GitHub</span>
-        }
-    </button>
+  <a href="http://localhost:8080/api/account/oauth2/authorization/github" class="auth__button">
+    <span>Login with GitHub</span>
+  </a>
 </section>
+
