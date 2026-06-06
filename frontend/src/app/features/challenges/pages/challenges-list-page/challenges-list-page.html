@@ -16,7 +16,9 @@
         <li>
             <h2>{{ challenge.title }}</h2>
             <p>{{ challenge.description }}</p>
-
+            <p>Dificultat: {{ getDifficultyLabel(challenge.difficulty) }}</p>
+            <p>Llenguatge: {{ getLanguageLabel(challenge.language) }}</p>
+            
             <div class="challenges-list__actions">
                 <button [routerLink]="['/challenges', challenge.id]">Accedir al repte</button>
                 @if(isMentor()) {
