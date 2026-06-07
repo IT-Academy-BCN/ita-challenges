@@ -9,10 +9,10 @@ import { Role } from '../../../core/models/role.enum';
 })
 export class AuthService {
   private readonly http = inject(HttpClient);
-  private readonly githubLoginUrl = '/api/account/oauth2/authorization/github';
-  private readonly currentUserUrl = '/api/account/auth/me';
-  private readonly logoutUrl = '/api/account/auth/logout';
-  private readonly userRoleUrl = (username: string) => `/api/account/users/${username}/role`;
+  private readonly githubLoginUrl = 'http://localhost:8080/api/account/oauth2/authorization/github';
+  private readonly currentUserUrl = 'http://localhost:8080/api/account/auth/me';
+  private readonly logoutUrl = 'http://localhost:8080/api/account/auth/logout';
+  private readonly userRoleUrl = (username: string) => `http://localhost:8080/api/account/users/${username}/role`;
 
   user = signal<AuthUser | null>(null);
 
@@ -21,7 +21,7 @@ export class AuthService {
   }
 
   fetchUser(): Observable<AuthUser> {
-    return this.http.get<AuthUser>(this.currentUserUrl).pipe(
+    return this.http.get<AuthUser>(this.currentUserUrl, { withCredentials: true }).pipe(
       switchMap(user =>
         this.getUserRole(user.username).pipe(
           map(role => ({ ...user, role })),
@@ -32,7 +32,7 @@ export class AuthService {
   }
 
   private getUserRole(username: string): Observable<Role> {
-    return this.http.get<{ role: Role }>(this.userRoleUrl(username))
+    return this.http.get<{ role: Role }>(this.userRoleUrl(username), { withCredentials: true })
       .pipe(map(response => response.role));
   }
 
@@ -45,7 +45,7 @@ export class AuthService {
   }
 
   logout(): Observable<void> {
-    return this.http.post(this.logoutUrl, {}, { responseType: 'text' }).pipe(
+    return this.http.post(this.logoutUrl, {}, { responseType: 'text', withCredentials: true }).pipe(
       tap(() => {
         this.user.set(null);
       }),
