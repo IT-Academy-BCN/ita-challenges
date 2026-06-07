@@ -19,14 +19,21 @@ export class ProfilePageComponent implements OnInit {
   public error = signal(false);
 
   ngOnInit(): void {
+    const user = this.authService.getUser();
 
-    const user = this.user();
-
-    if (user) {
+        if (user) {
           this.loading.set(false);
-        } else {
-          this.error.set(true);
-          this.loading.set(false);
+          return;
         }
+
+        this.authService.fetchUser().subscribe({
+          next: (fetchedUser) => {
+            this.authService.setUser(fetchedUser);
+            this.loading.set(false);
+          },
+          error: () => {
+            this.error.set(true);
+            this.loading.set(false);
+          }
+        });
       }
-    }
