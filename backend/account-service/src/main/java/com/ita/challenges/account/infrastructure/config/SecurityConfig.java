@@ -27,7 +27,6 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
                 )
                 .oauth2Login(oauth2 -> oauth2
-                        .loginPage("/auth")
                         .authorizationEndpoint(authorization -> authorization
                                 .baseUri("/api/account/oauth2/authorization")
                         )
