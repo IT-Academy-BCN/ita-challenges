@@ -26,14 +26,16 @@ export class ProfilePageComponent implements OnInit {
           return;
         }
 
-        this.authService.fetchUser().subscribe({
-          next: (fetchedUser) => {
-            this.authService.setUser(fetchedUser);
-            this.loading.set(false);
-          },
-          error: () => {
-            this.error.set(true);
-            this.loading.set(false);
-          }
-        });
+    this.authService.fetchUser().subscribe({
+      next: (fetchedUser) => {
+        this.authService.setUser(fetchedUser);
+        this.loading.set(false);
+      },
+      error: () => {
+        this.error.set(true);
+        this.loading.set(false);
       }
+    });
+  }
+}
+
