@@ -29,7 +29,7 @@ public class SecurityConfig {
                         .redirectionEndpoint(redirection -> redirection
                                 .baseUri("/api/account/login/oauth2/code/**")
                         )
-                        .defaultSuccessUrl("http://localhost:4200/", true)
+                        .defaultSuccessUrl("http://localhost:4200/challenges", true)
                 )
                 .logout(logout -> logout
                 .logoutUrl("/api/account/auth/logout")
