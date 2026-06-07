@@ -68,6 +68,19 @@ class TicketControllerTest {
     }
 
     @Test
+    void should_return_400_when_sending_blank_fields_in_create_ticket() throws Exception {
+        TicketRequest request = new TicketRequest("", "");
+
+        mockMvc.perform(post("/api/account/tickets")
+                        .with(csrf())
+                        .with(oauth2Login().attributes(attrs -> attrs.put("login", "tester")))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isBadRequest());
+
+    }
+
+    @Test
     void should_return_200_with_ticket_list_when_requesting_ticket_list() throws Exception {
         Ticket ticket = Ticket.create("testuser", "Login issue", "Unable to access my account");
         when(ticketRepository.findAllByUserId("testuser")).thenReturn(List.of(ticket));
