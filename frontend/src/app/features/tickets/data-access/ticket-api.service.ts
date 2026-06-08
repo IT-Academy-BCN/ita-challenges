@@ -16,9 +16,9 @@ export class TicketApiService {
   create(ticket: ITicketRequest): Observable<ITicket> {
     return this.http.post<ITicket>(this.ticketsUrl, ticket, { withCredentials: true }).pipe(
       catchError((error: HttpErrorResponse) => {
-        const mensaje = typeof error.error === 'string' ? error.error : error.error?.message || error.message;
-        const errorConMensaje = { ...error, userMessage: mensaje };
-        return throwError(() => errorConMensaje);
+        const message = typeof error.error === 'string' ? error.error : error.error?.message || error.message;
+        const errorWithMessage = { ...error, userMessage: message };
+        return throwError(() => errorWithMessage);
       })
     );
   }
