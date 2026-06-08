@@ -7,5 +7,5 @@ import { Component, Input } from '@angular/core';
   styleUrl: './button.css',
 })
 export class Button {
-  @Input() label: string = 'Button placeholder';
+  label = input<string>('Button placeholder');
 }
