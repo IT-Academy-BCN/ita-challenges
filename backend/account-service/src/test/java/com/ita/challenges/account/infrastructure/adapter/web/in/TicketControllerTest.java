@@ -15,6 +15,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
 import java.time.Instant;
 import java.util.List;
@@ -76,7 +77,8 @@ class TicketControllerTest {
                         .with(oauth2Login().attributes(attrs -> attrs.put("login", "tester")))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("No empty fields allowed"));
 
     }
 
@@ -114,6 +116,7 @@ class TicketControllerTest {
                 .andExpect(jsonPath("$.title").value("New Title"))
                 .andExpect(jsonPath("$.userId").value(currentUserId));
     }
+
     @Test
     void should_return_404_when_updating_non_existing_ticket() throws Exception {
         String ticketId = "non-existent";
