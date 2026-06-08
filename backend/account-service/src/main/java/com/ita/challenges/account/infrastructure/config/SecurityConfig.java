@@ -1,5 +1,6 @@
 package com.ita.challenges.account.infrastructure.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -13,6 +14,9 @@ import java.util.List;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+
+    @Value("${app.frontend.url:http://localhost:4200}")
+    private String frontendUrl;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -33,7 +37,7 @@ public class SecurityConfig {
                         .redirectionEndpoint(redirection -> redirection
                                 .baseUri("/api/account/login/oauth2/code/**")
                         )
-                        .defaultSuccessUrl("http://localhost:4200/challenges", true)
+                        .defaultSuccessUrl(frontendUrl + "/challenges", true)
                 )
                 .logout(logout -> logout
                         .logoutUrl("/api/account/auth/logout")
@@ -49,7 +53,7 @@ public class SecurityConfig {
         @Bean
         public CorsConfigurationSource corsConfigurationSource() {
             CorsConfiguration configuration = new CorsConfiguration();
-            configuration.setAllowedOrigins(List.of("http://localhost:4200"));
+            configuration.setAllowedOrigins(List.of(frontendUrl));
             configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
             configuration.setAllowedHeaders(List.of("*"));
             configuration.setAllowCredentials(true);
