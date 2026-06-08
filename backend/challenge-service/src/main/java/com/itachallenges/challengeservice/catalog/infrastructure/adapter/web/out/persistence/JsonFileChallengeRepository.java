@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Primary
@@ -63,7 +64,18 @@ public class JsonFileChallengeRepository implements ChallengeRepository {
 
     @Override
     public void delete(ChallengeId id) {
-        throw new UnsupportedOperationException("Not implemented yet");
+
+        if(!storage.containsKey(id)) {
+            throw new NoSuchElementException("Challenge with this id doesn't exist");
+        }
+
+        storage.remove(id);
+        try {
+            persistToFile();
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to persist after delete", e);
+
+        }
     }
 
     @Override

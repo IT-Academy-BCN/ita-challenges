@@ -2,6 +2,7 @@ package com.itachallenges.challengeservice.catalog.infrastructure.adapter.web.ou
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.itachallenges.challengeservice.catalog.domain.model.Challenge;
+import com.itachallenges.challengeservice.catalog.domain.valueobject.ChallengeId;
 import com.itachallenges.challengeservice.catalog.domain.valueobject.ChallengeLanguage;
 import com.itachallenges.challengeservice.catalog.domain.valueobject.ChallengeDifficulty;
 import org.junit.jupiter.api.AfterEach;
@@ -10,8 +11,10 @@ import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.NoSuchElementException;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class JsonFileChallengeRepositoryTest {
 
@@ -50,4 +53,29 @@ class JsonFileChallengeRepositoryTest {
         assertThat(repository.findAll().get(0).getTitle().toString())
                 .isEqualTo("Clean Code");
     }
+
+    @Test
+    void delete_should_remove_challenge_from_storage() {
+
+        Challenge challenge = Challenge.create(
+                "Clean Code",
+                "Write readable code",
+                ChallengeLanguage.JAVA,
+                ChallengeDifficulty.EASY,
+                "Challenge solution"
+        );
+
+        repository.save(challenge);
+        repository.delete(challenge.getId());
+
+        assertThat(repository.findAll()).isEmpty();
+    }
+
+    @Test
+    void delete_should_throw_when_challenge_does_not_exist() {
+        ChallengeId fakeId = ChallengeId.generate();
+
+        assertThrows(NoSuchElementException.class, () -> repository.delete(fakeId));
+    }
+
 }
