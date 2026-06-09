@@ -1,0 +1,11 @@
+.ticket-card {
+  display: grid;
+  grid-template-columns: 100px 1fr 100px 120px 100px 120px 140px;
+  gap: 8px;
+  align-items: center;
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 14px 20px;
+  margin-bottom: 8px;
+}
