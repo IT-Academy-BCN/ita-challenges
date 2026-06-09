@@ -1,11 +1,14 @@
-<h1>Tiquets</h1>
+<h1>Ticketing</h1>
 
-<ul>
-    @for (ticket of tickets(); track ticket.id) {
-        <li>
-            <h3>{{ ticket.title }}</h3>
-            <p>{{ ticket.description }}</p>
-        </li>
-        <button [routerLink]="['/tickets', ticket.id]">Accedir al ticket</button>
-    }
-</ul>
+<div class="tickets-header">
+  <span>ID</span>
+  <span>Títol</span>
+  <span>Estat</span>
+  <span>Descripció</span>
+  <span>Creat</span>
+  <span>Actualitzat</span>
+</div>
+
+@for (ticket of tickets(); track ticket.id) {
+  <app-card [ticket]="ticket" />
+}
