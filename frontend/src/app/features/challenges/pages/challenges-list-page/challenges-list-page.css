@@ -1,11 +1,78 @@
-.challenges-list__header {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-}
+:host { display: block; margin-left: -250px; width: calc(100% + 250px); }
 
-.challenges-list__actions {
-    display: flex;
-    gap: 1rem;
+.challenges-list__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
 }
+.cards-grid {
+  display: grid;
+  width: 90%;
+  margin: 0 auto;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+  padding: 1rem 0;
+  max-width: 1400px;
+}
+.cards-grid > * { max-width: 420px; width: 100%; }
+
+.challenge-card {
+  background: white;
+  border: 0.5px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 1.25rem;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  position: relative;
+  transition: border-color 0.2s;
+}
+.challenge-card:hover { border-color: #d1d5db; }
+.challenge-card__header { display: flex; justify-content: space-between; align-items: center; }
+.challenge-card__lang {
+  font-size: 12px;
+  font-weight: 500;
+  color: #6b7280;
+  background: #f3f4f6;
+  padding: 3px 10px;
+  border-radius: 999px;
+  border: 0.5px solid #e5e7eb;
+}
+.challenge-card__bookmark { color: #9ca3af; font-size: 18px; }
+.challenge-card__title { font-size: 16px; font-weight: 700; color: #111827; margin: 0; line-height: 1.4; }
+.challenge-card__desc {
+  font-size: 13px;
+  color: #6b7280;
+  margin: 0;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  line-height: 1.5;
+}
+.challenge-card__tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.challenge-card__footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+  padding-top: 10px;
+  border-top: 0.5px solid #f3f4f6;
+}
+.challenge-card__stats { display: flex; gap: 10px; font-size: 12px; color: #6b7280; align-items: center; }
+.challenge-card__stats i { font-size: 14px; vertical-align: -2px; }
+
+.tag {
+  font-size: 12px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  border: 1px solid #e5e7eb;
+  color: #374151;
+  background: white;
+}
+.tag--difficulty-easy   { background: #EAF3DE; color: #3B6D11; border-color: #C0DD97; }
+.tag--difficulty-medium { background: #FAEEDA; color: #854F0B; border-color: #FAC775; }
+.tag--difficulty-hard   { background: #FCEBEB; color: #A32D2D; border-color: #F7C1C1; }
