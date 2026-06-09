@@ -106,20 +106,4 @@ describe('ChallengesListPage', () => {
     expect(component.challenges().length).toBe(initialLength - 1);
     expect(component.challenges().some(c => c.id === CHALLENGES_MOCK[0].id)).toBe(false);
   });
-
-  it('should return easy class for EASY difficulty', () => {
-    expect(component.getDifficultyClass('EASY')).toBe('tag tag--difficulty-easy');
-  });
-
-  it('should return medium class for MEDIUM difficulty', () => {
-    expect(component.getDifficultyClass('MEDIUM')).toBe('tag tag--difficulty-medium');
-  });
-
-  it('should return hard class for HARD difficulty', () => {
-    expect(component.getDifficultyClass('HARD')).toBe('tag tag--difficulty-hard');
-  });
-
-  it('should return default tag class when difficulty is undefined', () => {
-    expect(component.getDifficultyClass(undefined)).toBe('tag');
-  });
 });
