@@ -128,4 +128,24 @@ class AuthControllerTest {
                 )
                 .andExpect(status().isNotFound());
     }
+
+    @Test
+    void authMe_whenAuthenticated_returnsUsernameAndAvatarUrl() throws Exception {
+        mockMvc.perform(get("/api/account/auth/me")
+                        .with(oauth2Login()
+                                .attributes(attrs -> {
+                                    attrs.put("login", "testuser");
+                                    attrs.put("avatar_url", "https://github.com/testuser.png");
+                                })))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.username").value("testuser"))
+                .andExpect(jsonPath("$.avatarUrl").value("https://github.com/testuser.png"));
+    }
+
+    @Test
+    void authMe_whenNotAuthenticated_returnsAnonymous() throws Exception {
+        mockMvc.perform(get("/api/account/auth/me"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.username").value("anonymous"));
+    }
 }
