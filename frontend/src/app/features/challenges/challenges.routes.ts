@@ -12,7 +12,7 @@ export const CHALLENGES_ROUTES: Routes = [
     component: ChallengesListPage,
   },
   {
-    path: 'edit',
+    path: 'edit/:id',
     component: EditChallengePage,
   },
   {
