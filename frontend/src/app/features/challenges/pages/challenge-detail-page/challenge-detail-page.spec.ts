@@ -96,6 +96,5 @@ describe('ChallengeDetailPage', () => {
       userId: 'user-456',
       code: 'my-code'
     });
-  });
 
-});
+

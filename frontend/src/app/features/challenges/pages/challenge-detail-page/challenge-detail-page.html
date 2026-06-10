@@ -4,17 +4,18 @@
   <p>{{ ch.description }}</p>
   <p>Dificultat: {{ getDifficultyLabel(ch.difficulty) }}</p>
   <p>Llenguatge: {{ getLanguageLabel(ch.language) }}</p>
-    
-  <form [formGroup]="codeSolutionForm" (ngSubmit)="saveSolution()">
-    <textarea
-        id="challengeAnswer"
-        formControlName="code"
-        rows="10"
-        placeholder="Escriu aquí la resposta del repte...">
-      </textarea>
-    <div class="challenge__actions">
-      <button type="submit">Guardar</button>
-      <button type="button" (click)="publishSolution()">Publicar</button>
+}
+
+@if (showModal()) {
+<div class="modal-overlay">
+  <div class="modal">
+    <h2>Vols enviar la solució?</h2>
+    <p>Escull com vols finalitzar el repte:</p>
+    <div class="modal-actions">
+      <button (click)="finishWithSolution()">Enviar i mostrar solució</button>
+      <button (click)="finishWithoutSolution()">No enviar</button>
+      <button (click)="closeModal()">Tornar enrere</button>
     </div>
-  </form>
+  </div>
+</div>
 }
