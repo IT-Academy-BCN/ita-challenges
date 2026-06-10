@@ -9,10 +9,10 @@ import { Role } from '../../../core/models/role.enum';
 })
 export class AuthService {
   private readonly http = inject(HttpClient);
-  private readonly githubLoginUrl = 'http://localhost:8080/api/account/oauth2/authorization/github';
-  private readonly currentUserUrl = 'http://localhost:8080/api/account/auth/me';
-  private readonly logoutUrl = 'http://localhost:8080/api/account/auth/logout';
-  private readonly userRoleUrl = (username: string) => `http://localhost:8080/api/account/users/${username}/role`;
+  private readonly githubLoginUrl = '/api/account/oauth2/authorization/github';
+  private readonly currentUserUrl = '/api/account/auth/me';
+  private readonly logoutUrl = '/api/account/auth/logout';
+  private readonly userRoleUrl = (username: string) => `/api/account/users/${username}/role`;
 
   user = signal<AuthUser | null>(null);
 
