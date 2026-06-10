@@ -31,12 +31,12 @@ public class SecurityConfig {
                         )
                         .defaultSuccessUrl("/challenges")
                 )
-            .logout(logout -> logout
-                    .logoutUrl("/api/account/auth/logout")
-                    .invalidateHttpSession(true)
-                    .deleteCookies("JSESSIONID", "remember-me")
-                    .logoutSuccessHandler((request, response, authentication) ->
-                            response.setStatus(200))
+                .logout(logout -> logout
+                .logoutUrl("/api/account/auth/logout")
+                .invalidateHttpSession(true)
+                .deleteCookies("JSESSIONID", "remember-me")
+                .logoutSuccessHandler((request, response, authentication) ->
+                        response.setStatus(200))
                 );
         return http.build();
 
