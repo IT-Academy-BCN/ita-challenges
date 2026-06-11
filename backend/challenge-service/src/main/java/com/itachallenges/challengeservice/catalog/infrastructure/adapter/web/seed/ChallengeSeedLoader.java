@@ -44,6 +44,30 @@ public class ChallengeSeedLoader implements ApplicationRunner {
                             ChallengeLanguage.TYPESCRIPT,
                             ChallengeDifficulty.HARD,
                             "app.get('/items', (req, res) => res.json(db));"
+                    ),
+                    Challenge.restore(
+                            ChallengeId.of("44444444-4444-4444-4444-444444444444"),
+                            "Data Analysis with Pandas",
+                            "Calculate the average of a list of numbers using Pandas.",
+                            ChallengeLanguage.PYTHON,
+                            ChallengeDifficulty.MEDIUM,
+                            "import pandas as pd; def get_avg(data): return pd.Series(data).mean()"
+                    ),
+                    Challenge.restore(
+                            ChallengeId.of("55555555-5555-5555-5555-555555555555"),
+                            "SQL Joins",
+                            "Join two tables: Users and Orders.",
+                            ChallengeLanguage.SQL,
+                            ChallengeDifficulty.EASY,
+                            "SELECT * FROM Users JOIN Orders ON Users.id = Orders.user_id;"
+                    ),
+                    Challenge.restore(
+                            ChallengeId.of("66666666-6666-6666-6666-666666666666"),
+                            "PHP Array Filter",
+                            "Filter an array to keep only even numbers.",
+                            ChallengeLanguage.PHP,
+                            ChallengeDifficulty.HARD,
+                            "$evens = array_filter($array, fn($n) => $n % 2 === 0);"
                     )
             );
                     initialChallenges.forEach(repository::save);
