@@ -1,6 +1,6 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { ChallengeService } from '../../services/challenge.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { IChallengeRequest } from '../../models/ichallenge-request.interface';
 import { ChallengeDifficulty } from '../../models/challenge-difficulty.type';
@@ -12,10 +12,11 @@ import { ChallengeLanguage } from '../../models/challenge-language.type';
   templateUrl: './edit-challenge-page.html',
   styleUrl: './edit-challenge-page.css',
 })
-export class EditChallengePage {
+export class EditChallengePage implements OnInit {
 
   private readonly challengeService = inject(ChallengeService);
   private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
   private readonly fb = inject(FormBuilder);
 
   readonly difficulties: ChallengeDifficulty[] = ['EASY', 'MEDIUM', 'HARD'];
@@ -36,6 +37,30 @@ export class EditChallengePage {
     difficulty: ['EASY'],
     language: ['']
   });
+
+  ngOnInit(): void {
+    const id = this.route.snapshot.paramMap.get('id');
+
+    if (id) {
+      this.challengeService.getById(id).subscribe({
+        next: (challenge) => {
+          if (!challenge) return;
+
+          this.editForm.patchValue({   
+            id:          challenge.id,
+            title:       challenge.title,
+            description: challenge.description,
+            solution:    challenge.solution,
+            difficulty:  challenge.difficulty,
+            language:    challenge.language,
+          });
+        },
+        error: (error) => {
+          console.error('Error loading challenge:', error);
+        }
+      });
+    }
+  }
 
   onSubmit() {
 
