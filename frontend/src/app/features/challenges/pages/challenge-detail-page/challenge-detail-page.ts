@@ -102,7 +102,7 @@ export class ChallengeDetailPage {
       this.submitSolution(false);
     }
 
-  private submitSolution(revealOfficialSolution: boolean): void {
+   submitSolution(revealOfficialSolution: boolean): void {
       const currentChallenge = this.challenge();
       const currentUser = this.authService.user() as AuthUserWithId;
 
@@ -113,6 +113,7 @@ export class ChallengeDetailPage {
           code: this.codeSolutionForm.value.code ?? '',
           revealOfficialSolution
         };
+        if(revealOfficialSolution) { 
         this.challengeApiService.publishSolution(challengeSolution).subscribe({
           next: () => {
             alert('Solució enviada!');
@@ -123,4 +124,5 @@ export class ChallengeDetailPage {
         });
       }
     }
+}
 }
