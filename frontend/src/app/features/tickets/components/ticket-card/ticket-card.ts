@@ -1,15 +1,15 @@
 import { Component, input } from '@angular/core';
 import { ITicket } from '../../models/iticket.interface';
 import { RouterLink } from '@angular/router';
-import { Button } from '../button/button';
+import { TicketButton } from '../ticket-button/ticket-button';
 import { DatePipe } from '@angular/common';
 
 @Component({
-  selector: 'app-card',
-  imports: [RouterLink, Button, DatePipe],
-  templateUrl: './card.html',
-  styleUrl: './card.css',
+  selector: 'app-ticket-card',
+  imports: [RouterLink, TicketButton, DatePipe],
+  templateUrl: './ticket-card.html',
+  styleUrl: './ticket-card.css',
 })
-export class Card {
+export class TicketCard {
   ticket = input.required<ITicket>();
 }

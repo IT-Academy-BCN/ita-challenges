@@ -1,12 +1,12 @@
 import { Component, inject, signal } from '@angular/core';
 import { TicketApiService } from '../../data-access/ticket-api.service';
 import { ITicket } from '../../models/iticket.interface';
-import { Card } from "../../components/card/card";
+import { TicketCard } from "../../components/ticket-card/ticket-card";
 
 @Component({
   selector: 'app-ticket-list-page',
   standalone: true,
-  imports: [Card],
+  imports: [TicketCard],
   templateUrl: './ticket-list-page.html',
   styleUrl: './ticket-list-page.css',
 })

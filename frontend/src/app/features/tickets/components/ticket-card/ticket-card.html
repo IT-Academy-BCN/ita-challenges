@@ -5,5 +5,5 @@
   <span class="ticket-description">{{ ticket().description }}</span>
   <span class="ticket-description">{{ ticket().createdAt | date:'dd/MM/yyyy HH:mm' }}</span>
   <span class="ticket-description">{{ ticket().updatedAt | date:'dd/MM/yyyy HH:mm' }}</span>
-  <app-button [routerLink]="['/tickets', ticket().id]" [label]="'Accedir'"/>
+  <app-ticket-button [routerLink]="['/tickets', ticket().id]" [label]="'Accedir'"/>
 </div>
