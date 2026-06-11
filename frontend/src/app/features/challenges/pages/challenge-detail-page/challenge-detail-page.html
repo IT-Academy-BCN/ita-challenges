@@ -1,20 +1,33 @@
-
 @if (challenge(); as ch) {
-  <h1>{{ ch.title }}</h1>
-  <p>{{ ch.description }}</p>
-  <p>Dificultat: {{ getDifficultyLabel(ch.difficulty) }}</p>
-  <p>Llenguatge: {{ getLanguageLabel(ch.language) }}</p>
-    
-  <form [formGroup]="codeSolutionForm" (ngSubmit)="saveSolution()">
-    <textarea
-        id="challengeAnswer"
-        formControlName="code"
-        rows="10"
-        placeholder="Escriu aquí la resposta del repte...">
-      </textarea>
-    <div class="challenge__actions">
-      <button type="submit">Guardar</button>
-      <button type="button" (click)="publishSolution()">Publicar</button>
+  <div class="challenge-container" xmlns:Llenguatge="http://www.w3.org/1999/xhtml">
+    <div class="challenge-header">
+      <h1 class="challenge-title">{{ ch.title }}</h1>
+      <p class="challenge-description">{{ ch.description }}</p>
+      <div class="challenge-meta">
+        <div class="meta-tag">
+          <span class="meta-label">Dificultat: </span>
+          <span class="meta-value">{{ getDifficultyLabel(ch.difficulty) }}</span>
+        </div>
+        <div class="meta-tag">
+          <span class="meta-label">Llenguatge: </span>
+          <span class="meta-value">{{ getLanguageLabel(ch.language) }}</span>
+        </div>
+      </div>
     </div>
-  </form>
+    <div class="challenge-content">
+      <form [formGroup]="codeSolutionForm" (ngSubmit)="saveSolution()" class="challenge__form">
+    <textarea
+      id="challengeAnswer"
+      formControlName="code"
+      rows="10"
+      class="code-textarea"
+      placeholder="Escriu aquí la resposta del repte...">
+      </textarea>
+        <div class="challenge__actions">
+          <button type="submit" class="btn btn-secondary">Guardar</button>
+          <button type="button" class="btn btn-primary" (click)="publishSolution()">Publicar</button>
+        </div>
+      </form>
+    </div>
+  </div>
 }
