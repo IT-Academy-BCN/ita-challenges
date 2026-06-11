@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class InMemoryChallengeRepositoryTest {
 
@@ -58,6 +59,14 @@ class InMemoryChallengeRepositoryTest {
         assertThat(result.getDescription().toString()).isEqualTo("New description");
         assertThat(result.getSolution().toString()).isEqualTo("New solution");
     }
+
+    @Test
+    void should_throw_RuntimeException_when_saving_null_object(){
+        assertThatThrownBy(() -> repository.save(null))
+                .isInstanceOf(RuntimeException.class)
+                .hasMessageContaining("Error saving challenge");
+    }
+
 
 
     @Test

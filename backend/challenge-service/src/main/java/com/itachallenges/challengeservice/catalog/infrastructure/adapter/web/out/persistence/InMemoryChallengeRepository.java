@@ -5,6 +5,7 @@ import com.itachallenges.challengeservice.catalog.domain.port.out.ChallengeRepos
 import com.itachallenges.challengeservice.catalog.domain.valueobject.ChallengeId;
 import org.springframework.stereotype.Repository;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -18,8 +19,11 @@ public class InMemoryChallengeRepository implements ChallengeRepository {
 
     @Override
     public Challenge save(Challenge challenge) {
-        storage.put(challenge.getId(), challenge);
-        return challenge;
+        try{
+            storage.put(challenge.getId(), challenge);
+            return challenge;
+        }catch(RuntimeException e){ throw new RuntimeException("Error saving challenge" + e.getMessage());}
+
     }
 
     @Override
