@@ -31,6 +31,7 @@ export class ChallengeDetailPage {
   challenge = signal<IChallenge | undefined>(undefined);
   isMentor = signal(false);
   programmingMode = signal(false);
+  solutionRevealed = signal(false);
 
   languageLabels: Record<ChallengeLanguage, string> = {
     JAVA: 'Java',
@@ -99,6 +100,7 @@ export class ChallengeDetailPage {
       this.challengeApiService.publishSolution(challengeSolution).subscribe({
         next: () => {
           alert('Solució publicada!');
+          this.solutionRevealed.set(true);
         },
         error: (err) => {
           console.error('Error en publicar la solució:', err);

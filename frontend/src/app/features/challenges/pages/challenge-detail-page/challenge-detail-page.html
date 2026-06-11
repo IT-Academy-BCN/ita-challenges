@@ -5,7 +5,7 @@
     <div class="challenge-header">
       <h1 class="challenge-title">{{ ch.title }}</h1>
       <p class="challenge-description">{{ ch.description }}</p>
-      
+
       <div class="challenge-meta">
         <div class="meta-tag">
           <span class="meta-label">Dificultat: </span>
@@ -38,6 +38,12 @@
               <button type="button" class="btn btn-primary" (click)="publishSolution()">Publicar</button>
             </div>
           </form>
+        }
+        @if (solutionRevealed()) {
+          <div class="challenge__result">
+            <h2>Solució oficial</h2>
+            <textarea rows="10" readonly>{{ challenge()?.solution }}</textarea>
+          </div>
         }
       }
     </div>
