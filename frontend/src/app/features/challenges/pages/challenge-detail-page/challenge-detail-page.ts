@@ -127,7 +127,6 @@ export class ChallengeDetailPage {
         });
       }
     }
-}
   }
 
   onRoleChange(value: boolean): void {
