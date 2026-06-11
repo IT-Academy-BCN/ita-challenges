@@ -15,6 +15,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
 import java.time.Instant;
 import java.util.List;
@@ -68,6 +69,20 @@ class TicketControllerTest {
     }
 
     @Test
+    void should_return_400_when_sending_blank_fields_in_create_ticket() throws Exception {
+        TicketRequest request = new TicketRequest("", "");
+
+        mockMvc.perform(post("/api/account/tickets")
+                        .with(csrf())
+                        .with(oauth2Login().attributes(attrs -> attrs.put("login", "tester")))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("No empty fields allowed"));
+
+    }
+
+    @Test
     void should_return_200_with_ticket_list_when_requesting_ticket_list() throws Exception {
         Ticket ticket = Ticket.create("testuser", "Login issue", "Unable to access my account");
         when(ticketRepository.findAllByUserId("testuser")).thenReturn(List.of(ticket));
@@ -101,6 +116,7 @@ class TicketControllerTest {
                 .andExpect(jsonPath("$.title").value("New Title"))
                 .andExpect(jsonPath("$.userId").value(currentUserId));
     }
+
     @Test
     void should_return_404_when_updating_non_existing_ticket() throws Exception {
         String ticketId = "non-existent";

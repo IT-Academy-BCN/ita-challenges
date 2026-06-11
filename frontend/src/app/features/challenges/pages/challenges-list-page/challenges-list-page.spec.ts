@@ -15,7 +15,7 @@ describe('ChallengesListPage', () => {
   let mockChallengeService: any;
 
   beforeEach(async () => {
-    mockChallengeService = { 
+    mockChallengeService = {
       loadAll: vi.fn().mockReturnValue(of(CHALLENGES_MOCK)),
       delete: vi.fn().mockReturnValue(of(void 0)),
     };
@@ -23,7 +23,7 @@ describe('ChallengesListPage', () => {
     await TestBed.configureTestingModule({
       imports: [ChallengesListPage],
       providers: [
-        provideRouter([]), 
+        provideRouter([]),
         { provide: ChallengeService, useValue: mockChallengeService }
       ],
     })
@@ -44,10 +44,10 @@ describe('ChallengesListPage', () => {
   });
 
   it('should render challenges in the template', () => {
-    const listItems = fixture.nativeElement.querySelectorAll('li');
+    const cards = fixture.nativeElement.querySelectorAll('.challenge-card');
 
-    expect(listItems.length).toBe(CHALLENGES_MOCK.length);
-    expect(listItems[0].textContent).toContain(CHALLENGES_MOCK[0].title);
+    expect(cards.length).toBe(CHALLENGES_MOCK.length);
+    expect(cards[0].textContent).toContain(CHALLENGES_MOCK[0].title);
   });
 
   it('should return correct difficulty and language labels', () => {

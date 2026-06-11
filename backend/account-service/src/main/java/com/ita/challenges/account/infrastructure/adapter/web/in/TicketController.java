@@ -33,12 +33,15 @@ public class TicketController {
     }
 
     @PostMapping
-    public ResponseEntity<TicketResponse> createTicket(
+    public ResponseEntity<?> createTicket(
             @RequestBody TicketRequest request,
             @AuthenticationPrincipal OAuth2User user) {
 
         if (user == null || user.getAttribute("login") == null) {
             return ResponseEntity.<TicketResponse>status(HttpStatus.UNAUTHORIZED).build();
+        }
+        if (request.title().isBlank() || request.description().isBlank()){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No empty fields allowed");
         }
 
         String userId = user.getAttribute("login");

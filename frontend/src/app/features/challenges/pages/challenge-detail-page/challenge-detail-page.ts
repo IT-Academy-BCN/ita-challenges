@@ -9,6 +9,7 @@ import { AuthService } from '../../../auth/data-access/auth-service';
 import { IChallengeSubmission } from '../../models/ichallenge-submission.interface';
 import { ChallengeLanguage } from '../../models/challenge-language.type';
 import { ChallengeDifficulty } from '../../models/challenge-difficulty.type';
+import { RoleSelectorComponent } from '../../components/role-selector/role-selector';
 
 interface AuthUserWithId extends AuthUser {
   id: string;
@@ -16,7 +17,7 @@ interface AuthUserWithId extends AuthUser {
 
 @Component({
   selector: 'app-challenge-detail-page',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, RoleSelectorComponent],
   templateUrl: './challenge-detail-page.html',
   styleUrl: './challenge-detail-page.css',
 })
@@ -29,6 +30,8 @@ export class ChallengeDetailPage {
 
   challenge = signal<IChallenge | undefined>(undefined);
   showModal = signal(false);
+  isMentor = signal(false);
+  programmingMode = signal(false);
 
   languageLabels: Record<ChallengeLanguage, string> = {
     JAVA: 'Java',
@@ -125,4 +128,14 @@ export class ChallengeDetailPage {
       }
     }
 }
+  }
+
+  onRoleChange(value: boolean): void {
+    this.isMentor.set(value);
+  }
+
+  setProgrammingMode(): void {
+    this.programmingMode.set(true);
+  }
+
 }

@@ -86,10 +86,10 @@ describe('ChallengeDetailPage', () => {
     });
   });
 
-  it('should call publishSolution with form data and challengeId', () => {
+  it('should call publicSolution with form data and challengeId', () => {
     fixture.detectChanges();
     component.codeSolutionForm.patchValue({ code: 'my-code' });
-    component.publishSolution();
+    component.publicSolution();
 
     expect(mockChallengeApiService.publishSolution).toHaveBeenCalledWith({
       challengeId: 'test-123',
@@ -97,4 +97,13 @@ describe('ChallengeDetailPage', () => {
       code: 'my-code'
     });
 
+  it('should set isMentor signal with the received value', () => {
+    component.onRoleChange(true);
+    expect(component.isMentor()).toBe(true);
+  });
 
+  it('should set programmingMode signal to true', () => {
+    component.setProgrammingMode();
+    expect(component.programmingMode()).toBe(true);
+  });
+});
