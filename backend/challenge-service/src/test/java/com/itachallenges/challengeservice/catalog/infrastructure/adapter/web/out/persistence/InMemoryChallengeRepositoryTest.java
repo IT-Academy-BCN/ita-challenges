@@ -6,6 +6,8 @@ import com.itachallenges.challengeservice.catalog.domain.valueobject.ChallengeId
 import com.itachallenges.challengeservice.catalog.domain.valueobject.ChallengeLanguage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import java.util.NoSuchElementException;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.util.List;
 
@@ -81,6 +83,51 @@ class InMemoryChallengeRepositoryTest {
 
         assertThat(result).hasSize(1);
         assertThat(result.get(0).getId()).isEqualTo(challenge.getId());
+    }
+
+    @Test
+    void should_find_existing_challenge() {
+        repository.save(challenge);
+
+        Challenge result = repository.find(challenge.getId());
+
+        assertThat(result).isNotNull();
+        assertThat(result.getId()).isEqualTo(challenge.getId());
+    }
+
+    @Test
+    void should_throw_exception_when_challenge_to_find_does_not_exist() {
+        ChallengeId nonExistentId = ChallengeId.generate();
+
+        assertThatThrownBy(() -> repository.find(nonExistentId))
+                .isInstanceOf(NoSuchElementException.class)
+                .hasMessageContaining("Challenge not found with id: " + nonExistentId);
+    }
+
+    @Test
+    void should_throw_exception_when_challenge_to_delete_does_not_exist() {
+        ChallengeId nonExistentId = ChallengeId.generate();
+
+        assertThatThrownBy(() -> repository.delete(nonExistentId))
+                .isInstanceOf(NoSuchElementException.class)
+                .hasMessageContaining("Challenge not found with id: " + nonExistentId);
+    }
+
+    @Test
+    void should_throw_exception_when_challenge_to_update_does_not_exist() {
+        ChallengeId nonExistentId = ChallengeId.generate();
+        Challenge unSavedChallenge = Challenge.restore(
+                nonExistentId,
+                "Unsaved title",
+                "Unsaved description",
+                ChallengeLanguage.JAVA,
+                ChallengeDifficulty.EASY,
+                "Unsaved solution"
+        );
+
+        assertThatThrownBy(() -> repository.update(unSavedChallenge))
+                .isInstanceOf(NoSuchElementException.class)
+                .hasMessageContaining("Challenge not found with id: " + nonExistentId);
     }
 
 }
