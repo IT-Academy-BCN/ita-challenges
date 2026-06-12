@@ -42,11 +42,10 @@ class UserControllerTest {
 
     @Test
     @WithMockUser
-    void shouldReturnGuestRoleWhenUserNotFound() throws Exception {
+    void shouldReturnNotFoundWhenUserDoesNotExist() throws Exception {
         when(userRepository.findByUsername("unknown")).thenReturn(Optional.empty());
 
         mockMvc.perform(get("/api/account/users/unknown/role"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.role").value("GUEST"));
+                .andExpect(status().isNotFound());
     }
 }
