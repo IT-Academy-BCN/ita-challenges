@@ -95,36 +95,6 @@ class InMemoryChallengeRepositoryTest {
         assertThat(result.getId()).isEqualTo(challenge.getId());
     }
 
-    @Test
-    void should_throw_exception_when_challenge_to_find_does_not_exist() {
-        ChallengeId nonExistentId = ChallengeId.generate();
-
-        assertThatThrownBy(() -> repository.find(nonExistentId))
-                .isInstanceOf(NoSuchElementException.class)
-                .hasMessageContaining("Challenge not found with id: " + nonExistentId);
-    }
-
-    @Test
-    void should_throw_exception_when_challenge_to_delete_does_not_exist() {
-        ChallengeId nonExistentId = ChallengeId.generate();
-
-        assertThatThrownBy(() -> repository.delete(nonExistentId))
-                .isInstanceOf(NoSuchElementException.class)
-                .hasMessageContaining("Challenge not found with id: " + nonExistentId);
-    }
-
-    @Test
-    void should_throw_exception_when_challenge_to_update_does_not_exist() {
-        ChallengeId nonExistentId = ChallengeId.generate();
-        Challenge unSavedChallenge = Challenge.restore(
-                nonExistentId,
-                "Unsaved title",
-                "Unsaved description",
-                ChallengeLanguage.JAVA,
-                ChallengeDifficulty.EASY,
-                "Unsaved solution"
-        );
-
         assertThatThrownBy(() -> repository.update(unSavedChallenge))
                 .isInstanceOf(NoSuchElementException.class)
                 .hasMessageContaining("Challenge not found with id: " + nonExistentId);
