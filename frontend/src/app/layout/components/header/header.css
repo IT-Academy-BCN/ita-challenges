@@ -10,7 +10,8 @@ header {
   padding: 0 20px;
 }
 
-.user__profile {
+.user__profile,
+.button__login {
   display: flex;
   justify-content: flex-end;
   align-items: center;
@@ -29,13 +30,4 @@ header {
   height: 4rem;
   border-radius: 50%;
   object-fit: cover;
-}
-
-.button__loginout {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  gap: 2rem;
-  flex-grow: 1;
-  margin-right: 2.5rem;
 }

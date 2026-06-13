@@ -3,6 +3,7 @@
 
   @if (user()) {
     <div class="user__profile">
+      <app-logout-button />
       <h4>
         {{ user()?.role ?? 'CONVIDAT' }}
       </h4>
@@ -14,9 +15,8 @@
       </div>
     </div>
   } @else {
-    <div class="button__loginout">
+    <div class="button__login">
       <button>Log In</button>
-      <app-logout-button />
     </div>
   }
 </header>
