@@ -8,8 +8,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
 class InMemoryChallengeRepositoryTest {
 
@@ -83,4 +85,22 @@ class InMemoryChallengeRepositoryTest {
         assertThat(result.get(0).getId()).isEqualTo(challenge.getId());
     }
 
+    @Test
+    void should_throw_when_updating_non_existing_challenge() {
+        ChallengeId nonExistentId = ChallengeId.generate();
+        Challenge unSavedChallenge = Challenge.restore(
+                nonExistentId,
+                "Title",
+                "Description",
+                ChallengeLanguage.JAVA,
+                ChallengeDifficulty.EASY,
+                "Solution"
+        );
+
+        assertThatThrownBy(() -> repository.update(unSavedChallenge))
+                .isInstanceOf(NoSuchElementException.class)
+                .hasMessageContaining("Challenge not found with id: " + nonExistentId);
+    }
 }
+
+
