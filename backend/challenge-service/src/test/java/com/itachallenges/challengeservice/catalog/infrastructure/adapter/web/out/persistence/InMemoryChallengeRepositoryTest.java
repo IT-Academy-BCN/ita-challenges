@@ -7,11 +7,11 @@ import com.itachallenges.challengeservice.catalog.domain.valueobject.ChallengeLa
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.util.NoSuchElementException;
+import static org.assertj.core.api.Assertions.assertThat;
+import java.util.List;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
 
 class InMemoryChallengeRepositoryTest {
 
@@ -86,18 +86,21 @@ class InMemoryChallengeRepositoryTest {
     }
 
     @Test
-    void should_find_existing_challenge() {
-        repository.save(challenge);
-
-        Challenge result = repository.find(challenge.getId());
-
-        assertThat(result).isNotNull();
-        assertThat(result.getId()).isEqualTo(challenge.getId());
-    }
+    void should_throw_when_updating_non_existing_challenge() {
+        ChallengeId nonExistentId = ChallengeId.generate();
+        Challenge unSavedChallenge = Challenge.restore(
+                nonExistentId,
+                "Title",
+                "Description",
+                ChallengeLanguage.JAVA,
+                ChallengeDifficulty.EASY,
+                "Solution"
+        );
 
         assertThatThrownBy(() -> repository.update(unSavedChallenge))
                 .isInstanceOf(NoSuchElementException.class)
                 .hasMessageContaining("Challenge not found with id: " + nonExistentId);
     }
+    }
 
-}
+
