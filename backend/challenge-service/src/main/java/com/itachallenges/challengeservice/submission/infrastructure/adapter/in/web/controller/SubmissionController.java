@@ -25,9 +25,9 @@ public class SubmissionController {
     private final SubmissionRepository submissionRepository;
     private final ChallengeRepository challengeRepository;
 
-    public SubmissionController(SaveDraftSubmissionUseCase saveDraftSubmissionUseCase, SubmissionRepository submissionrepository, ChallengeRepository challengeRepository) {
+    public SubmissionController(SaveDraftSubmissionUseCase saveDraftSubmissionUseCase, SubmissionRepository submissionRepository, ChallengeRepository challengeRepository) {
         this.saveDraftSubmissionUseCase = saveDraftSubmissionUseCase;
-        this.submissionRepository = submissionrepository;
+        this.submissionRepository = submissionRepository;
         this.challengeRepository = challengeRepository;
     }
 
