@@ -101,6 +101,15 @@ class InMemoryChallengeRepositoryTest {
                 .isInstanceOf(NoSuchElementException.class)
                 .hasMessageContaining("Challenge not found with id: " + nonExistentId);
     }
+
+    @Test
+    void should_throw_when_deleting_non_existing_challenge() {
+        ChallengeId nonExistentId = ChallengeId.generate();
+
+        assertThatThrownBy(() -> repository.delete(nonExistentId))
+                .isInstanceOf(NoSuchElementException.class)
+                .hasMessageContaining("Challenge not found with id: " + nonExistentId);
+    }
 }
 
 

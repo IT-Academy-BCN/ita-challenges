@@ -35,6 +35,7 @@ public class InMemoryChallengeRepository implements ChallengeRepository {
 
     @Override
     public void delete(ChallengeId id) {
+        ensureChallengeExists(id);
         storage.remove(id);
     }
 
