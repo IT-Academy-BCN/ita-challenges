@@ -106,38 +106,38 @@ describe('ChallengeDetailPage', () => {
     component.setProgrammingMode();
     expect(component.programmingMode()).toBe(true);
   });
-    it('should open modal when openFinishModal is called', () => {
-  component.openFinishModal();
-  expect(component.showModal()).toBe(true);
+  it('should open modal when openFinishModal is called', () => {
+    component.openFinishModal();
+    expect(component.showModal()).toBe(true);
 });
 
-it('should close modal when closeModal is called', () => {
-  component.openFinishModal();
-  component.closeModal();
-  expect(component.showModal()).toBe(false);
+  it('should close modal when closeModal is called', () => {
+    component.openFinishModal();
+    component.closeModal();
+    expect(component.showModal()).toBe(false);
 });
 
-it('should close modal and call submitSolution with true when finishWithSolution is called', () => {
-  vi.spyOn(component, 'submitSolution');
-  component.openFinishModal();
-  component.finishWithSolution();
-  expect(component.showModal()).toBe(false);
-  expect(component.submitSolution).toHaveBeenCalledWith(true);
+  it('should close modal and call submitSolution with true when finishWithSolution is called', () => {
+    vi.spyOn(component, 'submitSolution');
+    component.openFinishModal();
+    component.finishWithSolution();
+    expect(component.showModal()).toBe(false);
+    expect(component.submitSolution).toHaveBeenCalledWith(true);
 });
 
-it('should close modal and call submitSolution with false when finishWithoutSolution is called', () => {
-  vi.spyOn(component, 'submitSolution');
-  component.openFinishModal();
-  component.finishWithoutSolution();
-  expect(component.showModal()).toBe(false);
-  expect(component.submitSolution).toHaveBeenCalledWith(false);
+  it('should close modal and call submitSolution with false when finishWithoutSolution is called', () => {
+    vi.spyOn(component, 'submitSolution');
+    component.openFinishModal();
+    component.finishWithoutSolution();
+    expect(component.showModal()).toBe(false);
+    expect(component.submitSolution).toHaveBeenCalledWith(false);
 });
 
-it('should call publishSolution with revealOfficialSolution true when submitSolution is called with true', () => {
-  fixture.detectChanges();
-  component.codeSolutionForm.patchValue({ code: 'my-code' });
-  component.submitSolution(true);
-  expect(mockChallengeApiService.publishSolution).toHaveBeenCalledWith({
+  it('should call publishSolution with revealOfficialSolution true when submitSolution is called with true', () => {
+    fixture.detectChanges();
+    component.codeSolutionForm.patchValue({ code: 'my-code' });
+    component.submitSolution(true);
+    expect(mockChallengeApiService.publishSolution).toHaveBeenCalledWith({
     challengeId: 'test-123',
     userId: 'user-456',
     code: 'my-code',
@@ -145,10 +145,10 @@ it('should call publishSolution with revealOfficialSolution true when submitSolu
   });
 });
 
-it('should not call publishSolution when submitSolution is called with false', () => {
-  fixture.detectChanges();
-  component.codeSolutionForm.patchValue({ code: 'my-code' });
-  component.submitSolution(false);
-  expect(mockChallengeApiService.publishSolution).not.toHaveBeenCalled();
+  it('should not call publishSolution when submitSolution is called with false', () => {
+    fixture.detectChanges();
+    component.codeSolutionForm.patchValue({ code: 'my-code' });
+    component.submitSolution(false);
+    expect(mockChallengeApiService.publishSolution).not.toHaveBeenCalled();
 });
 });
