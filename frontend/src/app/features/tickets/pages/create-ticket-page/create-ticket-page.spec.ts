@@ -41,4 +41,11 @@ describe('CreateTicketPage', () => {
     component.onSubmit();
     expect(mockTicketService.create).toHaveBeenCalledWith(testData);
   });
+
+  it('should navigate to /tickets when ticketApiService.create emits next', () => {
+    const testData = { title: 'Nou Repte', description: 'Descripció' };
+    component.ticketForm.setValue(testData);
+    component.onSubmit();
+    expect(mockRouter.navigate).toHaveBeenCalledWith(['/tickets']);
+  });
 });

@@ -1,3 +1,12 @@
+:host {display: block;margin-left: -25rem;width: calc(100% + 25rem);}
+
+.challenge-container {
+  max-width: 80rem;
+  margin: 0 auto;
+  padding: 2rem;
+  color: var(--color-black-2);
+}
+
 .challenge__form {
     display: flex;
     flex-direction: column;
@@ -8,4 +17,78 @@
 .challenge__actions {
     display: flex;
     gap: 1rem;
+    justify-content: flex-end;
 }
+
+.challenge-description {
+  color: var(--color-gray-1);
+  margin-bottom: 2.4rem;
+  font-size: var(--font-size-normal);
+}
+
+.challenge-meta {
+  display: flex;
+  gap: 1.6rem;
+  margin-bottom: 3.2rem;
+}
+
+.meta-tag {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 0.8rem 1.6rem;
+  border: 1px solid var(--color-gray-4);
+  border-radius: 0.6rem;
+  font-size: var(--font-size-normal);
+  background-color: var(--color-white);
+}
+
+.meta-label {
+  font-weight: var(--font-weight-bold);
+  color: var(--color-gray-2);
+}
+
+.meta-value {font-weight: var(--font-weight-regular);}
+
+.divider {
+  border: 0;
+  border-top: 1px solid var(--color-gray-4);
+  margin: 3.2rem 0;
+}
+
+.section-title {
+  font-size: var(--font-size-h3);
+  font-weight: var(--font-weight-heading);
+  margin-bottom: 1.6rem;
+  color: var(--color-black-2);
+}
+
+.code-textarea {
+  width: 100%;
+  box-sizing: border-box;
+  font-size: var(--font-size-normal);
+  padding: 1.6rem;
+  border: 1px solid var(--color-gray-4);
+  border-radius: 0.8rem;
+  background-color: #fafafa;
+  resize: vertical;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.code-textarea:focus {
+  border-color: var(--color-primary);
+  background-color: var(--color-white);
+}
+.btn {
+  padding: 1rem 2.4rem;
+  font-size: var(--font-size-normal);
+  font-weight: var(--font-weight-bold);
+  border-radius: 0.6rem;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s;
+}
+.btn:hover { filter: brightness(0.9); }
+.btn-primary { background: var(--color-primary); color: var(--color-white); }
+.btn-secondary { background: var(--color-white); color: var(--color-gray-1); border: 1px solid var(--color-gray-4); }

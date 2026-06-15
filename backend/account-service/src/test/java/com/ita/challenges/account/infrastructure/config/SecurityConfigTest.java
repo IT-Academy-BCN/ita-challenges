@@ -1,6 +1,7 @@
 package com.ita.challenges.account.infrastructure.config;
 
 import com.ita.challenges.account.domain.port.out.TicketRepository;
+import com.ita.challenges.account.domain.port.out.UserRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -33,7 +34,12 @@ class SecurityConfigTest {
  private ClientRegistrationRepository clientRegistrationRepository;
 
  @MockBean
+ private UserRepository userRepository;
+
+ @MockBean
  private TicketRepository ticketRepository;
+
+
 
  @Test
  @DisplayName("Should assure the SecurityFilterChain is loaded")
