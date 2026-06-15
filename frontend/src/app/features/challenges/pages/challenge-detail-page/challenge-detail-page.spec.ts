@@ -90,7 +90,6 @@ describe('ChallengeDetailPage', () => {
     fixture.detectChanges();
     component.codeSolutionForm.patchValue({ code: 'my-code' });
     component.submitSolution(true);
-
     expect(mockChallengeApiService.publishSolution).toHaveBeenCalledWith({
       challengeId: 'test-123',
       userId: 'user-456',
