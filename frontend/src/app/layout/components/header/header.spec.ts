@@ -41,10 +41,7 @@ describe('Header', () => {
     };
     await TestBed.configureTestingModule({
       imports: [Header],
-      providers: [
-        { provide: AuthService, useValue: authServiceMock },
-        { provide: Router, useValue: routerMock },
-      ],
+      providers: [{ provide: AuthService, useValue: authServiceMock }],
     }).compileComponents();
 
     fixture = TestBed.createComponent(Header);
@@ -59,10 +56,22 @@ describe('Header', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should render logout button', () => {
+  it('should show logout button when user is logged in', () => {
+    authServiceMock.user.set(MOCK_USER);
+    fixture.detectChanges();
+
     const logoutButton = fixture.nativeElement.querySelector('app-logout-button');
 
     expect(logoutButton).toBeTruthy();
+  });
+
+  it('should not show logout button when user is not logged in', () => {
+    authServiceMock.user.set(null);
+    fixture.detectChanges();
+
+    const logoutButton = fixture.nativeElement.querySelector('app-logout-button');
+
+    expect(logoutButton).toBeFalsy();
   });
 
   it('should show username when user is logged in', () => {
