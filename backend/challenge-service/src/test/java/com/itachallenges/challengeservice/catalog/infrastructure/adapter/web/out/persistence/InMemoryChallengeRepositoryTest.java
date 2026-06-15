@@ -61,7 +61,7 @@ class InMemoryChallengeRepositoryTest {
     }
 
     @Test
-    void should_throw_RuntimeException_when_saving_null_object(){
+    void should_throw_RuntimeException_when_any_error_occurs_during_save(){
         assertThatThrownBy(() -> repository.save(null))
                 .isInstanceOf(RuntimeException.class)
                 .hasMessageContaining("Error saving challenge");
