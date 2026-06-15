@@ -82,8 +82,8 @@ describe('ChallengeDetailPage', () => {
     expect(mockChallengeApiService.saveSolution).toHaveBeenCalledWith({
       challengeId: 'test-123',
       userId: 'user-456',
-      code: 'my-code'
-    });
+      code: 'my-code',
+      revealOfficialSolution: true
   });
 
   it('should call submitSolution with form data and challengeId', () => {
@@ -95,7 +95,7 @@ describe('ChallengeDetailPage', () => {
       userId: 'user-456',
       code: 'my-code',
       revealOfficialSolution: true    
-    });
+  });
 
   it('should set isMentor signal with the received value', () => {
     component.onRoleChange(true);
@@ -142,7 +142,6 @@ describe('ChallengeDetailPage', () => {
     userId: 'user-456',
     code: 'my-code'
     });
-  });
 
   it('should not call publishSolution when submitSolution is called with false', () => {
     fixture.detectChanges();
