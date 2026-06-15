@@ -86,10 +86,10 @@ describe('ChallengeDetailPage', () => {
     });
   });
 
-  it('should call publicSolution with form data and challengeId', () => {
+  it('should call submitSolution with form data and challengeId', () => {
     fixture.detectChanges();
     component.codeSolutionForm.patchValue({ code: 'my-code' });
-    component.publicSolution();
+    component.submitSolution();
 
     expect(mockChallengeApiService.publishSolution).toHaveBeenCalledWith({
       challengeId: 'test-123',
