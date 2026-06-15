@@ -22,14 +22,13 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
                 )
                 .oauth2Login(oauth2 -> oauth2
-                        .loginPage("/auth")
                         .authorizationEndpoint(authorization -> authorization
                                 .baseUri("/api/account/oauth2/authorization")
                         )
                         .redirectionEndpoint(redirection -> redirection
                                 .baseUri("/api/account/login/oauth2/code/**")
                         )
-                        .defaultSuccessUrl("/profile", true)
+                        .defaultSuccessUrl("/challenges")
                 )
                 .logout(logout -> logout
                 .logoutUrl("/api/account/auth/logout")
@@ -39,5 +38,6 @@ public class SecurityConfig {
                         response.setStatus(200))
                 );
         return http.build();
+
     }
 }

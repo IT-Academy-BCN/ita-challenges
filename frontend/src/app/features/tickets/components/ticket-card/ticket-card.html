@@ -1,0 +1,9 @@
+<div class="ticket-card">
+  <span class="ticket-id">{{ ticket().id }}</span>
+  <span class="ticket-title">{{ ticket().title }}</span>
+  <span class="ticket-description">{{ ticket().status }}</span>
+  <span class="ticket-description">{{ ticket().description }}</span>
+  <span class="ticket-description">{{ ticket().createdAt | date:'dd/MM/yyyy HH:mm' }}</span>
+  <span class="ticket-description">{{ ticket().updatedAt | date:'dd/MM/yyyy HH:mm' }}</span>
+  <app-ticket-button [routerLink]="['/tickets', ticket().id]" [label]="'Accedir'"/>
+</div>

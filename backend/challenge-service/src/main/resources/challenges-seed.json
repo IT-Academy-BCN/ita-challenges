@@ -1,26 +1,90 @@
 [
   {
     "id": "11111111-1111-1111-1111-111111111111",
-    "title": "FizzBuzz",
-    "description": "Create a FizzBuzz implementation.",
+    "title": "FizzBuzz Enterprise",
+    "description": "Implement the classic FizzBuzz problem but with an enterprise-ready focus. Your program must iterate from numbers 1 to 100, printing 'Fizz' for multiples of 3, 'Buzz' for multiples of 5, and 'FizzBuzz' for numbers that are multiples of both 3 and 5. For all other numbers, the program must output the number itself. Ensure clear, readable logic that minimizes redundant modulo evaluations.",
     "language": "JAVA",
     "difficulty": "EASY",
-    "solution": "public class FizzBuzz { public static void main(String[] args) { for (int i = 1; i <= 100; i++) { if (i % 15 == 0) System.out.println(\"FizzBuzz\"); else if (i % 3 == 0) System.out.println(\"Fizz\"); else if (i % 5 == 0) System.out.println(\"Buzz\"); else System.out.println(i); } } }"
+    "solution": "public class FizzBuzz { public static void main(String[] args) { for (int i = 1; i <= 100; i++) { boolean f = i % 3 == 0, b = i % 5 == 0; if (f && b) System.out.println(\"FizzBuzz\"); else if (f) System.out.println(\"Fizz\"); else if (b) System.out.println(\"Buzz\"); else System.out.println(i); } } }"
   },
   {
     "id": "22222222-2222-2222-2222-222222222222",
-    "title": "Palindrome Checker",
-    "description": "Check if a text is palindrome.",
-    "language": "JAVA",
+    "title": "Advanced Palindrome Checker",
+    "description": "Design a robust utility function capable of validating whether a given sequence of characters forms a palindrome. The evaluation must entirely ignore casing variations, whitespace discrepancies, and any non-alphanumeric punctuation marks present in the raw input text string. The solution should operate efficiently, preferably utilizing an optimized two-pointer approach or standard string builders to maintain performance.",
+    "language": "TYPESCRIPT",
     "difficulty": "EASY",
-    "solution": "public class PalindromeChecker { public static boolean isPalindrome(String text) { String clean = text.replaceAll(\"[^A-Za-z0-9]\", \"\").toLowerCase(); return clean.equals(new StringBuilder(clean).reverse().toString()); } }"
+    "solution": "export function isPalindrome(text: string): boolean { const clean = text.replace(/[^A-Za-z0-9]/g, '').toLowerCase(); return clean === clean.split('').reverse().join(''); }"
   },
   {
     "id": "33333333-3333-3333-3333-333333333333",
-    "title": "REST API Basics",
-    "description": "Build a simple CRUD REST API.",
+    "title": "REST API Fundamentals with Spring Boot",
+    "description": "Develop a structured, standard conforming CRUD (Create, Read, Update, Delete) RESTful API architecture targeting an abstract product inventory system. The implementation must expose clean endpoints using the canonical HTTP verbs: GET for retrieval, POST for creation, PUT for updates, and DELETE for elimination. You must map these actions precisely using appropriate enterprise annotations like @RestController and mapping rules.",
     "language": "JAVA",
     "difficulty": "MEDIUM",
-    "solution": "Use Spring Boot with @RestController, @GetMapping, @PostMapping, @PutMapping, @DeleteMapping annotations to create REST endpoints."
+    "solution": "@RestController @RequestMapping(\"/api/products\") public class ProductController { @GetMapping public List<Product> getAll() { return service.findAll(); } @PostMapping public Product create(@RequestBody Product p) { return service.save(p); } @PutMapping(\"/{id}\") public Product update(@PathVariable Long id, @RequestBody Product p) { return service.update(id, p); } @DeleteMapping(\"/{id}\") public void delete(@PathVariable Long id) { service.delete(id); } }"
+  },
+  {
+    "id": "e98e25d2-09fb-4393-94c0-0fe4ec89f81a",
+    "title": "N-th Highest Salary Finder",
+    "description": "Write an advanced relational database query to locate and retrieve the specific n-th highest salary amount from a corporate Employee data structure schema map. Your query solution must account accurately for potential duplicate wage values using appropriate ranking metrics, and gracefully respond with an empty layout or null indicator in scenarios where the specified position exceeds the total database records.",
+    "language": "SQL",
+    "difficulty": "MEDIUM",
+    "solution": "SELECT DISTINCT salary FROM Employee e1 WHERE 3 = (SELECT COUNT(DISTINCT salary) FROM Employee e2 WHERE e2.salary >= e1.salary);"
+  },
+  {
+    "id": "7649cc79-4592-4211-9a99-0d4ef47e6ce3",
+    "title": "Custom Thread Pool Executor",
+    "description": "Design an advanced concurrent infrastructure implementing a custom thread pool manager completely from scratch. The system must maintain a designated internal blocking queue designed to hold pending task executions, worker threads dedicated to picking up tasks continuously, and robust graceful shutdown mechanisms to secure data integrity. Avoid using standard premium executors package shorthand utilities.",
+    "language": "JAVA",
+    "difficulty": "HARD",
+    "solution": "public class CustomThreadPool { private final LinkedBlockingQueue<Runnable> queue; private final WorkerThread[] workers; public CustomThreadPool(int threads) { queue = new LinkedBlockingQueue<>(); workers = new WorkerThread[threads]; for(int i=0; i<threads; i++) { workers[i] = new WorkerThread(); workers[i].start(); } } public void execute(Runnable r) { synchronized(queue) { queue.add(r); queue.notify(); } } }"
+  },
+  {
+    "id": "3be6027c-9b7e-46ee-ae97-1563f886f44d",
+    "title": "Two Sum Problem Optimization",
+    "description": "Given an arbitrary array composed of primitive integer values along with a specific single target metric value, write an algorithm to locate the precise indices of two unique items whose combined arithmetic summation matches the criteria exactly. The implementation must seek a linear time runtime footprint scaling at O(n) complexity, deliberately evading slow nested brute-force loops.",
+    "language": "PYTHON",
+    "difficulty": "EASY",
+    "solution": "def two_sum(nums: list[int], target: int) -> list[int]:\n    mapping = {}\n    for i, num in enumerate(nums):\n        diff = target - num\n        if diff in mapping:\n            return [mapping[diff], i]\n        mapping[num] = i\n    return []"
+  },
+  {
+    "id": "89b7b9f3-3dae-49b8-aba9-d65e7144e1da",
+    "title": "JWT Authentication Token Filter",
+    "description": "Construct a comprehensive custom security middleware filter to process and intercept JSON Web Tokens (JWT) inside an application gateway context. The system must capture outgoing and incoming authorization metadata fragments embedded directly within the standard HTTP headers, securely unpack the encrypted signature blocks, evaluate timestamp expirations, and assert system scopes safely to block fraudulent operations.",
+    "language": "TYPESCRIPT",
+    "difficulty": "HARD",
+    "solution": "import { Request, Response, NextFunction } from 'express'; import jwt from 'jsonwebtoken'; export function jwtFilter(req: Request, res: Response, next: NextFunction) { const authHeader = req.headers.authorization; if (authHeader && authHeader.startsWith('Bearer ')) { const token = authHeader.substring(7); try { const decoded = jwt.verify(token, process.env.JWT_SECRET!); req.user = decoded; } catch (err) { return res.status(401).json({ message: 'Invalid token' }); } } next(); }"
+  },
+  {
+    "id": "a9fb0ff4-93ec-4786-bb27-0da5f8fa2161",
+    "title": "Matrix Transposition Engine",
+    "description": "Create an algorithm designed to execute two-dimensional matrix grid transformations safely and accurately. Your application module must read an input matrix grid structural layout spanning dimensions N by M and completely flip the arrangement dynamically across its main structural diagonal axis. This produces a correctly aligned resulting matrix spanning updated dimensions M by N without data corruption.",
+    "language": "PYTHON",
+    "difficulty": "MEDIUM",
+    "solution": "def transpose(matrix: list[list[int]]) -> list[list[int]]:\n    return [[matrix[i][j] for i in range(len(matrix))] for j in range(len(matrix[0]))]"
+  },
+  {
+    "id": "887a0528-76c2-4919-971c-309191e4d8fb",
+    "title": "Asynchronous File Downloader",
+    "description": "Construct a resilient web asset downloading utility leveraging full non-blocking asynchronous event loop integrations. The software module must handle batches of concurrent download URLs efficiently, track partial binary transfer speeds, stream write fragments seamlessly into file storage pipelines to secure memory optimization, and smoothly log transfer breakdowns without fully terminating processing runs.",
+    "language": "JAVASCRIPT",
+    "difficulty": "MEDIUM",
+    "solution": "const fs = require('fs'); const axios = require('axios'); async function downloadFile(url, path) { const writer = fs.createWriteStream(path); const response = await axios({ url, method: 'GET', responseType: 'stream' }); response.data.pipe(writer); return new Promise((res, rej) => { writer.on('finish', res); writer.on('error', rej); }); }"
+  },
+  {
+    "id": "2da2d174-f2a8-4447-97d8-1119799ccdf3",
+    "title": "Valid Parentheses Compiler",
+    "description": "Write a validation logic routine that evaluates complex structural text strings comprising solely bracket notations, including braces, brackets, and parentheses. The algorithm must inspect if all opening structural brackets are appropriately matched up and terminated by corresponding closing characters in the exact correct ordered progression without layout nesting errors.",
+    "language": "JAVASCRIPT",
+    "difficulty": "EASY",
+    "solution": "function isValid(s) { const stack = []; const pairs = { ')': '(', '}': '{', ']': '[' }; for (let char of s) { if (['(', '{', '['].includes(char)) { stack.push(char); } else if (stack.pop() !== pairs[char]) { return false; } } return stack.length === 0; }"
+  },
+  {
+    "id": "a953e6d1-419b-439f-a63e-329bfa5f67b4",
+    "title": "Custom Dependency Injection Container",
+    "description": "Architect a modular dependency injection object lifecyle manager container completely using modern object-oriented features. The framework module must register system class dependencies dynamically via configuration maps or reflecting annotations, manage singleton scope parameters safely across concurrent execution trees, and perform deep target resolutions to instantiate objects cleanly.",
+    "language": "PHP",
+    "difficulty": "HARD",
+    "solution": "class Container { private $instances = []; public function set($id, $concrete) { $this->instances[$id] = $concrete; } public function get($id) { if (!isset($this->instances[$id])) { $this->instances[$id] = new $id(); } return $this->instances[$id]; } }"
   }
 ]

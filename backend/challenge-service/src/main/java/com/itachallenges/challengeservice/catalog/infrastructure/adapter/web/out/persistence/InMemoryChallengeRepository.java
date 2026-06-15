@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.concurrent.ConcurrentHashMap;
 
 import java.util.ArrayList;
@@ -25,9 +26,8 @@ public class InMemoryChallengeRepository implements ChallengeRepository {
     @Override
     public Challenge update(Challenge challenge) {
         ChallengeId id = challenge.getId();
-        if (!storage.containsKey(id)) {
-            throw new RuntimeException("Challenge not found with id: " + id);
-        }
+        ensureChallengeExists(id);
+
 
         storage.put(id, challenge);
         return challenge;
@@ -35,15 +35,15 @@ public class InMemoryChallengeRepository implements ChallengeRepository {
 
     @Override
     public void delete(ChallengeId id) {
+        ensureChallengeExists(id);
         storage.remove(id);
     }
 
     @Override
     public Challenge find(ChallengeId id) {
         Challenge challenge = storage.get(id);
-        if (challenge == null) {
-            throw new RuntimeException("Challenge not found with id: " + id);
-        }
+        ensureChallengeExists(id);
+
         return challenge;
     }
 
@@ -51,4 +51,12 @@ public class InMemoryChallengeRepository implements ChallengeRepository {
     public List<Challenge> findAll() {
         return new ArrayList<>(storage.values());
     }
+
+    private void ensureChallengeExists(ChallengeId id) {
+        if (!storage.containsKey(id)) {
+            throw new NoSuchElementException("Challenge not found with id: " + id);
+        }
+    }
+
+
 }

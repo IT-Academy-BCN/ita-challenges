@@ -98,4 +98,13 @@ describe('ChallengeDetailPage', () => {
     });
   });
 
+  it('should set isMentor signal with the received value', () => {
+    component.onRoleChange(true);
+    expect(component.isMentor()).toBe(true);
+  });
+
+  it('should set programmingMode signal to true', () => {
+    component.setProgrammingMode();
+    expect(component.programmingMode()).toBe(true);
+  });
 });

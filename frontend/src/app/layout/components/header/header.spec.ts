@@ -6,6 +6,7 @@ import { AuthUser } from '../../../features/auth/models/auth-user.model';
 import { of } from 'rxjs';
 import { AuthService } from '../../../features/auth/data-access/auth-service';
 import { Role } from '../../../core/models/role.enum';
+import { Router } from '@angular/router';
 
 const MOCK_USER: AuthUser = {
   username: 'mockUser',
@@ -24,6 +25,9 @@ describe('Header', () => {
     getUser: ReturnType<typeof vi.fn>;
     setUser: ReturnType<typeof vi.fn>;
   };
+  let routerMock: {
+    navigate: ReturnType<typeof vi.fn>;
+  };
   beforeEach(async () => {
     authServiceMock = {
       user: signal(null),
@@ -31,6 +35,9 @@ describe('Header', () => {
       fetchUser: vi.fn().mockReturnValue(of(null)),
       getUser: vi.fn().mockReturnValue(null),
       setUser: vi.fn(),
+    };
+    routerMock = {
+      navigate: vi.fn(),
     };
     await TestBed.configureTestingModule({
       imports: [Header],
@@ -113,5 +120,23 @@ describe('Header', () => {
     authServiceMock.user.set({ ...MOCK_USER, role: undefined });
     fixture.detectChanges();
     expect(fixture.nativeElement.querySelector('h4').textContent).toContain('CONVIDAT');
+  });
+
+  it('should redirect to challenges after fetching authenticated user', () => {
+    authServiceMock.fetchUser.mockReturnValue(of(MOCK_USER));
+
+    component.ngOnInit();
+
+    expect(authServiceMock.setUser).toHaveBeenCalledWith(MOCK_USER);
+    expect(routerMock.navigate).toHaveBeenCalledWith(['/challenges']);
+  });
+
+  it('should not redirect when user already exists', () => {
+    authServiceMock.getUser.mockReturnValue(MOCK_USER);
+
+    component.ngOnInit();
+
+    expect(authServiceMock.fetchUser).not.toHaveBeenCalled();
+    expect(routerMock.navigate).not.toHaveBeenCalled();
   });
 });
