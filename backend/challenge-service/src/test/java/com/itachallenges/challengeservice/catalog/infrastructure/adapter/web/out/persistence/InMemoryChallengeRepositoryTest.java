@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
 class InMemoryChallengeRepositoryTest {
@@ -60,6 +61,14 @@ class InMemoryChallengeRepositoryTest {
         assertThat(result.getDescription().toString()).isEqualTo("New description");
         assertThat(result.getSolution().toString()).isEqualTo("New solution");
     }
+
+    @Test
+    void should_throw_RuntimeException_when_any_error_occurs_during_save(){
+        assertThatThrownBy(() -> repository.save(null))
+                .isInstanceOf(RuntimeException.class)
+                .hasMessageContaining("Error saving challenge");
+    }
+
 
 
     @Test
