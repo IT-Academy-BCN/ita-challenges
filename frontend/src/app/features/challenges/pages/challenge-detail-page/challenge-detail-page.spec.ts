@@ -89,7 +89,7 @@ describe('ChallengeDetailPage', () => {
   it('should call submitSolution with form data and challengeId', () => {
     fixture.detectChanges();
     component.codeSolutionForm.patchValue({ code: 'my-code' });
-    component.submitSolution();
+    component.submitSolution(true);
 
     expect(mockChallengeApiService.publishSolution).toHaveBeenCalledWith({
       challengeId: 'test-123',
