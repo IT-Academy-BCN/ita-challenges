@@ -93,11 +93,14 @@ describe('TicketApiService', () => {
     expect(result).toEqual(mockTicketResponse);
   });
 
-  it('should return fallback ticket on create error', () => {
-    let result: any;
+  it('should throw error on create error', () => {
+    let error: any;
 
-    service.create(mockTicket).subscribe((value) => {
-      result = value;
+    service.create(mockTicket).subscribe({
+      next: () => {},
+      error: (err) => {
+        error = err;
+      }
     });
 
     const req = httpMock.expectOne(API_URL);
@@ -106,7 +109,7 @@ describe('TicketApiService', () => {
       statusText: 'Server Error',
     });
 
-    expect(result).toEqual({ id: '1', userId: 'u-1', ...mockTicket });
+    expect(error.status).toBe(500);
   });
 
   it('should call PATCH with correct URL and body', () => {
