@@ -63,21 +63,24 @@ public class AuthController {
 
     @GetMapping("/auth/me")
     public ResponseEntity<AuthUserDto> authMe(@AuthenticationPrincipal OAuth2User user) {
-        return ResponseEntity.ok(mapUser(user));
-    }
-
-    private AuthUserDto mapUser(OAuth2User user) {
         if (user == null) {
-            return new AuthUserDto("anonymous", null);
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
-        String login = user.getAttribute("login");
-        String avatarUrl = user.getAttribute("avatar_url");
+        return ResponseEntity.ok(mapUser(user));
 
-        if (login == null) {
-            login = "unknown";
-        }
-
-        return new AuthUserDto(login, avatarUrl);
     }
-}
+
+        private AuthUserDto mapUser (OAuth2User user){
+
+            String login = user.getAttribute("login");
+            String avatarUrl = user.getAttribute("avatar_url");
+
+            if (login == null) {
+                login = "unknown";
+            }
+
+            return new AuthUserDto(login, avatarUrl);
+        }
+
+    }
