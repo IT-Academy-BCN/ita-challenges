@@ -1,6 +1,11 @@
 package com.itachallenges.challengeservice.submission.infrastructure.adapter.in.web.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.itachallenges.challengeservice.catalog.domain.model.Challenge;
+import com.itachallenges.challengeservice.catalog.domain.port.out.ChallengeRepository;
+import com.itachallenges.challengeservice.catalog.domain.valueobject.ChallengeDifficulty;
+import com.itachallenges.challengeservice.catalog.domain.valueobject.ChallengeId;
+import com.itachallenges.challengeservice.catalog.domain.valueobject.ChallengeLanguage;
 import com.itachallenges.challengeservice.submission.application.dto.SaveDraftSubmissionCommand;
 import com.itachallenges.challengeservice.submission.domain.port.in.SaveDraftSubmissionUseCase;
 import com.itachallenges.challengeservice.submission.domain.port.out.SubmissionRepository;
@@ -39,6 +44,9 @@ class SubmissionControllerTest {
 
     @MockBean
     private SubmissionRepository submissionRepository;
+
+    @MockBean
+    private ChallengeRepository challengeRepository;
 
     @Test
     void shouldSubmitSuccessfully() throws Exception {
@@ -114,12 +122,31 @@ class SubmissionControllerTest {
     void shouldFinalizeSubmissionSuccessfully() throws Exception {
         String challengeId = UUID.randomUUID().toString();
         String userId = UUID.randomUUID().toString();
+
+        Challenge mockChallenge = Challenge.restore(
+                ChallengeId.of(challengeId),
+                "Challenge Title",
+                "Description",
+                ChallengeLanguage.JAVASCRIPT,
+                ChallengeDifficulty.EASY,
+                "official solution"
+        );
+
         FinalizeSubmissionRequest request = new FinalizeSubmissionRequest(
-                challengeId, userId, "my solution");
+                challengeId, userId, "my solution", true);
+
+        when(challengeRepository.find(any(ChallengeId.class))).thenReturn(mockChallenge);
+        when(submissionRepository.save(any())).thenAnswer(invocation -> invocation.getArgument(0));
+
         mockMvc.perform(post("/api/challenge/submissions/submit")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isCreated());
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.submissionId").exists())
+                .andExpect(jsonPath("$.studentCode").value("my solution"))
+                .andExpect(jsonPath("$.challengeTitle").value("Challenge Title"))
+                .andExpect(jsonPath("$.officialSolution").value("official solution"))
+                .andExpect(jsonPath("$.revealedSolution").value(true));
     }
 
 
