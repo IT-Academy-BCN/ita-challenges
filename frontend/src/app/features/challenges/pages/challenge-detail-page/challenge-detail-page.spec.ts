@@ -94,7 +94,8 @@ describe('ChallengeDetailPage', () => {
     expect(mockChallengeApiService.publishSolution).toHaveBeenCalledWith({
       challengeId: 'test-123',
       userId: 'user-456',
-      code: 'my-code'
+      code: 'my-code',
+      revealOfficialSolution: true    
     });
 
   it('should set isMentor signal with the received value', () => {
