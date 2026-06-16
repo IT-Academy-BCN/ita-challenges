@@ -29,6 +29,7 @@ export class ChallengeDetailPage {
   private readonly authService = inject(AuthService)
 
   challenge = signal<IChallenge | undefined>(undefined);
+  showModal = signal(false);
   isMentor = signal(false);
   programmingMode = signal(false);
   solutionRevealed = signal(false);
@@ -48,6 +49,9 @@ export class ChallengeDetailPage {
     HARD: 'Difícil',
   };
 
+  codeSolutionForm = this.fb.group({
+    code: ['']
+  });
   ngOnInit() {
     const id = this.route.snapshot.paramMap.get('id')!;
 
@@ -64,9 +68,6 @@ export class ChallengeDetailPage {
     return diff ? this.difficultyLabels[diff] : '';
   }
 
-  codeSolutionForm = this.fb.group({
-      code: ['']
-    })
 
     saveSolution(): void {
       const currentChallenge = this.challenge();
@@ -76,7 +77,8 @@ export class ChallengeDetailPage {
         const challengeSolution : IChallengeSubmission = {
           challengeId: currentChallenge.id,
           userId: currentUser?.id || '550e8400-e29b-41d4-a716-446655440000',
-          code: this.codeSolutionForm.value.code ?? ''
+          code: this.codeSolutionForm.value.code ?? '',
+          revealOfficialSolution: false
           };
 
         this.challengeApiService.saveSolution(challengeSolution).subscribe({
@@ -84,28 +86,47 @@ export class ChallengeDetailPage {
           alert('Solució guardada!');
         }
       });
-      }
+    }
+  }
+  openFinishModal(): void {
+      this.showModal.set(true);
     }
 
-  publishSolution(): void {
-    const currentChallenge = this.challenge();
-    const currentUser = this.authService.user() as AuthUserWithId;
+    closeModal(): void {
+      this.showModal.set(false);
+    }
 
-    if(this.codeSolutionForm.valid && currentChallenge?.id) {
-      const challengeSolution : IChallengeSubmission = {
-        challengeId: currentChallenge.id,
-        userId: currentUser?.id || '550e8400-e29b-41d4-a716-446655440000',
-        code: this.codeSolutionForm.value.code ?? ''
-      };
-      this.challengeApiService.publishSolution(challengeSolution).subscribe({
-        next: () => {
-          alert('Solució publicada!');
-          this.solutionRevealed.set(true);
-        },
-        error: (err) => {
-          console.error('Error en publicar la solució:', err);
-        }
-      });
+    finishWithSolution(): void {
+      this.closeModal();
+      this.submitSolution(true);
+    }
+
+    finishWithoutSolution(): void {
+      this.closeModal();
+      this.submitSolution(false);
+    }
+
+   submitSolution(revealOfficialSolution: boolean): void {
+      const currentChallenge = this.challenge();
+      const currentUser = this.authService.user() as AuthUserWithId;
+
+      if (this.codeSolutionForm.valid && currentChallenge?.id) {
+        const challengeSolution: IChallengeSubmission = {
+          challengeId: currentChallenge.id,
+          userId: currentUser?.id || '550e8400-e29b-41d4-a716-446655440000',
+          code: this.codeSolutionForm.value.code ?? '',
+          revealOfficialSolution
+        };
+        if(revealOfficialSolution) { 
+        this.challengeApiService.publishSolution(challengeSolution).subscribe({
+          next: () => {
+            alert('Solució enviada!');
+          },
+          error: (err) => {
+            console.error('Error en enviar la solució:', err);
+          }
+        });
+      }
     }
   }
 
