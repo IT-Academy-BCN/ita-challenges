@@ -148,5 +148,15 @@ describe('ChallengeDetailPage', () => {
     component.codeSolutionForm.patchValue({ code: 'my-code' });
     component.submitSolution(false);
     expect(mockChallengeApiService.publishSolution).not.toHaveBeenCalled();
-    });
+   });
+
+  it('should show solution section when solutionRevealed is true', async () => {
+    fixture.detectChanges();
+    component.solutionRevealed.set(true);
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const result = fixture.nativeElement.querySelector('.challenge__result');
+    expect(result).toBeTruthy();
   });
+});

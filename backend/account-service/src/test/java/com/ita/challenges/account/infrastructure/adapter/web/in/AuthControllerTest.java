@@ -143,9 +143,8 @@ class AuthControllerTest {
     }
 
     @Test
-    void authMe_whenNotAuthenticated_returnsAnonymous() throws Exception {
+    void authMe_whenNotAuthenticated_returns401() throws Exception {
         mockMvc.perform(get("/api/account/auth/me"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.username").value("anonymous"));
+                .andExpect(status().isUnauthorized());
     }
 }

@@ -1,4 +1,9 @@
 <form [formGroup]="ticketForm" (ngSubmit)="onSubmit()">
+  @if (errorMessage) {
+  <div class="error-message">
+    {{ errorMessage }}
+  </div>
+  }
   <div>
     <label for="title">Títol</label>
     <input type="text" id="title" formControlName="title">

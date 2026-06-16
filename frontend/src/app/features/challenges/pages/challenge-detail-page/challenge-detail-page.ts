@@ -32,6 +32,7 @@ export class ChallengeDetailPage {
   showModal = signal(false);
   isMentor = signal(false);
   programmingMode = signal(false);
+  solutionRevealed = signal(false);
 
   languageLabels: Record<ChallengeLanguage, string> = {
     JAVA: 'Java',

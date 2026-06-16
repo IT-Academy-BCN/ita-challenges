@@ -52,6 +52,12 @@
           </div>  
           }
         }
+        @if (solutionRevealed()) {
+          <div class="challenge__result">
+            <h2>Solució oficial</h2>
+            <textarea rows="10" readonly>{{ challenge()?.solution }}</textarea>
+          </div>
+        }
       }
     </div>
   </div>

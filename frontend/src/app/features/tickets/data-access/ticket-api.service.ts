@@ -1,6 +1,6 @@
 import {inject, Injectable} from '@angular/core';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
-import {catchError, Observable, of} from 'rxjs';
+import {catchError, Observable, of, throwError} from 'rxjs';
 
 import {ITicket} from '../models/iticket.interface';
 import {ITicketRequest} from '../models/iticket-request.interface';
@@ -14,8 +14,12 @@ export class TicketApiService {
   private readonly ticketsUrl = '/api/account/tickets';
 
   create(ticket: ITicketRequest): Observable<ITicket> {
-    return this.http.post<ITicket>(this.ticketsUrl, ticket).pipe(
-      catchError(() => of({id: '1', userId: 'u-1', ...ticket} as ITicket))
+    return this.http.post<ITicket>(this.ticketsUrl, ticket, { withCredentials: true }).pipe(
+      catchError((error: HttpErrorResponse) => {
+        const message = typeof error.error === 'string' ? error.error : error.error?.message || error.message;
+        const errorWithMessage = { ...error, userMessage: message };
+        return throwError(() => errorWithMessage);
+      })
     );
   }
 
