@@ -1,4 +1,4 @@
-import { Component, inject, ChangeDetectorRef } from '@angular/core';
+import { Component, inject, signal, DestroyRef } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TicketApiService } from '../../data-access/ticket-api.service';
 import { ITicketRequest } from '../../models/iticket-request.interface';
@@ -11,33 +11,47 @@ import { Router } from '@angular/router';
   styleUrl: './create-ticket-page.css',
 })
 export class CreateTicketPage {
-  private readonly cdr = inject(ChangeDetectorRef);
-  readonly ticketService = inject(TicketApiService)
-  readonly fb = inject(FormBuilder)
-  readonly router = inject(Router)
+  readonly ticketService = inject(TicketApiService);
+  readonly fb = inject(FormBuilder);
+  readonly router = inject(Router);
+  private readonly destroyRef = inject(DestroyRef);
 
-  errorMessage: string | null = null;
+  readonly ticketMessage = signal<string>('');
 
   ticketForm = this.fb.group({
     title: [''],
     description: ['']
-  })
+  });
 
   onSubmit() {
-    this.errorMessage = null;
+    this.ticketMessage.set('');
 
-    const newTicket = this.ticketForm.value as ITicketRequest
+    const newTicket = this.ticketForm.value as ITicketRequest;
 
     this.ticketService.create(newTicket).subscribe({
-      next: () => {this.goTickets();},
+      next: () => {
+        this.ticketMessage.set('Ticket creat correctament');
+        const redirectId = setTimeout(() => this.goTickets(), 2000);
+        this.destroyRef.onDestroy(() => clearTimeout(redirectId));
+      },
       error: (err) => {
-        this.errorMessage = 'Error al crear el ticket: ' + err.error;
-        this.cdr.detectChanges();
+        this.ticketMessage.set(this.getMessageForStatus(err.status));
       }
     });
   }
 
   goTickets() {
     this.router.navigate(['/tickets']);
-  }    
+  }
+
+  private getMessageForStatus(status: number): string {
+    switch (status) {
+      case 400:
+        return 'Dades del ticket incorrectes';
+      case 403:
+        return 'No tens permís per crear aquest tiquet';
+      default:
+        return "Error en crear el ticket";
+    }
+  }
 }
