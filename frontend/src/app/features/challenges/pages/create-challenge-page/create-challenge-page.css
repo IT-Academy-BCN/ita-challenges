@@ -13,3 +13,27 @@
 .form-field-input:focus {
   border-color: var(--color-primary);
 }
+
+.form-section-title {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: var(--font-size-h3);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-black-2);
+  margin: 0 0 2.4rem;
+}
+
+.form-section-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background-color: var(--color-black-2);
+  color: var(--color-white);
+  font-size: var(--font-size-normal);
+  font-weight: var(--font-weight-regular);
+  flex-shrink: 0;
+}

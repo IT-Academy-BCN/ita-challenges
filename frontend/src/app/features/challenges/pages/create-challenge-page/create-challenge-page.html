@@ -1,4 +1,9 @@
 <form [formGroup]="challengeForm" (ngSubmit)="onSubmit()">
+  <h2 class="form-section-title">
+    <span class="form-section-badge">1</span>
+    Informació general
+  </h2>
+
   <div class="form-field">
     <label class="form-field-label" for="title">Títol</label>
     <input class="form-field-input" type="text" id="title" formControlName="title" />
