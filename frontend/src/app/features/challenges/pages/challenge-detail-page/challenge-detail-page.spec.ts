@@ -27,9 +27,9 @@ describe('ChallengeDetailPage', () => {
     mockActivatedRoute = { snapshot: { paramMap: { get: vi.fn().mockReturnValue('test-123') } } };
     mockChallengeApiService = {
       saveSolution: vi.fn().mockReturnValue(of({})),
-      publishSolution: vi.fn().mockReturnValue(of({}))
+      publishSolution: vi.fn().mockReturnValue(of({})),
     };
-    mockAuthService = {user: vi.fn().mockReturnValue({ id: 'user-456' })};
+    mockAuthService = { user: vi.fn().mockReturnValue({ id: 'user-456' }) };
 
     await TestBed.configureTestingModule({
       imports: [ChallengeDetailPage],
@@ -83,80 +83,83 @@ describe('ChallengeDetailPage', () => {
       challengeId: 'test-123',
       userId: 'user-456',
       code: 'my-code',
-      revealOfficialSolution: true
-  });
-
-  it('should call submitSolution with form data and challengeId', () => {
-    fixture.detectChanges();
-    component.codeSolutionForm.patchValue({ code: 'my-code' });
-    component.submitSolution(true);
-    expect(mockChallengeApiService.publishSolution).toHaveBeenCalledWith({
-      challengeId: 'test-123',
-      userId: 'user-456',
-      code: 'my-code',
-      revealOfficialSolution: true    
-  });
-
-  it('should set isMentor signal with the received value', () => {
-    component.onRoleChange(true);
-    expect(component.isMentor()).toBe(true);
-  });
-
-  it('should set programmingMode signal to true', () => {
-    component.setProgrammingMode();
-    expect(component.programmingMode()).toBe(true);
-  });
-  it('should open modal when openFinishModal is called', () => {
-    component.openFinishModal();
-    expect(component.showModal()).toBe(true);
-  });
-
-  it('should close modal when closeModal is called', () => {
-    component.openFinishModal();
-    component.closeModal();
-    expect(component.showModal()).toBe(false);
-  });
-
-  it('should close modal and call submitSolution with true when finishWithSolution is called', () => {
-    vi.spyOn(component, 'submitSolution');
-    component.openFinishModal();
-    component.finishWithSolution();
-    expect(component.showModal()).toBe(false);
-    expect(component.submitSolution).toHaveBeenCalledWith(true);
-  });
-
-  it('should close modal and call submitSolution with false when finishWithoutSolution is called', () => {
-    vi.spyOn(component, 'submitSolution');
-    component.openFinishModal();
-    component.finishWithoutSolution();
-    expect(component.showModal()).toBe(false);
-    expect(component.submitSolution).toHaveBeenCalledWith(false);
-  });
-
-  it('should call publishSolution with revealOfficialSolution true when submitSolution is called with true', () => {
-    fixture.detectChanges();
-    component.codeSolutionForm.patchValue({ code: 'my-code' });
-    component.submitSolution(true);
-    expect(mockChallengeApiService.publishSolution).toHaveBeenCalledWith({
-    challengeId: 'test-123',
-    userId: 'user-456',
-    code: 'my-code'
+      revealOfficialSolution: true,
     });
 
-  it('should not call publishSolution when submitSolution is called with false', () => {
-    fixture.detectChanges();
-    component.codeSolutionForm.patchValue({ code: 'my-code' });
-    component.submitSolution(false);
-    expect(mockChallengeApiService.publishSolution).not.toHaveBeenCalled();
-   });
+    it('should call submitSolution with form data and challengeId', () => {
+      fixture.detectChanges();
+      component.codeSolutionForm.patchValue({ code: 'my-code' });
+      component.submitSolution(true);
+      expect(mockChallengeApiService.publishSolution).toHaveBeenCalledWith({
+        challengeId: 'test-123',
+        userId: 'user-456',
+        code: 'my-code',
+        revealOfficialSolution: true,
+      });
 
-  it('should show solution section when solutionRevealed is true', async () => {
-    fixture.detectChanges();
-    component.solutionRevealed.set(true);
-    fixture.detectChanges();
-    await fixture.whenStable();
+      it('should set isMentor signal with the received value', () => {
+        component.onRoleChange(true);
+        expect(component.isMentor()).toBe(true);
+      });
 
-    const result = fixture.nativeElement.querySelector('.challenge__result');
-    expect(result).toBeTruthy();
+      it('should set programmingMode signal to true', () => {
+        component.setProgrammingMode();
+        expect(component.programmingMode()).toBe(true);
+      });
+      it('should open modal when openFinishModal is called', () => {
+        component.openFinishModal();
+        expect(component.showModal()).toBe(true);
+      });
+
+      it('should close modal when closeModal is called', () => {
+        component.openFinishModal();
+        component.closeModal();
+        expect(component.showModal()).toBe(false);
+      });
+
+      it('should close modal and call submitSolution with true when finishWithSolution is called', () => {
+        vi.spyOn(component, 'submitSolution');
+        component.openFinishModal();
+        component.finishWithSolution();
+        expect(component.showModal()).toBe(false);
+        expect(component.submitSolution).toHaveBeenCalledWith(true);
+      });
+
+      it('should close modal and call submitSolution with false when finishWithoutSolution is called', () => {
+        vi.spyOn(component, 'submitSolution');
+        component.openFinishModal();
+        component.finishWithoutSolution();
+        expect(component.showModal()).toBe(false);
+        expect(component.submitSolution).toHaveBeenCalledWith(false);
+      });
+
+      it('should call publishSolution with revealOfficialSolution true when submitSolution is called with true', () => {
+        fixture.detectChanges();
+        component.codeSolutionForm.patchValue({ code: 'my-code' });
+        component.submitSolution(true);
+        expect(mockChallengeApiService.publishSolution).toHaveBeenCalledWith({
+          challengeId: 'test-123',
+          userId: 'user-456',
+          code: 'my-code',
+        });
+
+        it('should not call publishSolution when submitSolution is called with false', () => {
+          fixture.detectChanges();
+          component.codeSolutionForm.patchValue({ code: 'my-code' });
+          component.submitSolution(false);
+          expect(mockChallengeApiService.publishSolution).not.toHaveBeenCalled();
+        });
+
+        it('should show solution section when solutionRevealed is true', async () => {
+          fixture.detectChanges();
+          component.solutionRevealed.set(true);
+          fixture.detectChanges();
+          await fixture.whenStable();
+
+          const result = fixture.nativeElement.querySelector('.challenge__result');
+          expect(result).toBeTruthy();
+        });
+      });
+    });
   });
 });
