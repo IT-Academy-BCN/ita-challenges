@@ -5,13 +5,14 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
+import com.ita.challenges.account.infrastructure.security.CustomOAuth2UserService;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http, CustomOAuth2UserService customOAuth2UserService) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
@@ -19,6 +20,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/account/oauth2/**").permitAll()
                         .requestMatchers("/api/account/login/oauth2/**").permitAll()
                         .requestMatchers("/api/account/users/**").permitAll()
+                        .requestMatchers("/api/account/tickets/**").hasAuthority("ROLE_STUDENT")
                         .anyRequest().authenticated()
                 )
                 .oauth2Login(oauth2 -> oauth2
@@ -27,6 +29,9 @@ public class SecurityConfig {
                         )
                         .redirectionEndpoint(redirection -> redirection
                                 .baseUri("/api/account/login/oauth2/code/**")
+                        )
+                        .userInfoEndpoint(userInfo -> userInfo
+                                .userService(customOAuth2UserService)
                         )
                         .defaultSuccessUrl("/challenges")
                 )
