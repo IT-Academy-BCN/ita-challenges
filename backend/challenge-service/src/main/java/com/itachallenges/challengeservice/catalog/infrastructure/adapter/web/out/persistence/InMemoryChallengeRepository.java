@@ -3,6 +3,7 @@ package com.itachallenges.challengeservice.catalog.infrastructure.adapter.web.ou
 import com.itachallenges.challengeservice.catalog.domain.model.Challenge;
 import com.itachallenges.challengeservice.catalog.domain.port.out.ChallengeRepository;
 import com.itachallenges.challengeservice.catalog.domain.valueobject.ChallengeId;
+import com.itachallenges.challengeservice.catalog.domain.valueobject.ChallengeLanguage;
 import org.springframework.stereotype.Repository;
 
 import java.io.IOException;
@@ -20,18 +21,14 @@ public class InMemoryChallengeRepository implements ChallengeRepository {
 
     @Override
     public Challenge save(Challenge challenge) {
-        try{
-            storage.put(challenge.getId(), challenge);
-            return challenge;
-        }catch(RuntimeException e){ throw new RuntimeException("Error saving challenge" + e.getMessage());}
-
+        storage.put(challenge.getId(), challenge);
+        return challenge;
     }
 
     @Override
     public Challenge update(Challenge challenge) {
         ChallengeId id = challenge.getId();
         ensureChallengeExists(id);
-
 
         storage.put(id, challenge);
         return challenge;
@@ -56,11 +53,16 @@ public class InMemoryChallengeRepository implements ChallengeRepository {
         return new ArrayList<>(storage.values());
     }
 
+    @Override
+    public List<Challenge> findByLanguage(ChallengeLanguage language) {
+        return storage.values().stream()
+                .filter(c -> c.getLanguage() == language)
+                .toList();
+    }
+
     private void ensureChallengeExists(ChallengeId id) {
         if (!storage.containsKey(id)) {
             throw new NoSuchElementException("Challenge not found with id: " + id);
         }
     }
-
-
 }

@@ -82,7 +82,7 @@ class ChallengeControllerTest {
     @Test
     void should_update_challenge_and_return_200() throws Exception {
         String id = UUID.randomUUID().toString();
-        ChallengeRequest request = new ChallengeRequest(
+        ChallengeRequest updateRequest = new ChallengeRequest(
                 "Updated title",
                 "Updated description",
                 ChallengeLanguage.JAVA,
@@ -104,7 +104,7 @@ class ChallengeControllerTest {
 
         mockMvc.perform(put("/api/challenge/" + id)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(request)))
+                        .content(objectMapper.writeValueAsString(updateRequest)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(id))
                 .andExpect(jsonPath("$.title").value("Updated title"))
@@ -113,7 +113,6 @@ class ChallengeControllerTest {
                 .andExpect(jsonPath("$.language").value("JAVA"))
                 .andExpect(jsonPath("$.solution").value("Updated solution"));
     }
-
 
     @Test
     void should_return_200_with_challenge_when_finding_by_id() throws Exception {
@@ -138,5 +137,26 @@ class ChallengeControllerTest {
                 .andExpect(jsonPath("$.language").value("JAVA"))
                 .andExpect(jsonPath("$.difficulty").value("EASY"))
                 .andExpect(jsonPath("$.solution").value("Test Solution"));
+    }
+
+    @Test
+    void should_return_200_with_filtered_list_when_requesting_challenges_by_language() throws Exception {
+        Challenge javaChallenge = Challenge.create(
+                "Java Challenge", "Java description",
+                ChallengeLanguage.JAVA, ChallengeDifficulty.EASY, "Java solution"
+        );
+        when(repository.findByLanguage(ChallengeLanguage.JAVA)).thenReturn(List.of(javaChallenge));
+
+        mockMvc.perform(get("/api/challenge").param("language", "JAVA"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(1))
+                .andExpect(jsonPath("$[0].title").value("Java Challenge"))
+                .andExpect(jsonPath("$[0].language").value("JAVA"));
+    }
+
+    @Test
+    void should_return_400_when_requesting_challenges_with_invalid_language() throws Exception {
+        mockMvc.perform(get("/api/challenge").param("language", "COBOL"))
+                .andExpect(status().isBadRequest());
     }
 }
