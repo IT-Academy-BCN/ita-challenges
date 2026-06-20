@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { LoginButton } from './login-button';
-import { Router } from @angular/router";
+import { Router } from '@angular/router';
 
 describe('LoginButton', () => {
   let component: LoginButton;
@@ -18,7 +18,7 @@ describe('LoginButton', () => {
       imports: [LoginButton],
       providers: [
         { provide: Router, useValue: routerMock },
-        ],
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(LoginButton);
