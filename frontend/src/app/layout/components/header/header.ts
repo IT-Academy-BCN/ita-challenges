@@ -6,6 +6,7 @@ import { AuthService } from '../../../features/auth/data-access/auth-service';
 
 @Component({
   selector: 'app-header',
+  standalone: true,
   imports: [LogoutButton, LoginButton],
   templateUrl: './header.html',
   styleUrl: './header.css',
