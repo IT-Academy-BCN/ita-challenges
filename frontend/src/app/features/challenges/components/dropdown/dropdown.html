@@ -1,0 +1,17 @@
+<div class="dropdown">
+  <button class="dropdown__trigger" type="button" (click)="toggleDropdown()">
+    <img src="assets\icons\filter-icon.png" class="button_icon" />
+    <span class="button_text">Filtros</span>
+    <span class="button_arrow">›</span>
+  </button>
+
+  @if (isOpen()) {
+    <div class="dropdown__overlay" (click)="closeDropdown()"></div>
+
+    <div class="dropdown__menu">
+      <button type="button">Fácil</button>
+      <button type="button">Media</button>
+      <button type="button">Difícil</button>
+    </div>
+  }
+</div>
