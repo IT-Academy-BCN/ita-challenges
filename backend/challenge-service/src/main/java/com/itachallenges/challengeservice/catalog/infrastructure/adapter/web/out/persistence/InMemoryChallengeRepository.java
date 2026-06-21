@@ -21,8 +21,11 @@ public class InMemoryChallengeRepository implements ChallengeRepository {
 
     @Override
     public Challenge save(Challenge challenge) {
-        storage.put(challenge.getId(), challenge);
-        return challenge;
+        try{
+            storage.put(challenge.getId(), challenge);
+            return challenge;
+        }catch(RuntimeException e){ throw new RuntimeException("Error saving challenge" + e.getMessage());}
+
     }
 
     @Override

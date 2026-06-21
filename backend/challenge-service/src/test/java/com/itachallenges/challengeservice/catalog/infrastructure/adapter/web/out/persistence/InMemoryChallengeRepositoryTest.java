@@ -61,9 +61,10 @@ class InMemoryChallengeRepositoryTest {
     }
 
     @Test
-    void should_throw_NullPointerException_when_saving_null_challenge() {
+    void should_throw_RuntimeException_when_any_error_occurs_during_save(){
         assertThatThrownBy(() -> repository.save(null))
-                .isInstanceOf(NullPointerException.class);
+                .isInstanceOf(RuntimeException.class)
+                .hasMessageContaining("Error saving challenge");
     }
 
     @Test
