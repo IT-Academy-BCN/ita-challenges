@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 	selector: 'app-login-button',
 	standalone: true,
 	imports:[],
-	templeUrl: './login-button.html',
+	templateUrl: './login-button.html',
 	styleUrl: './login-button.css',
 })
 
