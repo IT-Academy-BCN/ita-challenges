@@ -1,3 +1,14 @@
+<div class="main-content-wrapper">
+  <header class="content-header">
+    <div class="header-left">
+      <a routerLink="/retos" class="btn-back">← Volver a reto</a>
+      <h1>Editar reto</h1>
+    </div>
+    <div class="header-actions">
+      <button type="button" class="btn-cancel">Cancelar</button>
+      <button type="button" class="btn-save">Guardar</button>
+    </div>
+  </header>
 <form [formGroup]="challengeForm" (ngSubmit)="onSubmit()">
   <div class="form-sections">
     <div class="form-section">
@@ -74,3 +85,4 @@
   </div>
   <button type="submit">Crear</button>
 </form>
+</div>
