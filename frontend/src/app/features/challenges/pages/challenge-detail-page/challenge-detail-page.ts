@@ -121,6 +121,7 @@ export class ChallengeDetailPage {
         this.challengeApiService.publishSolution(challengeSolution).subscribe({
           next: () => {
             alert('Solució enviada!');
+            this.solutionRevealed.set(true);
           },
           error: (err) => {
             console.error('Error en enviar la solució:', err);
