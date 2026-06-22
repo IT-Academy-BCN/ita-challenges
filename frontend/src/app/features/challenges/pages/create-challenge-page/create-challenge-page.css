@@ -114,3 +114,7 @@
     border: none;
     color: var(--color-white);
 }
+
+.btn-back{
+    text-decoration: none;
+}
