@@ -101,4 +101,10 @@ describe('CreateChallengePage', () => {
 
     expect(mockRouter.navigate).toHaveBeenCalledWith(['/challenges']);
   });
+
+  it('should update selectedLanguage and form control on language select', () => {
+    component.onLanguageSelect('JAVA');
+    expect(component.selectedLanguage()).toBe('JAVA');
+    expect(component.challengeForm.get('language')?.value).toBe('JAVA');
+  });
 });
