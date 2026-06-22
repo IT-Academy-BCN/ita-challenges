@@ -1,29 +1,32 @@
 <form [formGroup]="challengeForm" (ngSubmit)="onSubmit()">
-  <h2 class="form-section-title">
-    <span class="form-section-badge">1</span>
-    Informació general
-  </h2>
+  <div class="form-section">
+    <h2 class="form-section-title">
+      <span class="form-section-badge">1</span>
+      Informació general
+    </h2>
 
-  <div class="form-field">
-    <label class="form-field-label" for="title">Títol</label>
-    <input class="form-field-input" type="text" id="title" formControlName="title" />
+    <div class="form-field">
+      <label class="form-field-label" for="title">Títol</label>
+      <input class="form-field-input" type="text" id="title" formControlName="title" />
+    </div>
+
+    <div class="form-field">
+      <span class="form-field-label">Llenguatge</span>
+      <div class="language-btn-group">
+        @for (language of languages; track language) {
+          <app-language-select-button
+            [language]="language"
+            [isActive]="selectedLanguage() === language"
+            (clicked)="onLanguageSelect($event)"
+          />
+        }
+      </div>
+    </div>
   </div>
 
   <div>
     <label for="description">Descripció</label>
-    <input type="text" id="description" formControlName="description">
-  </div>
-
-  <div>
-    <label for="language">Llenguatge</label>
-    <select id="language" formControlName="language">
-      <option value="" selected disabled>Selecciona llenguatge</option>
-      @for (language of languages; track language) {
-        <option [value]="language">
-          {{ language }}
-        </option>
-      }
-    </select>
+    <input type="text" id="description" formControlName="description" />
   </div>
 
   <div>
