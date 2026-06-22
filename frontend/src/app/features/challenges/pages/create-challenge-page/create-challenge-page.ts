@@ -19,7 +19,7 @@ export class CreateChallengePage {
   readonly router = inject(Router)
   readonly fb = inject(FormBuilder)
 
-  selectedLanguage = signal<ChallengeLanguage | null>(null);
+  readonly selectedLanguage = signal<ChallengeLanguage | null>(null);
   readonly languages: ChallengeLanguage[] = ['JAVA', 'PHP', 'JAVASCRIPT', 'TYPESCRIPT', 'PYTHON', 'SQL'];
   readonly difficulties: ChallengeDifficulty[] = ['EASY', 'MEDIUM', 'HARD'];
 
