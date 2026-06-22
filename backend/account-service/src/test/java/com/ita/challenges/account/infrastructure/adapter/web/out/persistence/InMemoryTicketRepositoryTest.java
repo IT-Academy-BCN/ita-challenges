@@ -40,13 +40,14 @@ class InMemoryTicketRepositoryTest {
         Ticket original = Ticket.create("user-1", "Old Title", "Old Desc");
         repository.save(original);
 
-        Ticket updated = Ticket.restore(original.getId(), "user-1", "New Title", "New Desc");
+        Ticket updated = Ticket.restore(original.getId(),  "user-1", "No Assigned", "New Title", "New Desc");
         repository.updateTicket(updated);
 
         Optional<Ticket> result = repository.findById(original.getId());
         assertTrue(result.isPresent());
         assertEquals("New Title", result.get().getTitle());
         assertEquals("New Desc", result.get().getDescription());
+        assertEquals("No Assigned", result.get().getMentorAssignedId());
     }
 
     @Test
@@ -59,6 +60,7 @@ class InMemoryTicketRepositoryTest {
         assertTrue(found.isPresent(), "Ticket existing");
         assertEquals(ticket.getId(), found.get().getId());
         assertEquals("user-456", found.get().getUserId());
+        assertEquals("No Assigned", found.get().getMentorAssignedId());
     }
 
     @Test
@@ -75,7 +77,7 @@ class InMemoryTicketRepositoryTest {
         String title = "Restored Title";
         String desc = "Restored Desc";
 
-        Ticket restored = Ticket.restore(id, userId, title, desc);
+        Ticket restored = Ticket.restore(id, userId, "No Assigned", title, desc);
 
         assertNotNull(restored);
         assertEquals(id, restored.getId());
