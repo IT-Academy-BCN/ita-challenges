@@ -7,6 +7,7 @@ export interface ITicket {
   description: string;
   status: TicketStatus;
   comment: string | null;
+  assignedTo: string | null;
   createdAt: Date;
   updatedAt: Date;
 }
