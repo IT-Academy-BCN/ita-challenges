@@ -3,8 +3,8 @@ import { Component, signal } from '@angular/core';
 @Component({
   selector: 'app-challenges-filter-dropdown',
   imports: [],
-  templateUrl: './dropdown.html',
-  styleUrl: './dropdown.css',
+  templateUrl: './dropdown-filters.html',
+  styleUrl: './dropdown-filters.css',
 })
 export class DropdownComponent {
   isOpen = signal(false);
