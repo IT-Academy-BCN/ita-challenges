@@ -73,6 +73,6 @@
   gap: 2.4rem;
 }
 
-.difficulty-option input[type="radio"] {
+.difficulty-option input[type='radio'] {
   accent-color: var(--color-primary);
 }
