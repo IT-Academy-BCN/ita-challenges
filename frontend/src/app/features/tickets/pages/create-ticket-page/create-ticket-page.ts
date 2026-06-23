@@ -1,5 +1,5 @@
-import { Component, inject, signal, DestroyRef } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Component, inject, signal } from '@angular/core';
+import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { TicketApiService } from '../../data-access/ticket-api.service';
 import { ITicketRequest } from '../../models/iticket-request.interface';
 import { Router } from '@angular/router';
@@ -14,7 +14,6 @@ export class CreateTicketPage {
   readonly ticketService = inject(TicketApiService);
   readonly fb = inject(FormBuilder);
   readonly router = inject(Router);
-  private readonly destroyRef = inject(DestroyRef);
 
   readonly ticketMessage = signal<string>('');
 
@@ -29,11 +28,7 @@ export class CreateTicketPage {
     const newTicket = this.ticketForm.value as ITicketRequest;
 
     this.ticketService.create(newTicket).subscribe({
-      next: () => {
-        this.ticketMessage.set('Ticket creat correctament');
-        const redirectId = setTimeout(() => this.goTickets(), 2000);
-        this.destroyRef.onDestroy(() => clearTimeout(redirectId));
-      },
+      next: () => {this.goTickets();},
       error: (err) => {
         this.ticketMessage.set(this.getMessageForStatus(err.status));
       }
