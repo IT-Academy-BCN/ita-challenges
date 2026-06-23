@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
@@ -27,11 +28,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         OAuth2User oAuth2User = super.loadUser(userRequest);
 
-        processOAuth2User(oAuth2User);
-
-        List<SimpleGrantedAuthority> authorities = Collections.singletonList(
-                new SimpleGrantedAuthority("ROLE_STUDENT")
-        );
+        List<SimpleGrantedAuthority> authorities = processOAuth2User(oAuth2User);
 
         return new DefaultOAuth2User(
                 authorities,
@@ -40,12 +37,26 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         );
     }
 
-    public void processOAuth2User(OAuth2User oAuth2User) {
+    public List<SimpleGrantedAuthority> processOAuth2User(OAuth2User oAuth2User) {
         String login = oAuth2User.getAttribute("login");
 
-        if (login != null && userRepository.findByUsername(login).isEmpty()) {
-            User newUser = new User(login, Role.STUDENT);
-            userRepository.save(newUser);
+        if (login == null) {
+            throw new OAuth2AuthenticationException("Login not found in GitHub");
         }
+
+        Optional<User> existingUser = userRepository.findByUsername(login);
+        User user;
+
+        if (existingUser.isEmpty()) {
+            user = new User(login, Role.STUDENT);
+            userRepository.save(user);
+
+        } else {
+            user = existingUser.get();
+        }
+
+        return Collections.singletonList(
+                new SimpleGrantedAuthority("ROLE_" + user.userRole().name())
+        );
     }
 }
