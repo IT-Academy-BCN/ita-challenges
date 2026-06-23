@@ -14,7 +14,10 @@ describe('TicketListPage', () => {
 
   beforeEach(async () => {
     TestBed.resetTestingModule();
-    mockTicketApiService = { loadAll: vi.fn().mockReturnValue(of(TICKETS_MOCK)) };
+    mockTicketApiService = {
+      loadAll: vi.fn().mockReturnValue(of(TICKETS_MOCK)),
+      getTicketAssignableUsers: vi.fn().mockReturnValue(of([])),
+    };
 
     await TestBed.configureTestingModule({
       imports: [TicketListPage],
