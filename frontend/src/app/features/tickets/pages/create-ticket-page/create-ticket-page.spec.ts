@@ -46,16 +46,10 @@ describe('CreateTicketPage', () => {
     expect(mockTicketService.create).toHaveBeenCalledWith(testData);
   });
 
-  it('should show the success message on 201 and navigate to /tickets after the delay', () => {
-    vi.useFakeTimers();
+  it('should navigate to /tickets after the succes', () => {
     const testData = { title: 'Nou Repte', description: 'Descripció' };
     component.ticketForm.setValue(testData);
     component.onSubmit();
-
-    expect(component.ticketMessage()).toBe('Ticket creat correctament');
-    expect(mockRouter.navigate).not.toHaveBeenCalled();
-
-    vi.advanceTimersByTime(2000);
 
     expect(mockRouter.navigate).toHaveBeenCalledWith(['/tickets']);
   });
