@@ -7,7 +7,7 @@ import { ChallengeService } from '../../services/challenge.service';
 import { RoleSelectorComponent } from '../../components/role-selector/role-selector';
 import { CreateButtonComponent } from '../../components/buttons/create-button/create-button';
 import { DeleteButtonComponent } from '../../components/buttons/delete-button/delete-button';
-import { DropdownComponent } from '../../components/dropdown/dropdown';
+import { DropdownComponent } from '../../components/dropdown-filters/dropdown-filters';
 
 @Component({
   selector: 'app-challenges-list-page',

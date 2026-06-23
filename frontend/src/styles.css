@@ -23,6 +23,9 @@
   --color-gray-3: #7E7E7E;
   --color-gray-4: #EBEBEB;
 
+  /* Semi-transparent */
+  --color-transparent-black: rgba(0, 0, 0, 0.5);
+
   /* Typography */
   --font-family: 'Poppins', sans-serif;
 

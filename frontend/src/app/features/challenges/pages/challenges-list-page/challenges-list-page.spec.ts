@@ -7,7 +7,7 @@ import { ChallengesListPage } from './challenges-list-page';
 import { ChallengeService } from '../../services/challenge.service';
 import { CreateButtonComponent } from '../../components/buttons/create-button/create-button';
 import { RoleSelectorComponent } from '../../components/role-selector/role-selector';
-import { DropdownComponent } from '../../components/dropdown/dropdown';
+import { DropdownComponent } from '../../components/dropdown-filters/dropdown-filters';
 import { CHALLENGES_MOCK } from '../../models/challenges.mock';
 
 describe('ChallengesListPage', () => {
