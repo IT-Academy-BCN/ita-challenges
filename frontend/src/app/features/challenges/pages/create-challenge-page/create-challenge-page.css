@@ -1,4 +1,5 @@
-.form-field-input {
+.form-field-input,
+.form-field-textarea {
   width: 100%;
   padding: 1.2rem 1.6rem;
   border: 1.5px solid var(--color-gray-4);
@@ -8,10 +9,10 @@
   color: var(--color-black-2);
   outline: none;
   transition: border-color 0.2s;
-  margin-bottom: 1rem;
 }
 
-.form-field-input:focus {
+.form-field-input:focus,
+.form-field-textarea:focus {
   border-color: var(--color-primary);
 }
 
@@ -57,24 +58,6 @@
   display: flex;
   flex-wrap: wrap;
   gap: 0.8rem;
-}
-
-.form-field-textarea {
-  width: 100%;
-  padding: 1.2rem 1.6rem;
-  border: 1.5px solid var(--color-gray-4);
-  border-radius: 0.8rem;
-  font-size: var(--font-size-normal);
-  font-family: var(--font-family);
-  color: var(--color-black-2);
-  outline: none;
-  transition: border-color 0.2s;
-  resize: vertical;
-  line-height: 1.6;
-}
-
-.form-field-textarea:focus {
-  border-color: var(--color-primary);
 }
 
 .form-field-textarea-code {
