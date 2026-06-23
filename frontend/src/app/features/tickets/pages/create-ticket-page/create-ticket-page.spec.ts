@@ -46,7 +46,7 @@ describe('CreateTicketPage', () => {
     expect(mockTicketService.create).toHaveBeenCalledWith(testData);
   });
 
-  it('should navigate to /tickets after the succes', () => {
+  it('should navigate to /tickets after the success', () => {
     const testData = { title: 'Nou Repte', description: 'Descripció' };
     component.ticketForm.setValue(testData);
     component.onSubmit();
