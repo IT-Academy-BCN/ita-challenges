@@ -5,10 +5,7 @@ import com.ita.challenges.account.domain.model.Ticket;
 import com.ita.challenges.account.domain.model.User;
 import com.ita.challenges.account.domain.port.out.TicketRepository;
 import com.ita.challenges.account.domain.port.out.UserRepository;
-import com.ita.challenges.account.infrastructure.adapter.web.in.dto.TicketPatchRequest;
-import com.ita.challenges.account.infrastructure.adapter.web.in.dto.TicketPatchResponse;
-import com.ita.challenges.account.infrastructure.adapter.web.in.dto.TicketRequest;
-import com.ita.challenges.account.infrastructure.adapter.web.in.dto.TicketResponse;
+import com.ita.challenges.account.infrastructure.adapter.web.in.dto.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -174,6 +171,40 @@ public class TicketController {
                             savedTicket.getStatus(),
                             savedTicket.getComment()
                     ));
+                })
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PatchMapping("/{id}/assign")
+    public ResponseEntity<?> assignMentor(@PathVariable String id,
+                                          @RequestBody TicketAssignRequest assignRequest,
+                                          @AuthenticationPrincipal OAuth2User user) {
+
+        if (user == null || user.getAttribute("login") == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        String login = user.getAttribute("login");
+
+        User appUser = userRepository.findByUsername(login)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.FORBIDDEN, "User not registered"));
+
+        if (assignRequest.mentorAssignedId() == null || assignRequest.mentorAssignedId().isBlank()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Mentor ID cannot be empty");
+        }
+
+        return ticketRepository.findById(id)
+                .map(existingTicket -> {
+                    Ticket updatedTicket = existingTicket.assignMentor(assignRequest.mentorAssignedId());
+                    Ticket savedTicket = ticketRepository.updateTicket(updatedTicket);
+
+                    return ResponseEntity.ok(new TicketPatchResponse(
+                            savedTicket.getId(),
+                            savedTicket.getUserId(),
+                            savedTicket.mentorAssignedId(),
+                            savedTicket.getTitle(),
+                            savedTicket.getDescription(),
+                            savedTicket.getStatus()));
                 })
                 .orElse(ResponseEntity.notFound().build());
     }
