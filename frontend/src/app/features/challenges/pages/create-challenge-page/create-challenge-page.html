@@ -1,4 +1,5 @@
 <form [formGroup]="challengeForm" (ngSubmit)="onSubmit()">
+  <div class="form-sections">
   <div class="form-section">
     <h2 class="form-section-title">
       <span class="form-section-badge">1</span>
@@ -24,11 +25,24 @@
     </div>
   </div>
 
-  <div>
-    <label for="description">Descripció</label>
-    <input type="text" id="description" formControlName="description" />
-  </div>
+  <div class="form-section">
+    <h2 class="form-section-title">
+      <span class="form-section-badge">2</span>
+      Contingut del repte
+    </h2>
 
+    <div class="form-field">
+      <label class="form-field-label" for="description">Enunciat</label>
+      <textarea class="form-field-textarea" id="description" formControlName="description" rows="8"></textarea>
+    </div>
+
+    <div class="form-field">
+      <label class="form-field-label" for="solution">Solució oficial</label>
+      <textarea class="form-field-textarea form-field-textarea-code" id="solution" formControlName="solution" rows="12"></textarea>
+    </div>
+  </div>
+  </div>
+  
   <div>
     <label for="difficulty">Dificultat</label>
     <select id="difficulty" formControlName="difficulty">
@@ -40,11 +54,5 @@
       }
     </select>
   </div>
-
-  <div>
-    <label for="solution">Solució oficial</label>
-    <textarea id="solution" formControlName="solution"></textarea>
-  </div>
-
   <button type="submit">Crear</button>
 </form>
