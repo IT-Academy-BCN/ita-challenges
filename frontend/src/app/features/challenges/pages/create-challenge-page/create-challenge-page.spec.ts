@@ -107,4 +107,14 @@ describe('CreateChallengePage', () => {
     expect(component.selectedLanguage()).toBe('JAVA');
     expect(component.challengeForm.get('language')?.value).toBe('JAVA');
   });
+
+  it('should have 3 difficulty options', () => {
+  expect(component.difficulties.length).toBe(3);
+  expect(component.difficulties).toEqual(['EASY', 'MEDIUM', 'HARD']);
+});
+
+  it('should update difficulty form control when difficulty is selected', () => {
+    component.challengeForm.get('difficulty')?.setValue('MEDIUM');
+    expect(component.challengeForm.get('difficulty')?.value).toBe('MEDIUM');
+  });
 });

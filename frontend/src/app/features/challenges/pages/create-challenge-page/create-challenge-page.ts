@@ -23,6 +23,18 @@ export class CreateChallengePage {
   readonly languages: ChallengeLanguage[] = ['JAVA', 'PHP', 'JAVASCRIPT', 'TYPESCRIPT', 'PYTHON', 'SQL'];
   readonly difficulties: ChallengeDifficulty[] = ['EASY', 'MEDIUM', 'HARD'];
 
+  readonly difficultyLabels: Record<ChallengeDifficulty, string> = {
+  EASY: 'Fàcil',
+  MEDIUM: 'Mitjà',
+  HARD: 'Difícil'
+  };
+
+readonly difficultyIcons: Record<ChallengeDifficulty, string> = {
+  EASY: 'assets/Easy.svg',
+  MEDIUM: 'assets/Medium.svg',
+  HARD: 'assets/Hard.svg'
+  };
+
   challengeForm = this.fb.group({
     title: [''],
     description: [''],

@@ -41,18 +41,30 @@
       <textarea class="form-field-textarea form-field-textarea-code" id="solution" formControlName="solution" rows="12"></textarea>
     </div>
   </div>
-  </div>
   
-  <div>
-    <label for="difficulty">Dificultat</label>
-    <select id="difficulty" formControlName="difficulty">
-      <option value="" disabled>Selecciona dificultat</option>
-      @for (difficulty of difficulties; track difficulty) {
-        <option [value]="difficulty">
-          {{ difficulty }}
-        </option>
-      }
-    </select>
+ <div class="form-section">
+      <h2 class="form-section-title">
+        <span class="form-section-badge">3</span>
+        Informació adicional
+      </h2>
+
+      <div class="form-field">
+        <span class="form-field-label">Dificultat</span>
+        <div class="difficulty-group">
+          @for (difficulty of difficulties; track difficulty) {
+            <label class="difficulty-option">
+              <input
+                type="radio"
+                formControlName="difficulty"
+                [value]="difficulty"
+              />
+              <img [src]="difficultyIcons[difficulty]" [alt]="difficulty" />
+              {{ difficultyLabels[difficulty] }}
+            </label>
+          }
+        </div>
+      </div>
+    </div>
   </div>
   <button type="submit">Crear</button>
 </form>
