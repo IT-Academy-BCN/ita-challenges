@@ -21,7 +21,6 @@ export class Header implements OnInit {
     this.authService.fetchUser().subscribe({
       next: (user) => {
         this.authService.setUser(user);
-        this.router.navigate(['/challenges']);
       },
     });
   }
