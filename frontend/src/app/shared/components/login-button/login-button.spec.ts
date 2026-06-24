@@ -29,11 +29,7 @@ describe('LoginButton', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-
-  it('should call login method when button is clicked', () => {
+  it('should call login method and navigate to /auth when button is clicked', () => {
     const spy = vi.spyOn(component, 'login');
 
     const button: HTMLButtonElement =
@@ -42,11 +38,6 @@ describe('LoginButton', () => {
     button.click();
 
     expect(spy).toHaveBeenCalled();
-  });
-
-  it('should navigate to /auth when login is called', () => {
-    component.login();
-
     expect(routerMock.navigate).toHaveBeenCalledWith(['/auth']);
   });
 });

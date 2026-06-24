@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 
 @Component({
 	selector: 'app-login-button',
-	standalone: true,
 	imports:[],
 	templateUrl: './login-button.html',
 	styleUrl: './login-button.css',
@@ -11,7 +10,7 @@ import { Router } from '@angular/router';
 
 export class LoginButton {
 	private readonly router = inject(Router);
-	
+
 	login(): void{
 		this.router.navigate(['/auth']);
 	}
