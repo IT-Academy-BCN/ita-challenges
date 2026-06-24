@@ -3,16 +3,18 @@ package com.ita.challenges.account.infrastructure.seed;
 import com.ita.challenges.account.domain.model.Role;
 import com.ita.challenges.account.domain.model.User;
 import com.ita.challenges.account.domain.port.out.UserRepository;
-import lombok.AllArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Component
-@AllArgsConstructor
 public class UsersSeedLoader implements CommandLineRunner {
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+
+    public UsersSeedLoader(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @Override
     public void run(String... args) {
