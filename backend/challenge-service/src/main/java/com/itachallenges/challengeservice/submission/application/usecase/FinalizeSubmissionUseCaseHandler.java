@@ -26,6 +26,7 @@ public class FinalizeSubmissionUseCaseHandler implements FinalizeSubmissionUseCa
         UserId userId = UserId.of(command.userId());
         ChallengeId challengeId = ChallengeId.of(command.challengeId());
 
+        // Buscar el draft activo del usuario en el buffer
         Optional<Submission> activeDraft = SubmissionBuffer.findLastByUserId(userId);
         if (activeDraft.isEmpty()) {
             throw new NoSuchElementException("No active draft found for user: " + userId);
@@ -40,11 +41,9 @@ public class FinalizeSubmissionUseCaseHandler implements FinalizeSubmissionUseCa
         if (command.code() != null) {
             draft.updateCode(command.code());
         }
-
         Submission finalized = Submission.toSubmitted(draft);
 
         repository.save(finalized);
-
         SubmissionBuffer.removeByUserId(userId);
     }
 }
