@@ -10,8 +10,6 @@ import com.itachallenges.challengeservice.submission.domain.valueobject.Submissi
 import com.itachallenges.challengeservice.submission.infrastructure.adapter.out.buffer.SubmissionBuffer;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @Service
 public class SaveDraftSubmissionUseCaseHandler implements SaveDraftSubmissionUseCase {
 
@@ -23,27 +21,23 @@ public class SaveDraftSubmissionUseCaseHandler implements SaveDraftSubmissionUse
 
     @Override
     public void execute(SaveDraftSubmissionCommand command) {
-        UserId userId = UserId.of(command.userId());
-        ChallengeId challengeId = ChallengeId.of(command.challengeId());
-        String code = command.code();
-        Optional<Submission> existingDraft = SubmissionBuffer.findLastByUserId(userId);
+        var userId = UserId.of(command.userId());
+        var challengeId = ChallengeId.of(command.challengeId());
+        var code = command.code();
 
-        Submission submission;
+        var submission = SubmissionBuffer.findLastByUserId(userId)
+                .map(existing -> {
+                    existing.updateCode(code);
+                    return existing;
+                })
+                .orElseGet(() -> Submission.createInProgress(
+                        SubmissionId.generate(),
+                        challengeId,
+                        userId,
+                        code
+                ));
 
-        if (existingDraft.isPresent()) {
-            submission = existingDraft.get();
-            submission.updateCode(code);
-        } else {
-            submission = Submission.createInProgress(
-                    SubmissionId.generate(),
-                    challengeId,
-                    userId,
-                    code
-            );
-        }
         SubmissionBuffer.save(userId, submission);
-
-        // Guardar en el repositorio histórico
         repository.save(submission);
     }
 }
