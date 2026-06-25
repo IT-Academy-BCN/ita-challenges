@@ -71,6 +71,11 @@ public class Submission {
         return submission;
     }
 
+    public void updateCode(String newCode) {
+    this.code = newCode;
+    this.updatedAt = Instant.now();
+}
+    
     public static Submission toInProgress(Submission existing) {
         Submission submission = new Submission();
         submission.id = existing.id;
