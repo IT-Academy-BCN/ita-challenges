@@ -50,4 +50,16 @@ class InMemoryUserRepositoryTest {
         assertTrue(found.isPresent());
         assertEquals(Role.GUEST, found.get().userRole());
     }
+
+    @Test
+    void findAllMentors_shouldReturnOnlyMentors() {
+        repository.save(new User("mentor1", Role.MENTOR));
+        repository.save(new User("guest1", Role.GUEST));
+        repository.save(new User("mentor2", Role.MENTOR));
+
+        var mentors = repository.findAllMentors();
+
+        assertThat(mentors).hasSize(2);
+        assertThat(mentors).allMatch(user -> user.userRole() == Role.MENTOR);
+    }
 }
