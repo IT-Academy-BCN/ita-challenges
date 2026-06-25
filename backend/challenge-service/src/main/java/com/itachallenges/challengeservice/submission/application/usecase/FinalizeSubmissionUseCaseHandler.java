@@ -23,27 +23,18 @@ public class FinalizeSubmissionUseCaseHandler implements FinalizeSubmissionUseCa
 
     @Override
     public void execute(FinalizeSubmissionCommand command) {
-        UserId userId = UserId.of(command.userId());
-        ChallengeId challengeId = ChallengeId.of(command.challengeId());
+        var userId = UserId.of(command.userId());
+        var challengeId = ChallengeId.of(command.challengeId());
 
-        // Buscar el draft activo del usuario en el buffer
-        Optional<Submission> activeDraft = SubmissionBuffer.findLastByUserId(userId);
-        if (activeDraft.isEmpty()) {
-            throw new NoSuchElementException("No active draft found for user: " + userId);
-        }
+        var draft = SubmissionBuffer.findLastByUserId(userId)
+                .filter(submission -> submission.getChallengeId().equals(challengeId))
+                .orElseThrow(() -> new NoSuchElementException(
+                        "No active draft found for user: " + userId + " or challenge mismatch"
+                ));
 
-        Submission draft = activeDraft.get();
-        if (!draft.getChallengeId().equals(challengeId)) {
-            throw new IllegalStateException(
-                    "Active draft belongs to a different challenge than the one being finalized");
-        }
+        Optional.ofNullable(command.code()).ifPresent(draft::updateCode);
 
-        if (command.code() != null) {
-            draft.updateCode(command.code());
-        }
-        Submission finalized = Submission.toSubmitted(draft);
-
-        repository.save(finalized);
+        repository.save(Submission.toSubmitted(draft));
         SubmissionBuffer.removeByUserId(userId);
     }
 }
