@@ -1,4 +1,5 @@
-.form-field-input {
+.form-field-input,
+.form-field-textarea {
   width: 100%;
   padding: 1.2rem 1.6rem;
   border: 1.5px solid var(--color-gray-4);
@@ -10,8 +11,14 @@
   transition: border-color 0.2s;
 }
 
-.form-field-input:focus {
+.form-field-input:focus,
+.form-field-textarea:focus {
   border-color: var(--color-primary);
+}
+
+.form-field-label {
+  display: block;
+  margin-block: 1rem;
 }
 
 .form-section-title {
@@ -36,4 +43,36 @@
   font-size: var(--font-size-normal);
   font-weight: var(--font-weight-regular);
   flex-shrink: 0;
+}
+
+.form-section {
+  border-top: 1px solid var(--color-gray-4);
+  padding: 2.4rem 0;
+}
+
+.language-btn-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+}
+
+.form-field-textarea-code {
+  font-family: monospace;
+  font-size: 1.3rem;
+}
+
+.difficulty-option {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  cursor: pointer;
+}
+
+.difficulty-group {
+  display: flex;
+  gap: 2.4rem;
+}
+
+.difficulty-option input[type='radio'] {
+  accent-color: var(--color-primary);
 }
