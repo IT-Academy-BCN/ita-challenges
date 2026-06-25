@@ -1,11 +1,19 @@
 package com.itachallenges.challengeservice.submission.application.usecase;
 
+import com.itachallenges.challengeservice.shared.domain.valueobject.UserId;
 import com.itachallenges.challengeservice.submission.application.dto.MarkIncompleteCommand;
+import com.itachallenges.challengeservice.submission.domain.Submission;
 import com.itachallenges.challengeservice.submission.domain.port.in.MarkIncompleteUseCase;
+import com.itachallenges.challengeservice.submission.domain.port.out.SubmissionRepository;
+import com.itachallenges.challengeservice.submission.domain.valueobject.SubmissionId;
+import com.itachallenges.challengeservice.submission.infrastructure.adapter.out.buffer.SubmissionBuffer;
 import org.springframework.stereotype.Service;
+
+import java.util.NoSuchElementException;
 
 @Service
 public class MarkIncompleteUseCaseHandler implements MarkIncompleteUseCase {
+
     private final SubmissionRepository repository;
 
     public MarkIncompleteUseCaseHandler(SubmissionRepository repository) {
@@ -14,21 +22,16 @@ public class MarkIncompleteUseCaseHandler implements MarkIncompleteUseCase {
 
     @Override
     public void execute(MarkIncompleteCommand command) {
-        SubmissionId submissionId = SubmissionId.of(command.submissionId());
-        UserId userId = UserId.of(command.userId());
+        var submissionId = SubmissionId.of(command.submissionId());
+        var userId = UserId.of(command.userId());
 
-        // Buscar la submission en el repositorio histórico (por ID)
-        Optional<Submission> existing = repository.findById(submissionId);
-        if (existing.isEmpty()) {
-            throw new NoSuchElementException("Submission not found with id: " + submissionId);
-        }
+        var found = repository.findById(submissionId)
+                .filter(submission -> submission.getUserId().equals(userId))
+                .orElseThrow(() -> new NoSuchElementException(
+                        "Submission not found with id: " + submissionId + " or does not belong to user"
+                ));
 
-        Submission found = existing.get();
-        if (!found.getUserId().equals(userId)) {
-            throw new IllegalStateException("Submission does not belong to the given user");
-        }
-
-        Submission incomplete = Submission.toInProgress(found);
+        var incomplete = Submission.toInProgress(found);
         SubmissionBuffer.save(userId, incomplete);
         repository.save(incomplete);
     }
