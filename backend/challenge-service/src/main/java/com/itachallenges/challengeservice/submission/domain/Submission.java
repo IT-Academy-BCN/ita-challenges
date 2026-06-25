@@ -45,4 +45,42 @@ public class Submission {
         return submission;
     }
 
+    public static Submission restore(SubmissionId id, ChallengeId challengeId, UserId userId,
+                                     SubmissionStatus status, String code,
+                                     Instant createdAt, Instant updatedAt) {
+        Submission submission = new Submission();
+        submission.id = id;
+        submission.challengeId = challengeId;
+        submission.userId = userId;
+        submission.status = status;
+        submission.code = code;
+        submission.createdAt = createdAt;
+        submission.updatedAt = updatedAt;
+        return submission;
+    }
+
+    public static Submission toSubmitted(Submission draft) {
+        Submission submission = new Submission();
+        submission.id = draft.id;
+        submission.challengeId = draft.challengeId;
+        submission.userId = draft.userId;
+        submission.code = draft.code;
+        submission.status = SubmissionStatus.SUBMITTED;
+        submission.createdAt = draft.createdAt;
+        submission.updatedAt = Instant.now();
+        return submission;
+    }
+
+    public static Submission toInProgress(Submission existing) {
+        Submission submission = new Submission();
+        submission.id = existing.id;
+        submission.challengeId = existing.challengeId;
+        submission.userId = existing.userId;
+        submission.code = existing.code;
+        submission.status = SubmissionStatus.IN_PROGRESS;
+        submission.createdAt = existing.createdAt;
+        submission.updatedAt = Instant.now();
+        return submission;
+    }
+
 }
