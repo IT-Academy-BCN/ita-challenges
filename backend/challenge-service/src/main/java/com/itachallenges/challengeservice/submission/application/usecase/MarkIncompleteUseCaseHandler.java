@@ -6,13 +6,30 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class MarkIncompleteUseCaseHandler implements MarkIncompleteUseCase {
-    // TODO: inject SubmissionRepository and any other dependencies
+    private final SubmissionRepository repository;
+
+    public MarkIncompleteUseCaseHandler(SubmissionRepository repository) {
+        this.repository = repository;
+    }
 
     @Override
     public void execute(MarkIncompleteCommand command) {
-        // TODO: load submission
-        // TODO: call submission.markIncomplete()
-        // TODO: save submission
-        // TODO: publish domain events
+        SubmissionId submissionId = SubmissionId.of(command.submissionId());
+        UserId userId = UserId.of(command.userId());
+
+        // Buscar la submission en el repositorio histórico (por ID)
+        Optional<Submission> existing = repository.findById(submissionId);
+        if (existing.isEmpty()) {
+            throw new NoSuchElementException("Submission not found with id: " + submissionId);
+        }
+
+        Submission found = existing.get();
+        if (!found.getUserId().equals(userId)) {
+            throw new IllegalStateException("Submission does not belong to the given user");
+        }
+
+        Submission incomplete = Submission.toInProgress(found);
+        SubmissionBuffer.save(userId, incomplete);
+        repository.save(incomplete);
     }
 }

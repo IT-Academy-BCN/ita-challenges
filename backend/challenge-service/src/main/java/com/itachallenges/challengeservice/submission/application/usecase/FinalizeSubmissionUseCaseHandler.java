@@ -1,19 +1,43 @@
 package com.itachallenges.challengeservice.submission.application.usecase;
 
+import com.itachallenges.challengeservice.catalog.domain.valueobject.ChallengeId;
+import com.itachallenges.challengeservice.shared.domain.valueobject.UserId;
 import com.itachallenges.challengeservice.submission.application.dto.FinalizeSubmissionCommand;
+import com.itachallenges.challengeservice.submission.domain.Submission;
 import com.itachallenges.challengeservice.submission.domain.port.in.FinalizeSubmissionUseCase;
+import com.itachallenges.challengeservice.submission.domain.port.out.SubmissionRepository;
+import com.itachallenges.challengeservice.submission.infrastructure.adapter.out.buffer.SubmissionBuffer;
 import org.springframework.stereotype.Service;
+
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
 public class FinalizeSubmissionUseCaseHandler implements FinalizeSubmissionUseCase {
-    // TODO: inject SubmissionRepository and any other dependencies
+
+    private final SubmissionRepository repository;
+
+    public FinalizeSubmissionUseCaseHandler(SubmissionRepository repository) {
+        this.repository = repository;
+    }
 
     @Override
     public void execute(FinalizeSubmissionCommand command) {
-        // TODO: check no FINAL submission exists for this user/challenge
-        // TODO: load or create submission
-        // TODO: call submission.finalize()
-        // TODO: save submission
-        // TODO: publish domain events
-    }
+        UserId userId = UserId.of(command.userId());
+        ChallengeId challengeId = ChallengeId.of(command.challengeId());
+        Optional<Submission> activeDraft = SubmissionBuffer.findLastByUserId(userId);
+        if (activeDraft.isEmpty()) {
+            throw new NoSuchElementException("No active draft found for user: " + userId);
+        }
+
+        Submission draft = activeDraft.get();
+        if (!draft.getChallengeId().equals(challengeId)) {
+            throw new IllegalStateException(
+                    "Active draft belongs to a different challenge than the one being finalized");
+        }
+        if (command.code() != null) {
+            draft.updateCode(command.code());
+        }
+        repository.save(finalized);
+        SubmissionBuffer.removeByUserId(userId);
 }
