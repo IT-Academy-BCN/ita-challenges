@@ -1,0 +1,4 @@
+<button data-testid="filter-chip-button" class="filter-chip" [class.filter-chip--active]="active()" [attr.aria-pressed]="active()" (click)="clicked.emit()" type="button"
+>
+  {{ label() }}
+</button>
