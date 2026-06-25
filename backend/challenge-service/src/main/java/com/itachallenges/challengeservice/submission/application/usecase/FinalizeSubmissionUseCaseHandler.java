@@ -25,6 +25,7 @@ public class FinalizeSubmissionUseCaseHandler implements FinalizeSubmissionUseCa
     public void execute(FinalizeSubmissionCommand command) {
         UserId userId = UserId.of(command.userId());
         ChallengeId challengeId = ChallengeId.of(command.challengeId());
+
         Optional<Submission> activeDraft = SubmissionBuffer.findLastByUserId(userId);
         if (activeDraft.isEmpty()) {
             throw new NoSuchElementException("No active draft found for user: " + userId);
@@ -35,9 +36,15 @@ public class FinalizeSubmissionUseCaseHandler implements FinalizeSubmissionUseCa
             throw new IllegalStateException(
                     "Active draft belongs to a different challenge than the one being finalized");
         }
+
         if (command.code() != null) {
             draft.updateCode(command.code());
         }
+
+        Submission finalized = Submission.toSubmitted(draft);
+
         repository.save(finalized);
+
         SubmissionBuffer.removeByUserId(userId);
+    }
 }
