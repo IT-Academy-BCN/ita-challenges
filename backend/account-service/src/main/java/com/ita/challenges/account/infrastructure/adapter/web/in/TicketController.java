@@ -52,6 +52,7 @@ public class TicketController {
                 .body(new TicketResponse(
                         savedTicket.getId(),
                         savedTicket.getUserId(),
+                        savedTicket.getMentorAssignedId(),
                         savedTicket.getTitle(),
                         savedTicket.getDescription()
                 ));
@@ -70,6 +71,7 @@ public class TicketController {
                 .map(ticket -> new TicketPatchResponse(
                         ticket.getId(),
                         ticket.getUserId(),
+                        ticket.getMentorAssignedId(),
                         ticket.getTitle(),
                         ticket.getDescription(),
                         ticket.getStatus(),
@@ -99,6 +101,7 @@ public class TicketController {
                     Ticket updatedTicket = Ticket.restore(
                             id,
                             existingTicket.getUserId(),
+                            existingTicket.getMentorAssignedId(),
                             ticketRequest.title(),
                             ticketRequest.description()
                     );
@@ -106,6 +109,7 @@ public class TicketController {
                     return ResponseEntity.ok(new TicketResponse(
                             savedTicket.getId(),
                             savedTicket.getUserId(),
+                            savedTicket.getMentorAssignedId(),
                             savedTicket.getTitle(),
                             savedTicket.getDescription()
                     ));
@@ -126,6 +130,7 @@ public class TicketController {
                     return ResponseEntity.ok(new TicketResponse(
                             ticket.getId(),
                             ticket.getUserId(),
+                            ticket.getMentorAssignedId(),
                             ticket.getTitle(),
                             ticket.getDescription()
                     ));
@@ -163,6 +168,7 @@ public class TicketController {
                     return ResponseEntity.ok(new TicketPatchResponse(
                             savedTicket.getId(),
                             savedTicket.getUserId(),
+                            savedTicket.getMentorAssignedId(),
                             savedTicket.getTitle(),
                             savedTicket.getDescription(),
                             savedTicket.getStatus(),
