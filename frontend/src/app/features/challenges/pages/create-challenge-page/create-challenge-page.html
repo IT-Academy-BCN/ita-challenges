@@ -1,50 +1,76 @@
 <form [formGroup]="challengeForm" (ngSubmit)="onSubmit()">
-  <div class="form-section">
-    <h2 class="form-section-title">
-      <span class="form-section-badge">1</span>
-      Informació general
-    </h2>
+  <div class="form-sections">
+    <div class="form-section">
+      <h2 class="form-section-title">
+        <span class="form-section-badge">1</span>
+        Informació general
+      </h2>
 
-  <div class="form-field">
-    <label class="form-field-label" for="title">Títol</label>
-    <input class="form-field-input" type="text" id="title" formControlName="title" />
-  </div>
+      <div class="form-field">
+        <label class="form-field-label" for="title">Títol</label>
+        <input class="form-field-input" type="text" id="title" formControlName="title" />
+      </div>
 
-    <div class="form-field">
-      <span class="form-field-label">Llenguatge</span>
-      <div class="language-btn-group">
-        @for (language of languages; track language) {
-          <app-language-select-button
-            [language]="language"
-            [isActive]="selectedLanguage() === language"
-            (clicked)="onLanguageSelect($event)"
-          />
-        }
+      <div class="form-field">
+        <span class="form-field-label">Llenguatge</span>
+        <div class="language-btn-group">
+          @for (language of languages; track language) {
+            <app-language-select-button
+              [language]="language"
+              [isActive]="selectedLanguage() === language"
+              (clicked)="onLanguageSelect($event)"
+            />
+          }
+        </div>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <h2 class="form-section-title">
+        <span class="form-section-badge">2</span>
+        Contingut del repte
+      </h2>
+
+      <div class="form-field">
+        <label class="form-field-label" for="description">Enunciat</label>
+        <textarea
+          class="form-field-textarea"
+          id="description"
+          formControlName="description"
+          rows="8"
+        ></textarea>
+      </div>
+
+      <div class="form-field">
+        <label class="form-field-label" for="solution">Solució oficial</label>
+        <textarea
+          class="form-field-textarea form-field-textarea-code"
+          id="solution"
+          formControlName="solution"
+          rows="12"
+        ></textarea>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <h2 class="form-section-title">
+        <span class="form-section-badge">3</span>
+        Informació adicional
+      </h2>
+
+      <div class="form-field">
+        <span class="form-field-label">Dificultat</span>
+        <div class="difficulty-group">
+          @for (difficulty of difficulties; track difficulty) {
+            <label class="difficulty-option">
+              <input type="radio" formControlName="difficulty" [value]="difficulty" />
+              <img [src]="difficultyIcons[difficulty]" [alt]="difficulty" />
+              {{ difficultyLabels[difficulty] }}
+            </label>
+          }
+        </div>
       </div>
     </div>
   </div>
-
-  <div>
-    <label for="description">Descripció</label>
-    <input type="text" id="description" formControlName="description" />
-  </div>
-
-  <div>
-    <label for="difficulty">Dificultat</label>
-    <select id="difficulty" formControlName="difficulty">
-      <option value="" disabled>Selecciona dificultat</option>
-      @for (difficulty of difficulties; track difficulty) {
-        <option [value]="difficulty">
-          {{ difficulty }}
-        </option>
-      }
-    </select>
-  </div>
-
-  <div>
-    <label for="solution">Solució oficial</label>
-    <textarea id="solution" formControlName="solution"></textarea>
-  </div>
-
   <button type="submit">Crear</button>
 </form>

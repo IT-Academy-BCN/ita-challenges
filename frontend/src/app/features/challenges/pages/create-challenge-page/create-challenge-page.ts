@@ -14,14 +14,32 @@ import { LanguageSelectButton } from '../../components/buttons/language-select-b
   styleUrl: './create-challenge-page.css',
 })
 export class CreateChallengePage {
-
-  readonly challengeService = inject(ChallengeService)
-  readonly router = inject(Router)
-  readonly fb = inject(FormBuilder)
+  readonly challengeService = inject(ChallengeService);
+  readonly router = inject(Router);
+  readonly fb = inject(FormBuilder);
 
   readonly selectedLanguage = signal<ChallengeLanguage | null>(null);
-  readonly languages: ChallengeLanguage[] = ['JAVA', 'PHP', 'JAVASCRIPT', 'TYPESCRIPT', 'PYTHON', 'SQL'];
+  readonly languages: ChallengeLanguage[] = [
+    'JAVA',
+    'PHP',
+    'JAVASCRIPT',
+    'TYPESCRIPT',
+    'PYTHON',
+    'SQL',
+  ];
   readonly difficulties: ChallengeDifficulty[] = ['EASY', 'MEDIUM', 'HARD'];
+
+  readonly difficultyLabels: Record<ChallengeDifficulty, string> = {
+    EASY: 'Fàcil',
+    MEDIUM: 'Mitjà',
+    HARD: 'Difícil',
+  };
+
+  readonly difficultyIcons: Record<ChallengeDifficulty, string> = {
+    EASY: 'assets/Easy.svg',
+    MEDIUM: 'assets/Medium.svg',
+    HARD: 'assets/Hard.svg',
+  };
 
   challengeForm = this.fb.group({
     title: [''],
@@ -29,17 +47,17 @@ export class CreateChallengePage {
     language: [''],
     difficulty: [''],
     solution: [''],
-  })
+  });
 
   onSubmit() {
     if (this.challengeForm.valid) {
-      const newChallenge = this.challengeForm.value as IChallengeRequest
+      const newChallenge = this.challengeForm.value as IChallengeRequest;
 
       this.challengeService.create(newChallenge).subscribe({
-      next: () => {
-        this.goChallenges();
-      }
-    });
+        next: () => {
+          this.goChallenges();
+        },
+      });
     }
   }
 

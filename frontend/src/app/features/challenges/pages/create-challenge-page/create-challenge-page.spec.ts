@@ -14,30 +14,29 @@ describe('CreateChallengePage', () => {
   let mockRouter: Partial<Router>;
 
   beforeEach(async () => {
-
     mockChallengeService = {
-      create: () => of({ 
-        id: '1', 
-        title: '', 
-        description: '', 
-        language: 'JAVA',
-        difficulty: 'EASY',
-        solution: ''
-      })
+      create: () =>
+        of({
+          id: '1',
+          title: '',
+          description: '',
+          language: 'JAVA',
+          difficulty: 'EASY',
+          solution: '',
+        }),
     };
 
     mockRouter = {
-      navigate: vi.fn() as any
+      navigate: vi.fn() as any,
     };
 
     await TestBed.configureTestingModule({
       imports: [CreateChallengePage],
       providers: [
         { provide: ChallengeService, useValue: mockChallengeService },
-        { provide: Router, useValue: mockRouter }
-      ]
-    })
-    .compileComponents();
+        { provide: Router, useValue: mockRouter },
+      ],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(CreateChallengePage);
     component = fixture.componentInstance;
@@ -72,12 +71,12 @@ describe('CreateChallengePage', () => {
   });
 
   it('should call challengeService.create when call onSubmit with correct data', () => {
-    const testData = { 
-      title: 'Nou Repte', 
-      description: 'Descripció', 
+    const testData = {
+      title: 'Nou Repte',
+      description: 'Descripció',
       language: 'JAVA' as ChallengeLanguage,
       difficulty: 'EASY' as ChallengeDifficulty,
-      solution: 'Solució'
+      solution: 'Solució',
     };
     component.challengeForm.setValue(testData);
 
@@ -106,5 +105,15 @@ describe('CreateChallengePage', () => {
     component.onLanguageSelect('JAVA');
     expect(component.selectedLanguage()).toBe('JAVA');
     expect(component.challengeForm.get('language')?.value).toBe('JAVA');
+  });
+
+  it('should have 3 difficulty options', () => {
+    expect(component.difficulties.length).toBe(3);
+    expect(component.difficulties).toEqual(['EASY', 'MEDIUM', 'HARD']);
+  });
+
+  it('should update difficulty form control when difficulty is selected', () => {
+    component.challengeForm.get('difficulty')?.setValue('MEDIUM');
+    expect(component.challengeForm.get('difficulty')?.value).toBe('MEDIUM');
   });
 });
