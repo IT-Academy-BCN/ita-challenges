@@ -1,8 +1,9 @@
-import { Component, input } from '@angular/core';
+import { Component, inject, input, linkedSignal } from '@angular/core';
 import { ITicket } from '../../models/iticket.interface';
 import { RouterLink } from '@angular/router';
 import { TicketButton } from '../ticket-button/ticket-button';
 import { DatePipe } from '@angular/common';
+import { TicketService } from '../../ticket.service';
 
 @Component({
   selector: 'app-ticket-card',
@@ -11,5 +12,16 @@ import { DatePipe } from '@angular/common';
   styleUrl: './ticket-card.css',
 })
 export class TicketCard {
+  private readonly ticketService = inject(TicketService);
   ticket = input.required<ITicket>();
+
+  selectedMentorId = linkedSignal<string | null>(() => this.ticket().mentorAssignedId ?? null);
+
+  onSelectChange(event: Event) {
+    const value = (event.target as HTMLSelectElement).value || null;
+    this.selectedMentorId.set(value);
+    this.ticketService.updateAssignedMentor(this.ticket().id, value ?? '').subscribe({
+      error: () => this.selectedMentorId.set(this.ticket().mentorAssignedId ?? null)
+    });
+  }
 }
