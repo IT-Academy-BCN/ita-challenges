@@ -89,8 +89,20 @@ describe('Header', () => {
     authServiceMock.user.set(null);
     fixture.detectChanges();
 
+    const usernameDiv = fixture.nativeElement.querySelector('.user__username');
+    expect(usernameDiv).toBeFalsy();
+  });
+
+  it('should show INVITAT and Log In button when user is not logged in', () => {
+    authServiceMock.user.set(null);
+    fixture.detectChanges();
+
     const h4 = fixture.nativeElement.querySelector('h4');
-    expect(h4).toBeFalsy();
+    const loginButton = fixture.nativeElement.querySelector('.button__login button');
+
+    expect(h4.textContent).toContain('INVITAT');
+    expect(loginButton).toBeTruthy();
+    expect(loginButton.textContent).toContain('Log In');
   });
 
   it('should show user avatar when user is logged in', () => {
