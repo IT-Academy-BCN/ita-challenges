@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { AppLayoutComponent } from './layout/components/app-layout.component';
 import { NotFoundPage } from './shared/pages/not-found-page';
+import {authGuard} from './core/guards/auth-guard';
 
 export const appRoutes: Routes = [
   {
@@ -39,6 +40,7 @@ export const appRoutes: Routes = [
       },
       {
         path: 'tickets',
+        canActivate: [authGuard],
         loadChildren: () =>
           import('./features/tickets/tickets.routes').then(m => m.TICKETS_ROUTES),
       },      {

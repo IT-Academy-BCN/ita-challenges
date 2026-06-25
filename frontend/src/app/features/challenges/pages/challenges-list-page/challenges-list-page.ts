@@ -66,8 +66,8 @@ export class ChallengesListPage implements OnInit {
     return diff ? this.difficultyLabels[diff] : '';
   }
 
-  loadChallenges(): void {
-    this.challengesService.loadAll().subscribe({
+  loadChallenges(language?: ChallengeLanguage | null): void {
+    this.challengesService.loadAll(language).subscribe({
       next: (result) => {
         this.challenges.set(result);
       }

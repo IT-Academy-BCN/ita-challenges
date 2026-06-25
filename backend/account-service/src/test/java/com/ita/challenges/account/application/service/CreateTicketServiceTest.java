@@ -27,7 +27,7 @@ class CreateTicketServiceTest {
         String title = "Fix login issue";
         String description = "The login button is not responding on mobile devices.";
 
-        Ticket mockSavedTicket = Ticket.restore("ticket-999", userId, title, description);
+        Ticket mockSavedTicket = Ticket.restore("ticket-999", userId, null, title, description);
 
         when(ticketRepository.save(any(Ticket.class))).thenReturn(mockSavedTicket);
 

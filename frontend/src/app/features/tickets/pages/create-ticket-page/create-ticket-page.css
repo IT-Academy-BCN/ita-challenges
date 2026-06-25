@@ -1,8 +1,8 @@
-.error-message {
-  color: #d32f2f;
-  background-color: #ffebee;
+.message {
+  display: flex;
+  width: fit-content;
   padding: 12px;
   border-radius: 4px;
-  margin-bottom: 16px;
+  margin: 16px 0;
   border: 1px solid #ef9a9a;
 }

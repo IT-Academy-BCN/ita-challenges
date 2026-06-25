@@ -18,3 +18,4 @@
 - Isaac Malagón - https://github.com/isaacmg-bit
 - Cristhian Chulca - https://github.com/cristhianchulca49
 - Alex Gesti - https://github.com/alexgesti
+- Eduard Cantos Font - https://github.com/ecantosf
