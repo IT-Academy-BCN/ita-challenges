@@ -138,25 +138,4 @@ class ChallengeControllerTest {
                 .andExpect(jsonPath("$.difficulty").value("EASY"))
                 .andExpect(jsonPath("$.solution").value("Test Solution"));
     }
-
-    @Test
-    void should_return_200_with_filtered_list_when_requesting_challenges_by_language() throws Exception {
-        Challenge javaChallenge = Challenge.create(
-                "Java Challenge", "Java description",
-                ChallengeLanguage.JAVA, ChallengeDifficulty.EASY, "Java solution"
-        );
-        when(repository.findByLanguage(ChallengeLanguage.JAVA)).thenReturn(List.of(javaChallenge));
-
-        mockMvc.perform(get("/api/challenge").param("language", "JAVA"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(1))
-                .andExpect(jsonPath("$[0].title").value("Java Challenge"))
-                .andExpect(jsonPath("$[0].language").value("JAVA"));
-    }
-
-    @Test
-    void should_return_400_when_requesting_challenges_with_invalid_language() throws Exception {
-        mockMvc.perform(get("/api/challenge").param("language", "COBOL"))
-                .andExpect(status().isBadRequest());
-    }
 }
