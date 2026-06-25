@@ -26,6 +26,7 @@ export class ChallengesListPage implements OnInit {
 
   challenges = signal<IChallenge[]>([]);
   isMentor = signal(false);
+  selectedLanguage = signal<ChallengeLanguage | null>(null);
 
   languageLabels: Record<ChallengeLanguage, string> = {
     JAVA: 'Java',
@@ -54,8 +55,8 @@ export class ChallengesListPage implements OnInit {
     return diff ? this.difficultyLabels[diff] : '';
   }
 
-  loadChallenges(): void {
-    this.challengesService.loadAll().subscribe({
+  loadChallenges(language?: ChallengeLanguage | null): void {
+    this.challengesService.loadAll(language).subscribe({
       next: (result) => {
         this.challenges.set(result);
       }
@@ -64,6 +65,12 @@ export class ChallengesListPage implements OnInit {
 
   onRoleChange(value: boolean): void {
     this.isMentor.set(value);
+  }
+
+  onLanguageChipClick(lang: ChallengeLanguage): void {
+    const next = this.selectedLanguage() === lang ? null : lang;
+    this.selectedLanguage.set(next);
+    this.loadChallenges(next);
   }
 
   handleDelete(id: string): void {
