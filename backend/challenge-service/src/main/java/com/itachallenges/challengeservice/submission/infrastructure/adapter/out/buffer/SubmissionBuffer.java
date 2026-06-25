@@ -26,10 +26,6 @@ public final class SubmissionBuffer {
         return Optional.ofNullable(BUFFER.get(userId));
     }
 
-    public static boolean existsByUserId(UserId userId) {
-        return BUFFER.containsKey(userId);
-    }
-
     public static void removeByUserId(UserId userId) {
         BUFFER.remove(userId);
     }
