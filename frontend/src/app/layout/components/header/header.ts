@@ -2,10 +2,11 @@ import { Component, computed, inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { LogoutButton } from '../../../shared/components/logout-button/logout-button';
 import { AuthService } from '../../../features/auth/data-access/auth-service';
+import {RoleTranslatorPipe} from '../../../shared/pipes/role-translator-pipe';
 
 @Component({
   selector: 'app-header',
-  imports: [LogoutButton],
+  imports: [LogoutButton, RoleTranslatorPipe],
   templateUrl: './header.html',
   styleUrl: './header.css',
 })

@@ -7,6 +7,7 @@ import { of } from 'rxjs';
 import { AuthService } from '../../../features/auth/data-access/auth-service';
 import { Role } from '../../../core/models/role.enum';
 import { Router } from '@angular/router';
+import {RoleTranslatorPipe} from '../../../shared/pipes/role-translator-pipe';
 
 const MOCK_USER: AuthUser = {
   username: 'mockUser',
@@ -40,7 +41,7 @@ describe('Header', () => {
       navigate: vi.fn(),
     };
     await TestBed.configureTestingModule({
-      imports: [Header],
+      imports: [Header, RoleTranslatorPipe],
       providers: [{ provide: AuthService, useValue: authServiceMock }],
     }).compileComponents();
 
@@ -111,9 +112,9 @@ describe('Header', () => {
   });
 
   it('should show user role when user has a role', () => {
-    authServiceMock.user.set({ ...MOCK_USER, role: Role.GUEST });
+    authServiceMock.user.set({ ...MOCK_USER, role: 'STUDENT' as any });
     fixture.detectChanges();
-    expect(fixture.nativeElement.querySelector('h4').textContent).toContain(Role.GUEST);
+    expect(fixture.nativeElement.querySelector('h4').textContent).toContain('ESTUDIANT');
   });
 
   it('should show CONVIDAT when user has no role', () => {
