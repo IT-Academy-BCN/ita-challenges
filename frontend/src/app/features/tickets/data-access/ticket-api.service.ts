@@ -34,4 +34,7 @@ export class TicketApiService {
   update(id: string, data: Partial<ITicket>): Observable<ITicket> {
     return this.http.patch<ITicket>(`${this.ticketsUrl}/${id}`, data);
   }
+  updateAssignedMentor(ticketId: string, mentorAssignedId: {mentorAssignedId: string}): Observable<ITicket> {
+    return this.http.patch<ITicket>(`${this.ticketsUrl}/${ticketId}/assign`, mentorAssignedId)
+  }
 }
