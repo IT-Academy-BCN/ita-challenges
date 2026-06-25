@@ -176,7 +176,7 @@ public class TicketController {
     }
 
     @PatchMapping("/{id}/assign")
-    public ResponseEntity<?> assignMentor(@PathVariable String id,
+    public ResponseEntity<TicketPatchResponse> assignMentor(@PathVariable String id,
                                           @RequestBody TicketAssignRequest assignRequest,
                                           @AuthenticationPrincipal OAuth2User user) {
 
@@ -186,27 +186,28 @@ public class TicketController {
 
         String login = user.getAttribute("login");
 
-        User appUser = userRepository.findByUsername(login)
+        userRepository.findByUsername(login)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.FORBIDDEN, "User not registered"));
 
-        if (assignRequest.mentorAssignedId() == null || assignRequest.mentorAssignedId().isBlank()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Mentor ID cannot be empty");
+        if (assignRequest.mentorAssignedId() != null && !assignRequest.mentorAssignedId().isBlank()) {
+            userRepository.findByUsername(assignRequest.mentorAssignedId())
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "The assigned mentor does not exist"));
         }
 
-        return ticketRepository.findById(id)
-                .map(existingTicket -> {
-                    Ticket updatedTicket = existingTicket.assignMentor(assignRequest.mentorAssignedId());
-                    Ticket savedTicket = ticketRepository.updateTicket(updatedTicket);
+        Ticket existingTicket = ticketRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Ticket not found"));
 
-                    return ResponseEntity.ok(new TicketPatchResponse(
-                            savedTicket.getId(),
-                            savedTicket.getUserId(),
-                            savedTicket.mentorAssignedId(),
-                            savedTicket.getTitle(),
-                            savedTicket.getDescription(),
-                            savedTicket.getStatus()));
-                })
-                .orElse(ResponseEntity.notFound().build());
+        Ticket updatedTicket = existingTicket.assignMentor(assignRequest.mentorAssignedId());
+        Ticket savedTicket = ticketRepository.updateTicket(updatedTicket);
+
+        return ResponseEntity.ok(new TicketPatchResponse(
+                savedTicket.getId(),
+                savedTicket.getUserId(),
+                savedTicket.getMentorAssignedId(),
+                savedTicket.getTitle(),
+                savedTicket.getDescription(),
+                savedTicket.getStatus(),
+                savedTicket.getComment()
+        ));
     }
-
 }
