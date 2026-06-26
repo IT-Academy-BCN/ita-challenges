@@ -1,6 +1,6 @@
 .tickets-header {
   display: grid;
-  grid-template-columns: repeat(3, 10rem) 12rem repeat(2, 15rem) 14rem;
+  grid-template-columns: repeat(3, 10rem) 12rem repeat(2, 15rem) repeat(2,14rem);
   gap: 0.8rem;
   align-items: center;
   padding: 1.4rem 2rem;
