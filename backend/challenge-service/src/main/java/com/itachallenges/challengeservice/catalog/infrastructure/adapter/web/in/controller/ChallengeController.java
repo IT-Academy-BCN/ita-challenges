@@ -43,9 +43,8 @@ public class ChallengeController {
     public ResponseEntity<List<ChallengeResponse>> findAll(
             @RequestParam(required = false) ChallengeLanguage language
     ) {
-        List<Challenge> challenges = (language == null)
-                ? repository.findAll()
-                : repository.findByLanguage(language);
+        // Canvi aplicat: substitució del ternari per findByCriteria
+        List<Challenge> challenges = repository.findByCriteria(language, null);
 
         List<ChallengeResponse> response = challenges.stream()
                 .map(c -> new ChallengeResponse(

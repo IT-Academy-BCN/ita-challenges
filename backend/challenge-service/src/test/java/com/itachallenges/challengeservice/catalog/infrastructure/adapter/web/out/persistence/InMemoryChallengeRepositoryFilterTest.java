@@ -28,7 +28,7 @@ class InMemoryChallengeRepositoryFilterTest {
         repository.save(java2);
         repository.save(python);
 
-        List<Challenge> result = repository.findByLanguage(ChallengeLanguage.JAVA);
+        List<Challenge> result = repository.findByCriteria(ChallengeLanguage.JAVA, null);
 
         assertThat(result).hasSize(2);
         assertThat(result).extracting(Challenge::getLanguage).containsOnly(ChallengeLanguage.JAVA);
@@ -38,7 +38,7 @@ class InMemoryChallengeRepositoryFilterTest {
     void should_return_empty_list_when_no_challenges_match_language() {
         repository.save(Challenge.create("Java only", "Desc", ChallengeLanguage.JAVA, ChallengeDifficulty.EASY, "Sol"));
 
-        List<Challenge> result = repository.findByLanguage(ChallengeLanguage.PYTHON);
+        List<Challenge> result = repository.findByCriteria(ChallengeLanguage.PYTHON, null);
 
         assertThat(result).isEmpty();
     }

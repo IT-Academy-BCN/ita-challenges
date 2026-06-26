@@ -34,7 +34,7 @@ class ChallengeControllerFilterTest {
                 "Java Challenge", "Java description",
                 ChallengeLanguage.JAVA, ChallengeDifficulty.EASY, "Java solution"
         );
-        when(repository.findByLanguage(ChallengeLanguage.JAVA)).thenReturn(List.of(javaChallenge));
+        when(repository.findByCriteria(ChallengeLanguage.JAVA, null)).thenReturn(List.of(javaChallenge));
 
         mockMvc.perform(get("/api/challenge").param("language", "JAVA"))
                 .andExpect(status().isOk())
@@ -51,7 +51,7 @@ class ChallengeControllerFilterTest {
 
     @Test
     void should_return_200_with_empty_list_when_filter_matches_no_challenges() throws Exception {
-        when(repository.findByLanguage(ChallengeLanguage.SQL)).thenReturn(List.of());
+        when(repository.findByCriteria(ChallengeLanguage.SQL, null)).thenReturn(List.of());
 
         mockMvc.perform(get("/api/challenge").param("language", "SQL"))
                 .andExpect(status().isOk())
