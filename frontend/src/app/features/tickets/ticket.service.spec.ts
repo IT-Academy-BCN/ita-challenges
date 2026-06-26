@@ -3,14 +3,21 @@ import { TicketService } from './ticket.service';
 import { TICKETS_MOCK } from './models/tickets.mock';
 import { firstValueFrom, of } from 'rxjs';
 import { TicketApiService } from './data-access/ticket-api.service';
+import { AssignableUser } from './models/assignable-user.interface';
 
 describe('Ticket', () => {
   let service: TicketService;
   let mockTicketApiService: any;
 
+  const mockAssignableUsers: AssignableUser[] = [
+    { username: 'mentor1', role: 'mentor' },
+    { username: 'mentor2', role: 'mentor' },
+  ];
+
   beforeEach(() => {
     mockTicketApiService = {
-      loadAll: vi.fn().mockReturnValue(of(TICKETS_MOCK))
+      loadAll: vi.fn().mockReturnValue(of(TICKETS_MOCK)),
+      getTicketAssignableUsers: vi.fn().mockReturnValue(of(mockAssignableUsers)),
     };
 
     TestBed.configureTestingModule({
@@ -33,5 +40,11 @@ describe('Ticket', () => {
   it('should return undefined when ticket not found', async () => {
     const ticket = await firstValueFrom(service.getById('999'));
     expect(ticket).toBeUndefined();
+  });
+
+  it('should delegate getTicketAssignableUsers to ticketApiService', async () => {
+    const users = await firstValueFrom(service.getTicketAssignableUsers());
+    expect(mockTicketApiService.getTicketAssignableUsers).toHaveBeenCalled();
+    expect(users).toEqual(mockAssignableUsers);
   });
 });

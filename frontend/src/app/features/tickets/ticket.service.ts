@@ -2,6 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
 import { TicketApiService } from './data-access/ticket-api.service';
 import { ITicket } from './models/iticket.interface';
+import { AssignableUser } from './models/assignable-user.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -15,5 +16,7 @@ export class TicketService {
         map((tickets) => tickets.find(((ticket) => ticket.id === id)))
       )
     }
-
+  getTicketAssignableUsers(): Observable<AssignableUser[]> {
+    return this.ticketApiService.getTicketAssignableUsers();
+  }
 }
