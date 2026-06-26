@@ -3,6 +3,7 @@ import { of } from 'rxjs';
 
 import { TicketListPage } from './ticket-list-page';
 import { TicketApiService } from '../../data-access/ticket-api.service';
+import { TicketService } from '../../ticket.service';
 import { TICKETS_MOCK } from '../../models/tickets.mock';
 import { provideRouter, RouterLink } from '@angular/router';
 import { By } from '@angular/platform-browser';
@@ -11,15 +12,18 @@ describe('TicketListPage', () => {
   let component: TicketListPage;
   let fixture: ComponentFixture<TicketListPage>;
   let mockTicketApiService: Partial<TicketApiService>;
+  let mockTicketService: { getTicketAssignableUsers: ReturnType<typeof vi.fn> };
 
   beforeEach(async () => {
     TestBed.resetTestingModule();
     mockTicketApiService = { loadAll: vi.fn().mockReturnValue(of(TICKETS_MOCK)) };
+    mockTicketService = { getTicketAssignableUsers: vi.fn().mockReturnValue(of([])) };
 
     await TestBed.configureTestingModule({
       imports: [TicketListPage],
       providers: [
         { provide: TicketApiService, useValue: mockTicketApiService },
+        { provide: TicketService, useValue: mockTicketService },
         provideRouter([])
       ]
     }).compileComponents();
@@ -52,7 +56,15 @@ describe('TicketListPage', () => {
   });
 
   it('should have a routerLink button for each ticket', () => {
-  const links = fixture.debugElement.queryAll(By.directive(RouterLink));
-  expect(links.length).toBe(TICKETS_MOCK.length);
+    const links = fixture.debugElement.queryAll(By.directive(RouterLink));
+    expect(links.length).toBe(TICKETS_MOCK.length);
+  });
+
+  it('should call getTicketAssignableUsers on init', () => {
+    expect(mockTicketService.getTicketAssignableUsers).toHaveBeenCalled();
+  });
+
+  it('should populate assignableUsers signal from TicketService', () => {
+    expect(component.assignableUsers()).toEqual([]);
   });
 });
