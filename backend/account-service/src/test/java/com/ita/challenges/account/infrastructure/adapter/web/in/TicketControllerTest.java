@@ -51,7 +51,7 @@ class TicketControllerTest {
     @Test
     void should_create_ticket_and_return_201_created() throws Exception {
         TicketRequest request = new TicketRequest("Test Title", "Test description");
-        Ticket mockTicket = Ticket.restore("ticket-123", "tester", request.title(), request.description());
+        Ticket mockTicket = Ticket.restore("ticket-123", "tester", null, request.title(), request.description());
 
         when(ticketRepository.save(any(Ticket.class))).thenReturn(mockTicket);
 
@@ -63,6 +63,7 @@ class TicketControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").value("ticket-123"))
                 .andExpect(jsonPath("$.userId").value("tester"))
+                .andExpect(jsonPath("$.mentorAssignedId").doesNotExist())
                 .andExpect(jsonPath("$.title").value("Test Title"))
                 .andExpect(jsonPath("$.description").value("Test description"));
         verify(ticketRepository).save(any(Ticket.class));
@@ -100,7 +101,7 @@ class TicketControllerTest {
         String ticketId = "ticket-123";
         String currentUserId = "user-1";
 
-        Ticket existingTicket = Ticket.restore(ticketId, currentUserId, "Old Title", "Old Desc");
+        Ticket existingTicket = Ticket.restore(ticketId, currentUserId, null, "Old Title", "Old Desc");
         TicketRequest updateRequest = new TicketRequest("New Title", "New Desc");
 
         when(ticketRepository.findById(ticketId)).thenReturn(Optional.of(existingTicket));
@@ -113,6 +114,7 @@ class TicketControllerTest {
                         .content(objectMapper.writeValueAsString(updateRequest)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(ticketId))
+                .andExpect(jsonPath("$.mentorAssignedId").doesNotExist())
                 .andExpect(jsonPath("$.title").value("New Title"))
                 .andExpect(jsonPath("$.userId").value(currentUserId));
     }
@@ -138,7 +140,7 @@ class TicketControllerTest {
         String ownerId = "user-1";
         String hackerId = "hacker-99";
 
-        Ticket existingTicket = Ticket.restore(ticketId, ownerId, "Title", "Desc");
+        Ticket existingTicket = Ticket.restore(ticketId, ownerId, null, "Title", "Desc");
         TicketRequest updateRequest = new TicketRequest("New Title", "New Desc");
 
         when(ticketRepository.findById(ticketId)).thenReturn(Optional.of(existingTicket));
@@ -157,7 +159,7 @@ class TicketControllerTest {
         String ticketId = "ticket-123";
         String ownerId = "user-11";
 
-        Ticket existingTicket = Ticket.restore(ticketId, ownerId, "Title for test", "Description for tests");
+        Ticket existingTicket = Ticket.restore(ticketId, ownerId, null,"Title for test", "Description for tests");
 
         when(ticketRepository.findById(ticketId)).thenReturn(Optional.of(existingTicket));
 
@@ -174,7 +176,7 @@ class TicketControllerTest {
         String ticketId = "ticket-123";
         String currentUserId = "user-1";
 
-        Ticket existingTicket = Ticket.restore(ticketId, currentUserId, "Old Title", "Old Desc");
+        Ticket existingTicket = Ticket.restore(ticketId, currentUserId, null, "Old Title", "Old Desc");
         TicketPatchRequest patchRequest = new TicketPatchRequest(TicketStatus.IN_PROGRESS, "Working on it");
 
         User mockUser = new User(currentUserId, Role.MENTOR);
@@ -192,6 +194,7 @@ class TicketControllerTest {
                         .content(objectMapper.writeValueAsString(patchRequest)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(ticketId))
+                .andExpect(jsonPath("$.mentorAssignedId").doesNotExist())
                 .andExpect(jsonPath("$.title").value("Old Title"))
                 .andExpect(jsonPath("$.description").value("Old Desc"))
                 .andExpect(jsonPath("$.ticketStatus").value("IN_PROGRESS"))
@@ -202,7 +205,7 @@ class TicketControllerTest {
     @Test
     void should_return_200_with_ticket_list_when_user_is_authenticated() throws Exception {
         String userId = "user-42";
-        Ticket ticket = Ticket.restore("ticket-999", userId, "Payment error", "Card declined");
+        Ticket ticket = Ticket.restore("ticket-999", userId, null,  "Payment error", "Card declined");
 
         when(ticketRepository.findAllByUserId(userId)).thenReturn(List.of(ticket));
 
@@ -211,6 +214,7 @@ class TicketControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id").value("ticket-999"))
                 .andExpect(jsonPath("$[0].userId").value(userId))
+                .andExpect(jsonPath("$[0].mentorAssignedId").doesNotExist())
                 .andExpect(jsonPath("$[0].title").value("Payment error"))
                 .andExpect(jsonPath("$[0].description").value("Card declined"));
     }
