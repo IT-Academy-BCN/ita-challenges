@@ -7,6 +7,7 @@ import { ChallengesListPage } from './challenges-list-page';
 import { ChallengeService } from '../../services/challenge.service';
 import { CreateButtonComponent } from '../../components/buttons/create-button/create-button';
 import { RoleSelectorComponent } from '../../components/role-selector/role-selector';
+import { DropdownComponent } from '../../components/dropdown-filters/dropdown-filters';
 import { CHALLENGES_MOCK } from '../../models/challenges.mock';
 
 describe('ChallengesListPage', () => {
@@ -22,12 +23,8 @@ describe('ChallengesListPage', () => {
 
     await TestBed.configureTestingModule({
       imports: [ChallengesListPage],
-      providers: [
-        provideRouter([]),
-        { provide: ChallengeService, useValue: mockChallengeService }
-      ],
-    })
-    .compileComponents();
+      providers: [provideRouter([]), { provide: ChallengeService, useValue: mockChallengeService }],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(ChallengesListPage);
     component = fixture.componentInstance;
@@ -104,7 +101,7 @@ describe('ChallengesListPage', () => {
 
     expect(mockChallengeService.delete).toHaveBeenCalledWith(CHALLENGES_MOCK[0].id);
     expect(component.challenges().length).toBe(initialLength - 1);
-    expect(component.challenges().some(c => c.id === CHALLENGES_MOCK[0].id)).toBe(false);
+    expect(component.challenges().some((c) => c.id === CHALLENGES_MOCK[0].id)).toBe(false);
   });
 
   it('should set selectedLanguage when a language chip is clicked', () => {
@@ -125,5 +122,10 @@ describe('ChallengesListPage', () => {
     component.onLanguageChipClick('PHP');
     expect(component.selectedLanguage()).toBe('PHP');
     expect(mockChallengeService.loadAll).toHaveBeenCalledWith('PHP');
+  });
+
+  it('should render filter dropdown component', () => {
+    const dropdown = fixture.debugElement.query(By.directive(DropdownComponent));
+    expect(dropdown).toBeTruthy();
   });
 });
