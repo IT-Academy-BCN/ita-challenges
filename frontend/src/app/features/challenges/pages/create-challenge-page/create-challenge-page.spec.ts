@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Router } from '@angular/router';
+import { Router, provideRouter } from '@angular/router';
 import { of } from 'rxjs';
 
 import { CreateChallengePage } from './create-challenge-page';
@@ -33,6 +33,7 @@ describe('CreateChallengePage', () => {
     await TestBed.configureTestingModule({
       imports: [CreateChallengePage],
       providers: [
+        provideRouter([]),
         { provide: ChallengeService, useValue: mockChallengeService },
         { provide: Router, useValue: mockRouter },
       ],
@@ -115,5 +116,11 @@ describe('CreateChallengePage', () => {
   it('should update difficulty form control when difficulty is selected', () => {
     component.challengeForm.get('difficulty')?.setValue('MEDIUM');
     expect(component.challengeForm.get('difficulty')?.value).toBe('MEDIUM');
+  });
+
+  it('should have a back link pointing to /challenges', () => {
+    const backButton = fixture.nativeElement.querySelector('.btn-back');
+    expect(backButton).toBeTruthy();
+    expect(backButton.getAttribute('routerLink')).toBe('/challenges');
   });
 });
