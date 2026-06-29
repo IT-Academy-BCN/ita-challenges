@@ -70,6 +70,7 @@ export class ChallengesListPage implements OnInit {
   onLanguageChipClick(lang: ChallengeLanguage): void {
     const next = this.selectedLanguage() === lang ? null : lang;
     this.selectedLanguage.set(next);
+    
     this.loadChallenges(next);
   }
 
