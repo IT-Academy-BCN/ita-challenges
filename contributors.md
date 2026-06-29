@@ -19,3 +19,4 @@
 - Cristhian Chulca - https://github.com/cristhianchulca49
 - Alex Gesti - https://github.com/alexgesti
 - Eduard Cantos Font - https://github.com/ecantosf
+- Adrià Clavero Monteagudo - https://github.com/adriaclavero2
