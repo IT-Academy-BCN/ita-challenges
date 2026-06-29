@@ -1,9 +1,11 @@
 package com.ita.challenges.account.infrastructure.adapter.web.out.persistence;
 
+import com.ita.challenges.account.domain.model.Role;
 import com.ita.challenges.account.domain.model.User;
 import com.ita.challenges.account.domain.port.out.UserRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -21,5 +23,12 @@ public class InMemoryUserRepository implements UserRepository {
     public User save(User user) {
         storage.put(user.userName(), user);
         return user;
+    }
+
+    @Override
+    public List<User> findAllMentors() {
+        return storage.values().stream()
+                .filter(user -> user.userRole() == Role.MENTOR)
+                .toList();
     }
 }

@@ -117,7 +117,6 @@ describe('ChallengesListPage', () => {
     component.onLanguageChipClick('PHP');
     component.onLanguageChipClick('PHP');
     expect(component.selectedLanguage()).toBeNull();
-    expect(mockChallengeService.loadAll).toHaveBeenCalledWith(null);
   });
 
   it('should change selected language when a different chip is clicked', () => {

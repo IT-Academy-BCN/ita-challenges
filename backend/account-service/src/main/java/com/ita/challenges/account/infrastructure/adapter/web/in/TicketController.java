@@ -5,10 +5,7 @@ import com.ita.challenges.account.domain.model.Ticket;
 import com.ita.challenges.account.domain.model.User;
 import com.ita.challenges.account.domain.port.out.TicketRepository;
 import com.ita.challenges.account.domain.port.out.UserRepository;
-import com.ita.challenges.account.infrastructure.adapter.web.in.dto.TicketPatchRequest;
-import com.ita.challenges.account.infrastructure.adapter.web.in.dto.TicketPatchResponse;
-import com.ita.challenges.account.infrastructure.adapter.web.in.dto.TicketRequest;
-import com.ita.challenges.account.infrastructure.adapter.web.in.dto.TicketResponse;
+import com.ita.challenges.account.infrastructure.adapter.web.in.dto.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -52,6 +49,7 @@ public class TicketController {
                 .body(new TicketResponse(
                         savedTicket.getId(),
                         savedTicket.getUserId(),
+                        savedTicket.getMentorAssignedId(),
                         savedTicket.getTitle(),
                         savedTicket.getDescription()
                 ));
@@ -70,6 +68,7 @@ public class TicketController {
                 .map(ticket -> new TicketPatchResponse(
                         ticket.getId(),
                         ticket.getUserId(),
+                        ticket.getMentorAssignedId(),
                         ticket.getTitle(),
                         ticket.getDescription(),
                         ticket.getStatus(),
@@ -99,6 +98,7 @@ public class TicketController {
                     Ticket updatedTicket = Ticket.restore(
                             id,
                             existingTicket.getUserId(),
+                            existingTicket.getMentorAssignedId(),
                             ticketRequest.title(),
                             ticketRequest.description()
                     );
@@ -106,6 +106,7 @@ public class TicketController {
                     return ResponseEntity.ok(new TicketResponse(
                             savedTicket.getId(),
                             savedTicket.getUserId(),
+                            savedTicket.getMentorAssignedId(),
                             savedTicket.getTitle(),
                             savedTicket.getDescription()
                     ));
@@ -126,6 +127,7 @@ public class TicketController {
                     return ResponseEntity.ok(new TicketResponse(
                             ticket.getId(),
                             ticket.getUserId(),
+                            ticket.getMentorAssignedId(),
                             ticket.getTitle(),
                             ticket.getDescription()
                     ));
@@ -163,6 +165,7 @@ public class TicketController {
                     return ResponseEntity.ok(new TicketPatchResponse(
                             savedTicket.getId(),
                             savedTicket.getUserId(),
+                            savedTicket.getMentorAssignedId(),
                             savedTicket.getTitle(),
                             savedTicket.getDescription(),
                             savedTicket.getStatus(),
@@ -172,4 +175,39 @@ public class TicketController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @PatchMapping("/{id}/assign")
+    public ResponseEntity<TicketPatchResponse> assignMentor(@PathVariable String id,
+                                          @RequestBody TicketAssignRequest assignRequest,
+                                          @AuthenticationPrincipal OAuth2User user) {
+
+        if (user == null || user.getAttribute("login") == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        String login = user.getAttribute("login");
+
+        userRepository.findByUsername(login)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.FORBIDDEN, "User not registered"));
+
+        if (assignRequest.mentorAssignedId() != null && !assignRequest.mentorAssignedId().isBlank()) {
+            userRepository.findByUsername(assignRequest.mentorAssignedId())
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "The assigned mentor does not exist"));
+        }
+
+        Ticket existingTicket = ticketRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Ticket not found"));
+
+        Ticket updatedTicket = existingTicket.assignMentor(assignRequest.mentorAssignedId());
+        Ticket savedTicket = ticketRepository.updateTicket(updatedTicket);
+
+        return ResponseEntity.ok(new TicketPatchResponse(
+                savedTicket.getId(),
+                savedTicket.getUserId(),
+                savedTicket.getMentorAssignedId(),
+                savedTicket.getTitle(),
+                savedTicket.getDescription(),
+                savedTicket.getStatus(),
+                savedTicket.getComment()
+        ));
+    }
 }

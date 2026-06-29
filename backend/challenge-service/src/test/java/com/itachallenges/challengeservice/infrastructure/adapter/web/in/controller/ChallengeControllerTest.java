@@ -82,7 +82,7 @@ class ChallengeControllerTest {
     @Test
     void should_update_challenge_and_return_200() throws Exception {
         String id = UUID.randomUUID().toString();
-        ChallengeRequest request = new ChallengeRequest(
+        ChallengeRequest updateRequest = new ChallengeRequest(
                 "Updated title",
                 "Updated description",
                 ChallengeLanguage.JAVA,
@@ -104,7 +104,7 @@ class ChallengeControllerTest {
 
         mockMvc.perform(put("/api/challenge/" + id)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(request)))
+                        .content(objectMapper.writeValueAsString(updateRequest)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(id))
                 .andExpect(jsonPath("$.title").value("Updated title"))
@@ -113,7 +113,6 @@ class ChallengeControllerTest {
                 .andExpect(jsonPath("$.language").value("JAVA"))
                 .andExpect(jsonPath("$.solution").value("Updated solution"));
     }
-
 
     @Test
     void should_return_200_with_challenge_when_finding_by_id() throws Exception {
