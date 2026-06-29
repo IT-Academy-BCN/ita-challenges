@@ -45,13 +45,26 @@
 .dropdown__menu {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
   z-index: 1002;
-  min-width: 200px;
+  min-width: 400px;
   position: absolute;
   top: calc(100% + 1.5rem);
   right: 0;
   background: var(--color-white);
-  border-radius: 0.5rem;
-  padding: 1.5rem;
-}
+  border-radius: 1rem;
+  padding: 3rem;
+
+  h3 { font-weight: var(--font-weight-bold); letter-spacing: 0.05rem; margin: 0; margin-bottom: 1.5rem; }
+
+  .dropdown__menu__buttons { display: flex; flex-direction: row; gap: 1rem; }
+
+  .difficult-btn { display: flex; flex-direction: row; align-items: center; justify-content: center; margin-bottom: 2rem; padding: 0.6rem 1.2rem; border-radius: 2rem; border: 0.5px solid var(--color-gray-3); background: var(--color-white); font-size: var(--font-size-normal); font-weight: var(--font-weight-bold); letter-spacing: 0.05rem; cursor: pointer; transition: all 0.2s ease;
+    &:hover { background: var(--color-gray-4); transform: translateY(-1px); }
+    .button_icon { width: 0.75em; height: 1em; margin: 0.05rem; } }
+
+  .difficult-btn.selected { background: var(--color-black-3); color: var(--color-white); border-color: var(--color-black-3); }
+
+  .dropdown__confirm { display: flex; flex-direction: row; justify-content: flex-end;
+    .confirm-btn { padding: 0.8rem 1.5rem; border-radius: 1rem; border: 0.5px solid var(--color-primary); background: var(--color-primary); font-size: var(--font-size-normal); font-weight: var(--font-weight-bold); color: var(--color-white); letter-spacing: 0.05rem; cursor: pointer; transition: all 0.2s ease;
+      &:hover { background: var(--color-error); border: 0.5px solid var(--color-error); transform: translateY(-1px); }
+      &:active { background: var(--color-black-3); border-color: var(--color-black-3); } } } }

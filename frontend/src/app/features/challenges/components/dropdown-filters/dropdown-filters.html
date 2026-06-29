@@ -6,12 +6,16 @@
   </button>
 
   @if (isOpen()) {
-    <div class="dropdown__overlay" data-testid="dropdown-overlay" (click)="closeDropdown()" ></div>
+    <div class="dropdown__overlay" data-testid="dropdown-overlay" (click)="closeDropdown()"></div>
 
     <div class="dropdown__menu" data-testid="dropdown-menu">
-      <button type="button">Fàcil</button>
-      <button type="button">Mitjana</button>
-      <button type="button">Difícil</button>
+      <h3>Dificultad</h3>
+      <div class="dropdown__menu__buttons">
+        <button class="difficult-btn" type="button" [class.selected]="selectedDifficulty() === 'easy'" (click)="selectDifficulty('easy')"> <img src="assets\dif-full.png" class="button_icon" /> <img src="assets\dif-none.png" class="button_icon" /> <img src="assets\dif-none.png" class="button_icon" /> Fàcil </button>
+        <button class="difficult-btn" type="button" [class.selected]="selectedDifficulty() === 'mid'" (click)="selectDifficulty('mid')"> <img src="assets\dif-full.png" class="button_icon" /> <img src="assets\dif-full.png" class="button_icon" /> <img src="assets\dif-none.png" class="button_icon" /> Mitjana </button>
+        <button class="difficult-btn" type="button" [class.selected]="selectedDifficulty() === 'hard'" (click)="selectDifficulty('hard')"> <img src="assets\dif-full.png" class="button_icon" /> <img src="assets\dif-full.png" class="button_icon" /> <img src="assets\dif-full.png" class="button_icon" /> Difícil </button> 
+      </div>
+      <div class="dropdown__confirm"> <button class="confirm-btn" type="button" (click)="confirm()">Confirmar</button> </div>
     </div>
   }
 </div>
