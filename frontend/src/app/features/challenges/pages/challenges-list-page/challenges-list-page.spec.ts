@@ -110,20 +110,17 @@ describe('ChallengesListPage', () => {
   it('should set selectedLanguage when a language chip is clicked', () => {
     component.onLanguageChipClick('JAVA');
     expect(component.selectedLanguage()).toBe('JAVA');
-    expect(mockChallengeService.loadAll).toHaveBeenCalledWith('JAVA');
   });
 
   it('should deselect language when the active chip is clicked again', () => {
     component.onLanguageChipClick('JAVA');
     component.onLanguageChipClick('JAVA');
     expect(component.selectedLanguage()).toBeNull();
-    expect(mockChallengeService.loadAll).toHaveBeenCalledWith(null);
   });
 
   it('should change selected language when a different chip is clicked', () => {
     component.onLanguageChipClick('JAVA');
     component.onLanguageChipClick('PHP');
     expect(component.selectedLanguage()).toBe('PHP');
-    expect(mockChallengeService.loadAll).toHaveBeenCalledWith('PHP');
   });
 });

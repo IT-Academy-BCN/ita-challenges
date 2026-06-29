@@ -7,6 +7,7 @@ import { ChallengeService } from '../../services/challenge.service';
 import { RoleSelectorComponent } from "../../components/role-selector/role-selector";
 import { CreateButtonComponent } from '../../components/buttons/create-button/create-button';
 import { DeleteButtonComponent } from "../../components/buttons/delete-button/delete-button";
+import { FilterChipComponent } from '../../../../shared/components/filter-chip/filter-chip';
 
 @Component({
   selector: 'app-challenges-list-page',
@@ -14,7 +15,8 @@ import { DeleteButtonComponent } from "../../components/buttons/delete-button/de
     RouterLink,
     RoleSelectorComponent,
     CreateButtonComponent,
-    DeleteButtonComponent
+    DeleteButtonComponent,
+    FilterChipComponent
   ],
   standalone: true,
   templateUrl: './challenges-list-page.html',
@@ -27,6 +29,15 @@ export class ChallengesListPage implements OnInit {
   challenges = signal<IChallenge[]>([]);
   isMentor = signal(false);
   selectedLanguage = signal<ChallengeLanguage | null>(null);
+
+  languages: { value: ChallengeLanguage; label: string }[] = [
+    { value: 'JAVA',       label: 'Java' },
+    { value: 'PHP',        label: 'PHP' },
+    { value: 'JAVASCRIPT', label: 'JavaScript' },
+    { value: 'TYPESCRIPT', label: 'TypeScript' },
+    { value: 'PYTHON',     label: 'Python' },
+    { value: 'SQL',        label: 'SQL' },
+  ];
 
   languageLabels: Record<ChallengeLanguage, string> = {
     JAVA: 'Java',
@@ -68,9 +79,9 @@ export class ChallengesListPage implements OnInit {
   }
 
   onLanguageChipClick(lang: ChallengeLanguage): void {
-    const next = this.selectedLanguage() === lang ? null : lang;
-    this.selectedLanguage.set(next);
-    this.loadChallenges(next);
+    this.selectedLanguage.set(
+      this.selectedLanguage() === lang ? null : lang
+    );
   }
 
   handleDelete(id: string): void {
