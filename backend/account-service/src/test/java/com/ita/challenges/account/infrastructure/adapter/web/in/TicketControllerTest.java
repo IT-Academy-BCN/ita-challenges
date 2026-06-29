@@ -218,4 +218,34 @@ class TicketControllerTest {
                 .andExpect(jsonPath("$[0].title").value("Payment error"))
                 .andExpect(jsonPath("$[0].description").value("Card declined"));
     }
+
+    @Test
+    void should_assign_mentor_successfully_and_return_200() throws Exception {
+        String ticketId = "ticket-123";
+        String adminLogin = "admin-user";
+        String targetMentorId = "mentor-brian";
+
+        Ticket existingTicket = Ticket.restore(
+                ticketId, "student-1", null, "Title", "Desc"
+        );
+
+        User mockAdmin = new User(adminLogin, Role.MENTOR);
+        User mockMentor = new User(targetMentorId, Role.MENTOR);
+
+        when(userRepository.findByUsername(adminLogin)).thenReturn(Optional.of(mockAdmin));
+        when(userRepository.findByUsername(targetMentorId)).thenReturn(Optional.of(mockMentor));
+        when(ticketRepository.findById(ticketId)).thenReturn(Optional.of(existingTicket));
+        when(ticketRepository.updateTicket(any(Ticket.class))).thenAnswer(i -> i.getArguments()[0]);
+
+        mockMvc.perform(patch("/api/account/tickets/{id}/assign", ticketId)
+                        .with(csrf())
+                        .with(oauth2Login().attributes(attrs -> attrs.put("login", adminLogin)))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"mentorAssignedId\":\"" + targetMentorId + "\"}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(ticketId))
+                .andExpect(jsonPath("$.mentorAssignedId").value(targetMentorId))
+                .andExpect(jsonPath("$.title").value("Title"))
+                .andExpect(jsonPath("$.ticketStatus").value("OPEN"));
+    }
 }
