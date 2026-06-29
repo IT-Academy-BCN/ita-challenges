@@ -1,11 +1,21 @@
-<div class="challenges-list__header">
+<div class="challenges-header">
+  <div class="challenges-list__header">
     <h1>Llistat de Reptes</h1>
 
-    <app-role-selector
-        (roleChange)="onRoleChange($event)"
-    ></app-role-selector>
-</div>
+    <app-role-selector (roleChange)="onRoleChange($event)"></app-role-selector>
+  </div>
 
+  <div class="challenges-list__actions">
+    <div class="challenges-list__actions_left">
+      @if (isMentor()) {
+        <app-create-button></app-create-button>
+      }
+    </div>
+    <div class="challenges-list__actions_right">
+      <app-challenges-filter-dropdown />
+    </div>
+  </div>
+</div>
 <div class="challenges-list__filters">
   @for (lang of languages; track lang.value) {
     <app-filter-chip

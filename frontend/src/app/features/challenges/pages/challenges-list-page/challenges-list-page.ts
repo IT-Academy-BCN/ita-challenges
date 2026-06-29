@@ -7,6 +7,7 @@ import { ChallengeService } from '../../services/challenge.service';
 import { RoleSelectorComponent } from "../../components/role-selector/role-selector";
 import { CreateButtonComponent } from '../../components/buttons/create-button/create-button';
 import { DeleteButtonComponent } from "../../components/buttons/delete-button/delete-button";
+import { DropdownComponent } from '../../components/dropdown-filters/dropdown-filters';
 import { FilterChipComponent } from '../../../../shared/components/filter-chip/filter-chip';
 
 @Component({
@@ -16,6 +17,7 @@ import { FilterChipComponent } from '../../../../shared/components/filter-chip/f
     RoleSelectorComponent,
     CreateButtonComponent,
     DeleteButtonComponent,
+    DropdownComponent,
     FilterChipComponent
   ],
   standalone: true,
@@ -23,7 +25,6 @@ import { FilterChipComponent } from '../../../../shared/components/filter-chip/f
   styleUrl: './challenges-list-page.css',
 })
 export class ChallengesListPage implements OnInit {
-
   private readonly challengesService = inject(ChallengeService);
 
   challenges = signal<IChallenge[]>([]);
@@ -70,7 +71,7 @@ export class ChallengesListPage implements OnInit {
     this.challengesService.loadAll(language).subscribe({
       next: (result) => {
         this.challenges.set(result);
-      }
+      },
     });
   }
 
@@ -87,13 +88,11 @@ export class ChallengesListPage implements OnInit {
   handleDelete(id: string): void {
     this.challengesService.delete(id).subscribe({
       next: () => {
-        this.challenges.update((current) =>
-          current.filter((challenge) => challenge.id !== id)
-        );
+        this.challenges.update((current) => current.filter((challenge) => challenge.id !== id));
       },
       error: (err) => {
         console.error('Error deleting challenge', err);
-      }
+      },
     });
   }
 
