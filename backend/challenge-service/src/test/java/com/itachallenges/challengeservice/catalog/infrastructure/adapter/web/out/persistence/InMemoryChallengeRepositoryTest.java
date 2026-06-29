@@ -12,7 +12,6 @@ import java.util.NoSuchElementException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
 class InMemoryChallengeRepositoryTest {
 
@@ -28,7 +27,6 @@ class InMemoryChallengeRepositoryTest {
     @Test
     void should_return_empty_list_when_no_challenges_exist() {
         List<Challenge> result = repository.findAll();
-
         assertThat(result).isEmpty();
     }
 
@@ -37,9 +35,9 @@ class InMemoryChallengeRepositoryTest {
         Challenge newChallenge = Challenge.create("New Challenge Title", "New Challenge Description", ChallengeLanguage.JAVA, ChallengeDifficulty.EASY, "New Challenge Solution");
         Challenge result = repository.save(newChallenge);
 
-        assertThat(result.getTitle().toString()).isEqualTo("New Challenge Title");
-        assertThat(result.getDescription().toString()).isEqualTo("New Challenge Description");
-        assertThat(result.getSolution().toString()).isEqualTo("New Challenge Solution");
+        assertThat(result.getTitle()).hasToString("New Challenge Title");
+        assertThat(result.getDescription()).hasToString("New Challenge Description");
+        assertThat(result.getSolution()).hasToString("New Challenge Solution");
     }
 
     @Test
@@ -57,9 +55,9 @@ class InMemoryChallengeRepositoryTest {
 
         Challenge result = repository.update(updated);
 
-        assertThat(result.getTitle().toString()).isEqualTo("New title");
-        assertThat(result.getDescription().toString()).isEqualTo("New description");
-        assertThat(result.getSolution().toString()).isEqualTo("New solution");
+        assertThat(result.getTitle()).hasToString("New title");
+        assertThat(result.getDescription()).hasToString("New description");
+        assertThat(result.getSolution()).hasToString("New solution");
     }
 
     @Test
@@ -69,14 +67,11 @@ class InMemoryChallengeRepositoryTest {
                 .hasMessageContaining("Error saving challenge");
     }
 
-
-
     @Test
     void should_delete_existing_challenge() {
-        Challenge challenge = Challenge.create("To be deleted", "Description", ChallengeLanguage.JAVA, ChallengeDifficulty.EASY, "Solution");
-
-        ChallengeId id = challenge.getId();
-        repository.save(challenge);
+        Challenge challengeToDelete = Challenge.create("To be deleted", "Description", ChallengeLanguage.JAVA, ChallengeDifficulty.EASY, "Solution");
+        ChallengeId id = challengeToDelete.getId();
+        repository.save(challengeToDelete);
         assertThat(repository.findAll()).hasSize(1);
 
         repository.delete(id);
@@ -120,5 +115,3 @@ class InMemoryChallengeRepositoryTest {
                 .hasMessageContaining("Challenge not found with id: " + nonExistentId);
     }
 }
-
-

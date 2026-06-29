@@ -6,6 +6,16 @@
     ></app-role-selector>
 </div>
 
+<div class="challenges-list__filters">
+  @for (lang of languages; track lang.value) {
+    <app-filter-chip
+      [label]="lang.label"
+      [active]="selectedLanguage() === lang.value"
+      (clicked)="onLanguageChipClick(lang.value)"
+    />
+  }
+</div>
+
 @if(isMentor()) {
     <app-create-button></app-create-button>
 }
