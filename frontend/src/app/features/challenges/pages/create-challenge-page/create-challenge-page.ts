@@ -2,14 +2,14 @@ import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { IChallengeRequest } from '../../models/ichallenge-request.interface';
 import { ChallengeService } from '../../services/challenge.service';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { ChallengeLanguage } from '../../models/challenge-language.type';
 import { ChallengeDifficulty } from '../../models/challenge-difficulty.type';
 import { LanguageSelectButton } from '../../components/buttons/language-select-button/language-select-button';
 
 @Component({
   selector: 'app-create-challenge-page',
-  imports: [ReactiveFormsModule, LanguageSelectButton],
+  imports: [ReactiveFormsModule, LanguageSelectButton, RouterLink],
   templateUrl: './create-challenge-page.html',
   styleUrl: './create-challenge-page.css',
 })

@@ -76,6 +76,7 @@
 .difficulty-option input[type='radio'] {
   accent-color: var(--color-primary);
 }
+
 .content-header {
     display: flex;
     justify-content: space-between;
@@ -112,4 +113,8 @@
     background-color: var(--color-primary);
     border: none;
     color: var(--color-white);
+}
+
+.btn-back{
+    text-decoration: none;
 }
