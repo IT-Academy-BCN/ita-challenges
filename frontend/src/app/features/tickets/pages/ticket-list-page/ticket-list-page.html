@@ -10,5 +10,5 @@
 </div>
 
 @for (ticket of tickets(); track ticket.id) {
-  <app-ticket-card [ticket]="ticket" />
+  <app-ticket-card [ticket]="ticket" [assignableUsers]="assignableUsers()"/>
 }
