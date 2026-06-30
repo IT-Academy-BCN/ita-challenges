@@ -8,6 +8,7 @@ import { TicketApiService } from './ticket-api.service';
 import { TICKETS_MOCK } from '../models/tickets.mock';
 import { ITicket } from '../models/iticket.interface';
 import { TicketStatus } from '../models/status.enum';
+import { AssignableUser } from '../models/assignable-user.interface';
 
 describe('TicketApiService', () => {
   let service: TicketApiService;
@@ -123,4 +124,27 @@ describe('TicketApiService', () => {
   expect(req.request.body).toEqual(partialData);
   req.flush({});
 });
+
+  it('should GET assignable users from correct URL', () => {
+    const mockUsers: AssignableUser[] = [{ username: 'mentor1', role: 'mentor' }];
+
+    service.getTicketAssignableUsers().subscribe((users) => {
+      expect(users).toEqual(mockUsers);
+    });
+
+    const req = httpMock.expectOne('/api/account/users/mentors');
+    expect(req.request.method).toBe('GET');
+    req.flush(mockUsers);
+  });
+
+  it('should propagate userMessage on getTicketAssignableUsers error', () => {
+    let error: any;
+
+    service.getTicketAssignableUsers().subscribe({ error: (err) => { error = err; } });
+
+    httpMock.expectOne('/api/account/users/mentors').flush('Unauthorized', { status: 401, statusText: 'Unauthorized' });
+
+    expect(error.status).toBe(401);
+    expect(error.userMessage).toBeDefined();
+  });
 });

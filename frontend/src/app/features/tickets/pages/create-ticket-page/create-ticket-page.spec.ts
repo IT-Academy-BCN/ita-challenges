@@ -13,7 +13,7 @@ describe('CreateTicketPage', () => {
 
   beforeEach(async () => {
     mockTicketService = {
-      create: () => of({ id:'1', userId: 'one', title: '', description: '', status: TicketStatus.OPEN, comment: null, createdAt: new Date(), updatedAt: new Date()  })
+      create: () => of({ id:'1', userId: 'one', title: '', description: '', status: TicketStatus.OPEN, comment: null, mentorAssignedId: null,createdAt: new Date(), updatedAt: new Date()  })
     };
 
     mockRouter = {
@@ -41,7 +41,7 @@ describe('CreateTicketPage', () => {
   it('should call ticketApiService.create when call onSubmit with correct data', () => {
     const testData = { title: 'Nou Repte', description: 'Descripció' };
     component.ticketForm.setValue(testData);
-    vi.spyOn(mockTicketService, 'create').mockReturnValue(of({ id: '1', userId: 'usuari', ...testData, status: TicketStatus.OPEN, comment: null, createdAt: new Date(), updatedAt: new Date() }));
+    vi.spyOn(mockTicketService, 'create').mockReturnValue(of({ id: '1', userId: 'usuari', ...testData, status: TicketStatus.OPEN, comment: null, mentorAssignedId: null, createdAt: new Date(), updatedAt: new Date() }));
     component.onSubmit();
     expect(mockTicketService.create).toHaveBeenCalledWith(testData);
   });
