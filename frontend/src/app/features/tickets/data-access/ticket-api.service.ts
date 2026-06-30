@@ -35,6 +35,7 @@ export class TicketApiService {
   update(id: string, data: Partial<ITicket>): Observable<ITicket> {
     return this.http.patch<ITicket>(`${this.ticketsUrl}/${id}`, data);
   }
+  
   getTicketAssignableUsers(): Observable<AssignableUser[]> {
     return this.http.get<AssignableUser[]>('/api/account/users/mentors').pipe(
       catchError((error: HttpErrorResponse) => {
@@ -42,6 +43,10 @@ export class TicketApiService {
         const errorWithMessage = { ...error, userMessage: message };
         return throwError(() => errorWithMessage);
       })
-    )
+    );
+  }
+  
+  updateAssignedMentor(ticketId: string, mentorAssignedId: {mentorAssignedId: string}): Observable<ITicket> {
+    return this.http.patch<ITicket>(`${this.ticketsUrl}/${ticketId}/assign`, mentorAssignedId);
   }
 }
