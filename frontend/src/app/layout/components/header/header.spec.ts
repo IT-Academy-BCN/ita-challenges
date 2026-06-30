@@ -7,6 +7,7 @@ import { of } from 'rxjs';
 import { AuthService } from '../../../features/auth/data-access/auth-service';
 import { Role } from '../../../core/models/role.enum';
 import { Router } from '@angular/router';
+import {RoleTranslatorPipe} from '../../../shared/pipes/role-translator-pipe';
 
 const MOCK_USER: AuthUser = {
   username: 'mockUser',
@@ -40,7 +41,7 @@ describe('Header', () => {
       navigate: vi.fn(),
     };
     await TestBed.configureTestingModule({
-      imports: [Header],
+      imports: [Header, RoleTranslatorPipe],
       providers: [{ provide: AuthService, useValue: authServiceMock }],
     }).compileComponents();
 
@@ -89,8 +90,20 @@ describe('Header', () => {
     authServiceMock.user.set(null);
     fixture.detectChanges();
 
+    const usernameDiv = fixture.nativeElement.querySelector('.user__username');
+    expect(usernameDiv).toBeFalsy();
+  });
+
+  it('should show INVITAT and Log In button when user is not logged in', () => {
+    authServiceMock.user.set(null);
+    fixture.detectChanges();
+
     const h4 = fixture.nativeElement.querySelector('h4');
-    expect(h4).toBeFalsy();
+    const loginButton = fixture.nativeElement.querySelector('.button__login button');
+
+    expect(h4.textContent).toContain('INVITAT');
+    expect(loginButton).toBeTruthy();
+    expect(loginButton.textContent).toContain('Log In');
   });
 
   it('should show user avatar when user is logged in', () => {
@@ -111,9 +124,9 @@ describe('Header', () => {
   });
 
   it('should show user role when user has a role', () => {
-    authServiceMock.user.set({ ...MOCK_USER, role: Role.GUEST });
+    authServiceMock.user.set({ ...MOCK_USER, role: 'STUDENT' as any });
     fixture.detectChanges();
-    expect(fixture.nativeElement.querySelector('h4').textContent).toContain(Role.GUEST);
+    expect(fixture.nativeElement.querySelector('h4').textContent).toContain('ESTUDIANT');
   });
 
   it('should show CONVIDAT when user has no role', () => {

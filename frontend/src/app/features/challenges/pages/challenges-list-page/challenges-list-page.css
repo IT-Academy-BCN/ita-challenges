@@ -1,10 +1,10 @@
 :host { display: block; margin-left: -250px; width: calc(100% + 250px); }
 
-.challenges-list__header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1.5rem;
+.challenges-header { display: flex; flex-direction: column; justify-content: space-between; gap: 1.5rem; padding: 0 1rem; margin-bottom: 1.5rem; }
+.challenges-list__header, .challenges-list__actions { display: flex; flex-direction: row; justify-content: space-between; align-items: center; gap: 1rem;
+  h1 { margin: 0; }
+  .challenges-list__actions_left, .challenges-list__actions_right { display: flex; align-items: center; gap: 1rem;
+    .challenges-list__actions_right { margin-left: auto; } }
 }
 .cards-grid {
   display: grid;

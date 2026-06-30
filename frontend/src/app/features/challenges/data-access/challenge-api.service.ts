@@ -2,9 +2,10 @@ import { inject, Injectable } from '@angular/core';
 import { IChallengeRequest } from '../models/ichallenge-request.interface';
 import { IChallenge } from '../models/ichallenge.interface';
 import { catchError, Observable, of } from 'rxjs';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { CHALLENGES_MOCK } from '../models/challenges.mock';
 import { IChallengeSubmission } from '../models/ichallenge-submission.interface';
+import { ChallengeLanguage } from '../models/challenge-language.type';
 
 @Injectable({
   providedIn: 'root',
@@ -28,8 +29,11 @@ export class ChallengeApiService {
     );
   }
 
-  loadAll(): Observable<IChallenge[]> {
-    return this.http.get<IChallenge[]>(this.apiUrl).pipe(
+  loadAll(language?: ChallengeLanguage | null): Observable<IChallenge[]> {
+    const params = language
+      ? new HttpParams().set('language', language)
+      : undefined;
+    return this.http.get<IChallenge[]>(this.apiUrl, { params }).pipe(
       catchError((error: HttpErrorResponse) => {
         return of(CHALLENGES_MOCK);
       }),

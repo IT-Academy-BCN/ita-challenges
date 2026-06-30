@@ -16,6 +16,11 @@ export class TicketService {
         map((tickets) => tickets.find(((ticket) => ticket.id === id)))
       )
     }
+  
+  getTicketAssignableUsers(): Observable<AssignableUser[]> {
+    return this.ticketApiService.getTicketAssignableUsers();
+  }
+  
   updateAssignedMentor(ticketId: string, mentorAssignedId: string): Observable<ITicket> {
     return this.ticketApiService.updateAssignedMentor(ticketId, {
       mentorAssignedId: mentorAssignedId

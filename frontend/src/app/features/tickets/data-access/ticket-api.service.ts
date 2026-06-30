@@ -5,6 +5,7 @@ import {catchError, Observable, of, throwError} from 'rxjs';
 import {ITicket} from '../models/iticket.interface';
 import {ITicketRequest} from '../models/iticket-request.interface';
 import {TICKETS_MOCK} from '../models/tickets.mock';
+import { AssignableUser } from '../models/assignable-user.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -34,7 +35,18 @@ export class TicketApiService {
   update(id: string, data: Partial<ITicket>): Observable<ITicket> {
     return this.http.patch<ITicket>(`${this.ticketsUrl}/${id}`, data);
   }
+  
+  getTicketAssignableUsers(): Observable<AssignableUser[]> {
+    return this.http.get<AssignableUser[]>('/api/account/users/mentors').pipe(
+      catchError((error: HttpErrorResponse) => {
+        const message = typeof error.error === 'string' ? error.error : error.error?.message || error.message;
+        const errorWithMessage = { ...error, userMessage: message };
+        return throwError(() => errorWithMessage);
+      })
+    );
+  }
+  
   updateAssignedMentor(ticketId: string, mentorAssignedId: {mentorAssignedId: string}): Observable<ITicket> {
-    return this.http.patch<ITicket>(`${this.ticketsUrl}/${ticketId}/assign`, mentorAssignedId)
+    return this.http.patch<ITicket>(`${this.ticketsUrl}/${ticketId}/assign`, mentorAssignedId);
   }
 }

@@ -3,6 +3,7 @@ import { IChallengeRequest } from '../models/ichallenge-request.interface';
 import { IChallenge } from '../models/ichallenge.interface';
 import { map, Observable } from 'rxjs';
 import { ChallengeApiService } from '../data-access/challenge-api.service';
+import { ChallengeLanguage } from '../models/challenge-language.type';
 
 @Injectable({
   providedIn: 'root',
@@ -16,8 +17,8 @@ export class ChallengeService {
     return this.challengeApiService.create(challenge);
   }
 
-  loadAll(): Observable<IChallenge[]> {
-    return this.challengeApiService.loadAll();
+  loadAll(language?: ChallengeLanguage | null): Observable<IChallenge[]> {
+    return this.challengeApiService.loadAll(language);
   }
 
   update(id: string, challenge: IChallengeRequest): Observable<IChallenge> {

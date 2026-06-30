@@ -7,6 +7,8 @@ import { ChallengeService } from '../../services/challenge.service';
 import { RoleSelectorComponent } from "../../components/role-selector/role-selector";
 import { CreateButtonComponent } from '../../components/buttons/create-button/create-button';
 import { DeleteButtonComponent } from "../../components/buttons/delete-button/delete-button";
+import { DropdownComponent } from '../../components/dropdown-filters/dropdown-filters';
+import { FilterChipComponent } from '../../../../shared/components/filter-chip/filter-chip';
 
 @Component({
   selector: 'app-challenges-list-page',
@@ -14,18 +16,29 @@ import { DeleteButtonComponent } from "../../components/buttons/delete-button/de
     RouterLink,
     RoleSelectorComponent,
     CreateButtonComponent,
-    DeleteButtonComponent
+    DeleteButtonComponent,
+    DropdownComponent,
+    FilterChipComponent
   ],
   standalone: true,
   templateUrl: './challenges-list-page.html',
   styleUrl: './challenges-list-page.css',
 })
 export class ChallengesListPage implements OnInit {
-
   private readonly challengesService = inject(ChallengeService);
 
   challenges = signal<IChallenge[]>([]);
   isMentor = signal(false);
+  selectedLanguage = signal<ChallengeLanguage | null>(null);
+
+  languages: { value: ChallengeLanguage; label: string }[] = [
+    { value: 'JAVA',       label: 'Java' },
+    { value: 'PHP',        label: 'PHP' },
+    { value: 'JAVASCRIPT', label: 'JavaScript' },
+    { value: 'TYPESCRIPT', label: 'TypeScript' },
+    { value: 'PYTHON',     label: 'Python' },
+    { value: 'SQL',        label: 'SQL' },
+  ];
 
   languageLabels: Record<ChallengeLanguage, string> = {
     JAVA: 'Java',
@@ -54,11 +67,11 @@ export class ChallengesListPage implements OnInit {
     return diff ? this.difficultyLabels[diff] : '';
   }
 
-  loadChallenges(): void {
-    this.challengesService.loadAll().subscribe({
+  loadChallenges(language?: ChallengeLanguage | null): void {
+    this.challengesService.loadAll(language).subscribe({
       next: (result) => {
         this.challenges.set(result);
-      }
+      },
     });
   }
 
@@ -66,16 +79,21 @@ export class ChallengesListPage implements OnInit {
     this.isMentor.set(value);
   }
 
+  onLanguageChipClick(lang: ChallengeLanguage): void {
+    const next = this.selectedLanguage() === lang ? null : lang;
+    this.selectedLanguage.set(next);
+    
+    this.loadChallenges(next);
+  }
+
   handleDelete(id: string): void {
     this.challengesService.delete(id).subscribe({
       next: () => {
-        this.challenges.update((current) =>
-          current.filter((challenge) => challenge.id !== id)
-        );
+        this.challenges.update((current) => current.filter((challenge) => challenge.id !== id));
       },
       error: (err) => {
         console.error('Error deleting challenge', err);
-      }
+      },
     });
   }
 

@@ -1,10 +1,12 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { of, throwError } from 'rxjs';
+import { provideRouter } from '@angular/router';
 import { TicketCard } from './ticket-card';
 import { TicketService } from '../../ticket.service';
 import { ITicket } from '../../models/iticket.interface';
 import { TicketStatus } from '../../models/status.enum';
 
+const mockUsers = [{ username: 'mentor1', role: 'mentor' }];
 const mockTicket: ITicket = {
   id: '1', userId: 'u1', title: 'Test', description: 'desc',
   status: TicketStatus.OPEN, comment: null, mentorAssignedId: 'mentor1',
@@ -21,17 +23,29 @@ describe('TicketCard', () => {
 
     await TestBed.configureTestingModule({
       imports: [TicketCard],
-      providers: [{ provide: TicketService, useValue: ticketService }],
+      providers: [
+        { provide: TicketService, useValue: ticketService },
+        provideRouter([]),
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(TicketCard);
     component = fixture.componentInstance;
     fixture.componentRef.setInput('ticket', mockTicket);
+    fixture.componentRef.setInput('assignableUsers', mockUsers);
+    fixture.detectChanges();
     await fixture.whenStable();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  it('should render a select with one option per user plus "Sense assignar"', () => {
+    const options = fixture.nativeElement.querySelectorAll('option');
+    expect(options.length).toBe(mockUsers.length + 1);
+  });
+
+  it('should select "Sense assignar" when no mentor is assigned', () => {
+    fixture.componentRef.setInput('ticket', { ...mockTicket, mentorAssignedId: null });
+    fixture.detectChanges();
+    expect((fixture.nativeElement.querySelector('option') as HTMLOptionElement).selected).toBe(true);
   });
 
   it('initializes selectedMentorId from ticket', () => {

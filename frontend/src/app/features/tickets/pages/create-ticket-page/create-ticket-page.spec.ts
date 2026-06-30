@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CreateTicketPage } from './create-ticket-page';
 import { TicketApiService } from '../../data-access/ticket-api.service';
-import { of } from 'rxjs';
+import { of, throwError } from 'rxjs';
 import { Router } from '@angular/router';
 import { TicketStatus } from '../../models/status.enum';
 
@@ -13,7 +13,7 @@ describe('CreateTicketPage', () => {
 
   beforeEach(async () => {
     mockTicketService = {
-      create: () => of({ id:'1', userId: 'one', title: '', description: '', status: TicketStatus.OPEN, comment: null, createdAt: new Date(), updatedAt: new Date()  })
+      create: () => of({ id:'1', userId: 'one', title: '', description: '', status: TicketStatus.OPEN, comment: null, mentorAssignedId: null,createdAt: new Date(), updatedAt: new Date()  })
     };
 
     mockRouter = {
@@ -34,18 +34,33 @@ describe('CreateTicketPage', () => {
     await fixture.whenStable();
   });
 
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
   it('should call ticketApiService.create when call onSubmit with correct data', () => {
     const testData = { title: 'Nou Repte', description: 'Descripció' };
     component.ticketForm.setValue(testData);
-    vi.spyOn(mockTicketService, 'create').mockReturnValue(of({ id: '1', userId: 'usuari', ...testData, status: TicketStatus.OPEN, comment: null, createdAt: new Date(), updatedAt: new Date() }));
+    vi.spyOn(mockTicketService, 'create').mockReturnValue(of({ id: '1', userId: 'usuari', ...testData, status: TicketStatus.OPEN, comment: null, mentorAssignedId: null, createdAt: new Date(), updatedAt: new Date() }));
     component.onSubmit();
     expect(mockTicketService.create).toHaveBeenCalledWith(testData);
   });
 
-  it('should navigate to /tickets when ticketApiService.create emits next', () => {
+  it('should navigate to /tickets after the success', () => {
     const testData = { title: 'Nou Repte', description: 'Descripció' };
     component.ticketForm.setValue(testData);
     component.onSubmit();
+
     expect(mockRouter.navigate).toHaveBeenCalledWith(['/tickets']);
+  });
+
+  it('should show the "dades incorrectes" message on a 400 error and not navigate', () => {
+    vi.spyOn(mockTicketService, 'create').mockReturnValue(throwError(() => ({ status: 400 })));
+    const testData = { title: '', description: '' };
+    component.ticketForm.setValue(testData);
+    component.onSubmit();
+
+    expect(component.ticketMessage()).toBe('Dades del ticket incorrectes');
+    expect(mockRouter.navigate).not.toHaveBeenCalled();
   });
 });

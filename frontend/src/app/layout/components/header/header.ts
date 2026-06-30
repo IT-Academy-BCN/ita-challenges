@@ -1,11 +1,14 @@
 import { Component, computed, inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { LogoutButton } from '../../../shared/components/logout-button/logout-button';
+import { LoginButton } from '../../../shared/components/login-button/login-button';
 import { AuthService } from '../../../features/auth/data-access/auth-service';
+import {RoleTranslatorPipe} from '../../../shared/pipes/role-translator-pipe';
 
 @Component({
   selector: 'app-header',
-  imports: [LogoutButton],
+  standalone: true,
+  imports: [LogoutButton, LoginButton, RoleTranslatorPipe],
   templateUrl: './header.html',
   styleUrl: './header.css',
 })
@@ -21,7 +24,6 @@ export class Header implements OnInit {
     this.authService.fetchUser().subscribe({
       next: (user) => {
         this.authService.setUser(user);
-        this.router.navigate(['/challenges']);
       },
     });
   }

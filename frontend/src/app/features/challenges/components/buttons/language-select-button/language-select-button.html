@@ -1,0 +1,9 @@
+<button
+  type="button"
+  class="language-btn"
+  [class.language-btn-active]="isActive()"
+  (click)="onClick()"
+>
+  <img [src]="languageIcons[language()]" [alt]="language()" class="language-btn-icon" />
+  {{ languageLabels[language()] }}
+</button>

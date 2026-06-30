@@ -7,6 +7,9 @@
   <span class="ticket-description">{{ ticket().updatedAt | date:'dd/MM/yyyy HH:mm' }}</span>
   <select name="assigned-to" (change)="onSelectChange($event)">
     <option value="" [selected]="selectedMentorId() === null">Sense assignar</option>
+    @for(user of assignableUsers(); track user.username){
+      <option [value]="user.username" [selected]="user.username === ticket().mentorAssignedId">{{user.username}}</option>
+    }
   </select>
   <app-ticket-button [routerLink]="['/tickets', ticket().id]" [label]="'Accedir'"/>
 </div>
