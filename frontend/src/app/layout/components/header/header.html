@@ -5,7 +5,7 @@
     <div class="user__profile">
       <app-logout-button />
       <h4>
-        {{ user()?.role ?? 'CONVIDAT' }}
+        {{ user()?.role ? (user()?.role | roleTranslator) : 'CONVIDAT' }}
       </h4>
       <div class="user__username">
         {{ user()?.username }}
