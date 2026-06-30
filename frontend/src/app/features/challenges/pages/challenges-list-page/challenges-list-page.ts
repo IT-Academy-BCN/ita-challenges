@@ -80,9 +80,10 @@ export class ChallengesListPage implements OnInit {
   }
 
   onLanguageChipClick(lang: ChallengeLanguage): void {
-    this.selectedLanguage.set(
-      this.selectedLanguage() === lang ? null : lang
-    );
+    const next = this.selectedLanguage() === lang ? null : lang;
+    this.selectedLanguage.set(next);
+    
+    this.loadChallenges(next);
   }
 
   handleDelete(id: string): void {
