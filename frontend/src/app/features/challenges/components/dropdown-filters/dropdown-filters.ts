@@ -1,6 +1,5 @@
 import { Component, signal } from '@angular/core';
-
-type Difficulty = 'easy' | 'mid' | 'hard';
+import { ChallengeDifficulty } from '../../models/challenge-difficulty.type';
 
 @Component({
   selector: 'app-challenges-filter-dropdown',
@@ -11,7 +10,7 @@ type Difficulty = 'easy' | 'mid' | 'hard';
 export class DropdownComponent {
   isOpen = signal(false);
 
-  selectedDifficulty = signal<Difficulty | null>(null);
+  selectedDifficulty = signal<ChallengeDifficulty | null>(null);
 
   toggleDropdown(): void {
     this.isOpen.set(!this.isOpen());
@@ -21,7 +20,11 @@ export class DropdownComponent {
     this.isOpen.set(false);
   }
 
-  selectDifficulty(level: Difficulty): void { this.selectedDifficulty.set(level); }
+  selectDifficulty(level: ChallengeDifficulty): void {
+    this.selectedDifficulty.set(level);
+  }
 
-  confirm(): void { this.closeDropdown(); }
+  confirm(): void {
+    this.closeDropdown();
+  }
 }
