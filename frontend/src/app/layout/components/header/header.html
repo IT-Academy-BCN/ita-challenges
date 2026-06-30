@@ -2,13 +2,17 @@
   <h1>IT ACADEMY</h1>
 
   @if (user()) {
-  <div class="user__profile">
-    <app-logout-button />
-    <h4>
-      {{ user()?.role ?? 'CONVIDAT' }}
-    </h4>
-    <div class="user__username">
-      {{ user()?.username }}
+    <div class="user__profile">
+      <app-logout-button />
+      <h4>
+        {{ user()?.role ? (user()?.role | roleTranslator) : 'CONVIDAT' }}
+      </h4>
+      <div class="user__username">
+        {{ user()?.username }}
+      </div>
+      <div>
+        <img [src]="user()?.avatarUrl" alt="avatar" class="avatar__image" />
+      </div>
     </div>
     <div>
       <img [src]="user()?.avatarUrl" alt="avatar" class="avatar__image" />
