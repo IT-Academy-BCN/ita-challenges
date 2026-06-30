@@ -28,7 +28,7 @@ class InMemoryChallengeRepositoryFilterTest {
         repository.save(java2);
         repository.save(python);
 
-        List<Challenge> result = repository.findByLanguage(ChallengeLanguage.JAVA);
+        List<Challenge> result = repository.findByCriteria(ChallengeLanguage.JAVA, null);
 
         assertThat(result).hasSize(2);
         assertThat(result).extracting(Challenge::getLanguage).containsOnly(ChallengeLanguage.JAVA);
@@ -38,8 +38,50 @@ class InMemoryChallengeRepositoryFilterTest {
     void should_return_empty_list_when_no_challenges_match_language() {
         repository.save(Challenge.create("Java only", "Desc", ChallengeLanguage.JAVA, ChallengeDifficulty.EASY, "Sol"));
 
-        List<Challenge> result = repository.findByLanguage(ChallengeLanguage.PYTHON);
+        List<Challenge> result = repository.findByCriteria(ChallengeLanguage.PYTHON, null);
 
         assertThat(result).isEmpty();
+    }
+
+    @Test
+    void should_return_only_challenges_with_given_difficulty() {
+        Challenge easy1 = Challenge.create("Easy 1", "Desc 1", ChallengeLanguage.JAVA, ChallengeDifficulty.EASY, "Sol 1");
+        Challenge easy2 = Challenge.create("Easy 2", "Desc 2", ChallengeLanguage.PYTHON, ChallengeDifficulty.EASY, "Sol 2");
+        Challenge hard = Challenge.create("Hard 1", "Desc 3", ChallengeLanguage.JAVA, ChallengeDifficulty.HARD, "Sol 3");
+        repository.save(easy1);
+        repository.save(easy2);
+        repository.save(hard);
+
+        List<Challenge> result = repository.findByCriteria(null, ChallengeDifficulty.EASY);
+
+        assertThat(result).hasSize(2);
+        assertThat(result).extracting(Challenge::getDifficulty).containsOnly(ChallengeDifficulty.EASY);
+    }
+
+    @Test
+    void should_return_challenges_matching_both_language_and_difficulty() {
+        Challenge javaEasy = Challenge.create("Java Easy", "Desc", ChallengeLanguage.JAVA, ChallengeDifficulty.EASY, "Sol");
+        Challenge javaHard = Challenge.create("Java Hard", "Desc", ChallengeLanguage.JAVA, ChallengeDifficulty.HARD, "Sol");
+        Challenge pythonEasy = Challenge.create("Python Easy", "Desc", ChallengeLanguage.PYTHON, ChallengeDifficulty.EASY, "Sol");
+        repository.save(javaEasy);
+        repository.save(javaHard);
+        repository.save(pythonEasy);
+
+        List<Challenge> result = repository.findByCriteria(ChallengeLanguage.JAVA, ChallengeDifficulty.EASY);
+
+        assertThat(result).hasSize(1);
+        assertThat(result).first()
+                .extracting(Challenge::getLanguage, Challenge::getDifficulty)
+                .containsExactly(ChallengeLanguage.JAVA, ChallengeDifficulty.EASY);
+    }
+
+    @Test
+    void should_return_all_challenges_when_no_criteria_provided() {
+        repository.save(Challenge.create("C1", "D1", ChallengeLanguage.JAVA, ChallengeDifficulty.EASY, "S1"));
+        repository.save(Challenge.create("C2", "D2", ChallengeLanguage.PYTHON, ChallengeDifficulty.HARD, "S2"));
+
+        List<Challenge> result = repository.findByCriteria(null, null);
+
+        assertThat(result).hasSize(2);
     }
 }

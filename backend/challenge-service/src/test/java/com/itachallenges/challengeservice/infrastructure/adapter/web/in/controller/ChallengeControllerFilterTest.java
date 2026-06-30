@@ -34,7 +34,7 @@ class ChallengeControllerFilterTest {
                 "Java Challenge", "Java description",
                 ChallengeLanguage.JAVA, ChallengeDifficulty.EASY, "Java solution"
         );
-        when(repository.findByLanguage(ChallengeLanguage.JAVA)).thenReturn(List.of(javaChallenge));
+        when(repository.findByCriteria(ChallengeLanguage.JAVA, null)).thenReturn(List.of(javaChallenge));
 
         mockMvc.perform(get("/api/challenge").param("language", "JAVA"))
                 .andExpect(status().isOk())
@@ -51,10 +51,48 @@ class ChallengeControllerFilterTest {
 
     @Test
     void should_return_200_with_empty_list_when_filter_matches_no_challenges() throws Exception {
-        when(repository.findByLanguage(ChallengeLanguage.SQL)).thenReturn(List.of());
+        when(repository.findByCriteria(ChallengeLanguage.SQL, null)).thenReturn(List.of());
 
         mockMvc.perform(get("/api/challenge").param("language", "SQL"))
                 .andExpect(status().isOk())
                 .andExpect(content().json("[]"));
+    }
+
+    @Test
+    void should_return_200_with_filtered_list_when_requesting_challenges_by_difficulty() throws Exception {
+        Challenge easyChallenge = Challenge.create(
+                "Easy Challenge", "Easy description",
+                ChallengeLanguage.JAVA, ChallengeDifficulty.EASY, "Easy solution"
+        );
+        when(repository.findByCriteria(null, ChallengeDifficulty.EASY)).thenReturn(List.of(easyChallenge));
+
+        mockMvc.perform(get("/api/challenge").param("difficulty", "EASY"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(1))
+                .andExpect(jsonPath("$[0].difficulty").value("EASY"));
+    }
+
+    @Test
+    void should_return_400_when_requesting_challenges_with_invalid_difficulty() throws Exception {
+        mockMvc.perform(get("/api/challenge").param("difficulty", "IMPOSSIBLE"))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void should_return_200_with_filtered_list_when_combining_language_and_difficulty() throws Exception {
+        Challenge javaEasy = Challenge.create(
+                "Java Easy", "Desc",
+                ChallengeLanguage.JAVA, ChallengeDifficulty.EASY, "Sol"
+        );
+        when(repository.findByCriteria(ChallengeLanguage.JAVA, ChallengeDifficulty.EASY))
+                .thenReturn(List.of(javaEasy));
+
+        mockMvc.perform(get("/api/challenge")
+                        .param("language", "JAVA")
+                        .param("difficulty", "EASY"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(1))
+                .andExpect(jsonPath("$[0].language").value("JAVA"))
+                .andExpect(jsonPath("$[0].difficulty").value("EASY"));
     }
 }

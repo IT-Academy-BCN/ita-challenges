@@ -4,9 +4,9 @@ import com.itachallenges.challengeservice.catalog.domain.model.Challenge;
 import com.itachallenges.challengeservice.catalog.domain.port.out.ChallengeRepository;
 import com.itachallenges.challengeservice.catalog.domain.valueobject.ChallengeId;
 import com.itachallenges.challengeservice.catalog.domain.valueobject.ChallengeLanguage;
+import com.itachallenges.challengeservice.catalog.domain.valueobject.ChallengeDifficulty;
 import org.springframework.stereotype.Repository;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -57,9 +57,10 @@ public class InMemoryChallengeRepository implements ChallengeRepository {
     }
 
     @Override
-    public List<Challenge> findByLanguage(ChallengeLanguage language) {
+    public List<Challenge> findByCriteria(ChallengeLanguage language, ChallengeDifficulty difficulty) {
         return storage.values().stream()
-                .filter(c -> c.getLanguage() == language)
+                .filter(c -> language == null || c.getLanguage() == language)
+                .filter(c -> difficulty == null || c.getDifficulty() == difficulty)
                 .toList();
     }
 

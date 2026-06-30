@@ -4,6 +4,7 @@ import com.itachallenges.challengeservice.catalog.domain.model.Challenge;
 import com.itachallenges.challengeservice.catalog.domain.port.out.ChallengeRepository;
 import com.itachallenges.challengeservice.catalog.domain.valueobject.ChallengeId;
 import com.itachallenges.challengeservice.catalog.domain.valueobject.ChallengeLanguage;
+import com.itachallenges.challengeservice.catalog.domain.valueobject.ChallengeDifficulty;
 import com.itachallenges.challengeservice.catalog.infrastructure.adapter.web.in.dto.ChallengeResponse;
 import com.itachallenges.challengeservice.catalog.infrastructure.adapter.web.in.dto.ChallengeRequest;
 import lombok.AllArgsConstructor;
@@ -41,11 +42,10 @@ public class ChallengeController {
 
     @GetMapping
     public ResponseEntity<List<ChallengeResponse>> findAll(
-            @RequestParam(required = false) ChallengeLanguage language
+            @RequestParam(required = false) ChallengeLanguage language,
+            @RequestParam(required = false) ChallengeDifficulty difficulty
     ) {
-        List<Challenge> challenges = (language == null)
-                ? repository.findAll()
-                : repository.findByLanguage(language);
+        List<Challenge> challenges = repository.findByCriteria(language, difficulty);
 
         List<ChallengeResponse> response = challenges.stream()
                 .map(c -> new ChallengeResponse(
